@@ -49,10 +49,10 @@ export function TechBackground() {
       },
       particles: {
         color: {
-          value: ["#7c3aed", "#22d3ee", "#60a5fa"],
+          value: ["#8b5cf6", "#a855f7", "#d8b4fe"],
         },
         links: {
-          color: "#7c3aed",
+          color: "#a855f7",
           distance: 130,
           enable: true,
           opacity: 0.18,

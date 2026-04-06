@@ -333,19 +333,25 @@ export function PortfolioPage() {
                 <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.24em] text-white/70">
                   Live profile panel
                 </p>
-                <h2 className="display-title mt-3 text-4xl font-semibold text-white">Amirul Fariz</h2>
+                <h2 className="display-title mt-3 text-4xl font-semibold text-white">
+                  <span className="typewriter-line typewriter-line-primary">
+                    Amirul Fariz
+                  </span>
+                </h2>
                 <p className="mt-2 text-sm uppercase tracking-[0.2em] text-white/75">
-                  Student developer / frontend engineer
+                  <span className="typewriter-line typewriter-line-secondary">
+                    Student developer / frontend engineer
+                  </span>
                 </p>
               </div>
-              <div className="absolute left-4 top-4 z-20 rounded-2xl border border-cyan-300/20 bg-slate-950/55 px-4 py-3 backdrop-blur-md">
-                <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-cyan-300">
+              <div className="absolute left-4 top-4 z-20 rounded-2xl border border-[color:color-mix(in_oklab,var(--primary)_28%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_18%,black)] px-4 py-3 backdrop-blur-md">
+                <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[color:color-mix(in_oklab,white_24%,var(--primary))]">
                   Status
                 </p>
                 <p className="mt-1 text-sm font-semibold text-white">Online and building</p>
               </div>
-              <div className="absolute bottom-24 right-4 z-20 rounded-2xl border border-violet-300/20 bg-slate-950/55 px-4 py-3 backdrop-blur-md">
-                <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-violet-200">
+              <div className="absolute bottom-24 right-4 z-20 rounded-2xl border border-[color:color-mix(in_oklab,var(--accent)_26%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_18%,black)] px-4 py-3 backdrop-blur-md">
+                <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[color:color-mix(in_oklab,white_24%,var(--accent))]">
                   Stack
                 </p>
                 <p className="mt-1 text-sm font-semibold text-white">Next.js / Tailwind</p>
@@ -463,7 +469,7 @@ export function PortfolioPage() {
                   </div>
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,10,20,0.06)_0%,rgba(6,10,20,0.12)_34%,rgba(6,10,20,0.78)_100%)]" />
                   <div className="absolute left-4 top-4 rounded-2xl border border-white/15 bg-black/28 px-4 py-3 backdrop-blur-md">
-                    <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.24em] text-cyan-200/90">
+                    <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.24em] text-[color:color-mix(in_oklab,white_26%,var(--primary))]">
                       Visual profile
                     </p>
                     <p className="mt-2 text-sm font-medium text-white/78">
