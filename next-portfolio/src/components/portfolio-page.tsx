@@ -19,6 +19,7 @@ import type { ReactNode } from "react";
 import { useRef } from "react";
 import amirulImage from "@/assets/project_images/amirul.jpg";
 import jackolImage from "@/assets/project_images/jackol.jpg";
+import { ChatbotWidget } from "@/components/chatbot-widget";
 import { TechBackground } from "@/components/tech-background";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -77,7 +78,7 @@ const projects = [
     year: "2025",
   },
   {
-    title: "MotoGP FansBot Chatbot",
+    title: "UiTM Perak Departments Dashboard",
     description:
       "An experimental web app used to explore conversational interactions, logic flow, and reusable UI patterns.",
     stack: ["JavaScript", "Interaction", "Web App"],
@@ -207,7 +208,7 @@ export function PortfolioPage() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.3]);
 
   return (
-    <main className="relative overflow-hidden">
+    <main suppressHydrationWarning className="relative overflow-hidden">
       <TechBackground />
       <div className="pointer-events-none absolute inset-0 -z-10 grid-glow opacity-40" />
       <div className="pointer-events-none absolute inset-0 -z-10 grain-overlay" />
@@ -239,12 +240,10 @@ export function PortfolioPage() {
           </nav>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <a
-              href="#contact"
-              className="button-primary hidden rounded-full border border-[color:color-mix(in_oklab,var(--primary)_40%,transparent)] px-5 py-2.5 text-sm font-bold sm:inline-flex"
-            >
-              Let&apos;s Talk
-            </a>
+            <ChatbotWidget
+              triggerLabel="Let&apos;s Talk"
+              triggerClassName="button-primary hidden rounded-full border border-[color:color-mix(in_oklab,var(--primary)_40%,transparent)] px-5 py-2.5 text-sm font-bold sm:inline-flex"
+            />
           </div>
         </div>
       </header>

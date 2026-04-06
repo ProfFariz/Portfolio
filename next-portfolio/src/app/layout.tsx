@@ -34,7 +34,10 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${syne.variable} ${jetbrainsMono.variable} h-full`}
     >
-      <body className="min-h-full font-[family-name:var(--font-inter)]">
+      <body
+        suppressHydrationWarning
+        className="min-h-full font-[family-name:var(--font-inter)]"
+      >
         <script
           dangerouslySetInnerHTML={{
             __html: `
