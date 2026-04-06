@@ -262,7 +262,7 @@ export function PortfolioPage() {
 
           <div className="space-y-5">
             <h1 className="display-title max-w-4xl text-6xl font-semibold leading-[0.92] md:text-[5.7rem]">
-              Building futuristic web interfaces with clean code and modern interaction.
+              Hi, Im Amirul Fariz. People call me Fariz. Lets get to know each other.
             </h1>
 
             <p className="max-w-2xl text-lg leading-8 text-muted md:text-xl">
@@ -302,14 +302,6 @@ export function PortfolioPage() {
                 <p className="display-title mt-3 text-3xl font-semibold leading-none">{item.value}</p>
               </motion.div>
             ))}
-          </div>
-
-          <div className="frame-panel px-7 py-6">
-            <p className="caps-label">System objective</p>
-            <p className="mt-4 max-w-2xl text-base leading-8 text-muted">
-              My goal is to turn product ideas into responsive interfaces with stronger visual
-              impact, cleaner structure, and dependable frontend implementation.
-            </p>
           </div>
         </motion.div>
 
@@ -381,80 +373,80 @@ export function PortfolioPage() {
           id="about"
           number="01"
           label="About"
-          title="Frontend-focused developer building modern digital experiences with a tech-first mindset."
+          title="Modern frontend builder with a product-first mindset."
         >
-          <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-            <motion.div
-              initial={{ opacity: 0, y: 26 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.65, ease: easing }}
-              className="frame-panel p-4"
-            >
-              <div className="relative overflow-hidden rounded-[1.7rem] border border-[color:color-mix(in_oklab,var(--border)_82%,transparent)]">
-                <Image
-                  src={jackolImage}
-                  alt="Jackol profile"
-                  className="h-full w-full object-cover"
-                  sizes="(max-width: 768px) 100vw, 45vw"
-                  priority={false}
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/68 via-black/20 to-transparent px-5 pb-5 pt-14">
+          <motion.div
+            initial={{ opacity: 0, y: 26 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.65, ease: easing }}
+            className="frame-panel p-4 md:p-5"
+          >
+            <div className="grid gap-5 lg:grid-cols-[0.78fr_1.22fr]">
+              <div className="relative overflow-hidden rounded-[1.9rem] border border-[color:color-mix(in_oklab,var(--border)_82%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_60%,transparent)]">
+                <div className="relative aspect-[4/4.8] w-full">
+                  <Image
+                    src={jackolImage}
+                    alt="Jackol profile"
+                    className="h-full w-full object-cover"
+                    sizes="(max-width: 1024px) 100vw, 28vw"
+                    priority={false}
+                  />
+                </div>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 via-black/18 to-transparent px-5 pb-5 pt-16">
                   <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.24em] text-white/70">
                     Developer identity
                   </p>
                   <h3 className="display-title mt-2 text-3xl font-semibold text-white">
                     Jackal
                   </h3>
+                  <p className="mt-2 text-sm uppercase tracking-[0.18em] text-white/75">
+                    UiTM student / frontend builder
+                  </p>
                 </div>
               </div>
-            </motion.div>
 
-            <div className="grid gap-5">
-              <motion.div
-                initial={{ opacity: 0, y: 26 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.65, ease: easing, delay: 0.05 }}
-                className="frame-panel px-7 py-7"
-              >
-                <p className="caps-label">Profile note</p>
-                <p className="display-title mt-4 text-3xl font-semibold leading-tight md:text-4xl">
-                  I enjoy building websites that feel advanced, usable, and clearly made for modern
-                  products.
-                </p>
-                <p className="mt-5 text-base leading-8 text-muted">
-                  I study at Universiti Teknologi Mara and spend my time improving frontend
-                  development skills through projects that combine clean code, strong interface
-                  logic, and modern visual direction. I am especially interested in product pages,
-                  landing pages, and interactive portfolio experiences.
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 26 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.65, ease: easing, delay: 0.1 }}
-                className="grid gap-5 md:grid-cols-2"
-              >
-                <div className="frame-panel px-6 py-6">
-                  <p className="caps-label">Philosophy</p>
-                  <p className="mt-4 text-sm leading-8 text-muted">
-                    Strong structure, sharp hierarchy, and purposeful motion create interfaces that
-                    feel futuristic without becoming confusing.
+              <div className="grid content-start gap-5">
+                <div className="rounded-[1.9rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_70%,transparent)] px-6 py-6 md:px-7 md:py-7">
+                  <p className="caps-label">Profile note</p>
+                  <p className="display-title mt-4 max-w-2xl text-2xl font-semibold leading-tight md:text-[2.35rem]">
+                    I build interfaces that feel clear, modern, and ready for real products.
+                  </p>
+                  <p className="mt-5 max-w-2xl text-base leading-8 text-muted">
+                    I am a UiTM student focused on frontend development with React, TypeScript,
+                    and Next.js. Most of my work goes into responsive layouts, cleaner UI systems,
+                    and digital experiences that look sharp without sacrificing usability.
                   </p>
                 </div>
-                <div className="frame-panel px-6 py-6">
-                  <p className="caps-label">Approach</p>
-                  <p className="mt-4 text-sm leading-8 text-muted">
-                    I iterate through build, test, and refine cycles until the interface feels fast,
-                    clean, and technically convincing.
-                  </p>
+
+                <div className="grid gap-5 md:grid-cols-2">
+                  <div className="rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_70%,transparent)] px-6 py-6">
+                    <p className="caps-label">Focus</p>
+                    <p className="mt-4 text-sm leading-8 text-muted">
+                      Responsive frontends, motion polish, and reusable UI patterns for product-style interfaces.
+                    </p>
+                  </div>
+                  <div className="rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_70%,transparent)] px-6 py-6">
+                    <p className="caps-label">Goal</p>
+                    <p className="mt-4 text-sm leading-8 text-muted">
+                      Keep growing through internships and practical builds that strengthen both design sense and implementation quality.
+                    </p>
+                  </div>
                 </div>
-              </motion.div>
+
+                <div className="flex flex-wrap gap-2">
+                  {["React.js", "TypeScript", "Next.js", "Motion UI"].map((item) => (
+                    <span
+                      key={item}
+                      className="tech-badge rounded-full px-3 py-1.5 font-mono text-[0.72rem] font-semibold uppercase tracking-[0.14em]"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
+          </motion.div>
         </SectionBlock>
 
         <SectionBlock

@@ -28,7 +28,7 @@ export function ChatbotWidget({
     {
       role: "assistant",
       content:
-        "Hi! I'm Amirul's portfolio assistant. Ask me about his background, skills, projects, or contact information.",
+        "Hi! I'm Amirul's portfolio assistant. I can only answer questions about Amirul, his background, skills, projects, and contact information.",
     },
   ]);
 

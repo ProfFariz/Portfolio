@@ -8,6 +8,13 @@ type Chunk = {
   text: string;
 };
 
+export type RetrievalResult = {
+  context: string;
+  hasRelevantMatch: boolean;
+  topScore: number;
+  sources: string[];
+};
+
 function normalizeText(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9\s]/g, " ");
 }
@@ -62,7 +69,7 @@ function splitIntoChunks(source: string, content: string): Chunk[] {
   return compact.map((text) => ({ source, text }));
 }
 
-export async function retrieveKnowledge(query: string) {
+export async function retrieveKnowledge(query: string): Promise<RetrievalResult> {
   try {
     const markdownFiles = await collectMarkdownFiles(knowledgeRoot);
     const chunks = await Promise.all(
@@ -83,11 +90,22 @@ export async function retrieveKnowledge(query: string) {
       .filter((chunk) => chunk.score > 0);
 
     const selectedChunks = ranked.length > 0 ? ranked : chunks.flat().slice(0, 4);
+    const uniqueSources = [...new Set(selectedChunks.map((chunk) => chunk.source))];
 
-    return selectedChunks
-      .map((chunk) => `Source: ${chunk.source}\n${chunk.text}`)
-      .join("\n\n---\n\n");
+    return {
+      context: selectedChunks
+        .map((chunk) => `Source: ${chunk.source}\n${chunk.text}`)
+        .join("\n\n---\n\n"),
+      hasRelevantMatch: ranked.length > 0,
+      topScore: ranked[0]?.score ?? 0,
+      sources: uniqueSources,
+    };
   } catch {
-    return "";
+    return {
+      context: "",
+      hasRelevantMatch: false,
+      topScore: 0,
+      sources: [],
+    };
   }
 }

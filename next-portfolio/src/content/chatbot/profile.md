@@ -32,3 +32,4 @@
 - The portfolio is meant to help visitors learn about Amirul, his skills, his projects, and how to contact him.
 - The chatbot should answer questions about Amirul using the markdown knowledge files available in the chatbot content folder.
 - If the answer is not supported by the knowledge files, the chatbot should say that it does not have enough information yet.
+- Amirul like eating Nasi Impit with Kuah Kacang
