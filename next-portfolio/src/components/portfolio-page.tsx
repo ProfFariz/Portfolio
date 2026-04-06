@@ -153,12 +153,14 @@ function SectionBlock({
   number,
   label,
   title,
+  description,
   children,
 }: {
   id: string;
   number: string;
   label: string;
   title: string;
+  description: string;
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -177,19 +179,23 @@ function SectionBlock({
         style={{ opacity, y, scale }}
         className="section-shell section-sticky px-6 py-8 [transform-origin:top_center] md:px-10 md:py-10"
       >
-        <div className="grid gap-8 md:grid-cols-[0.9fr_1.1fr]">
-          <div className="md:sticky md:top-28 md:self-start">
-            <div className="flex items-center gap-4">
-              <span className="section-number">{number}</span>
-              <div className="section-divider flex-1" />
+        <div className="flex flex-col gap-7">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-4xl">
+              <div className="flex items-center gap-3">
+                <span className="section-number">{number}</span>
+                <div className="section-divider w-14 sm:w-20" />
+                <p className="caps-label">{label}</p>
+              </div>
+              <h2 className="display-title mt-5 max-w-4xl text-4xl font-semibold leading-[0.94] sm:text-5xl lg:text-[4.7rem]">
+                {title}
+              </h2>
             </div>
-            <p className="mt-5 caps-label">
-              {label}
+            <p className="max-w-xl text-sm leading-7 text-muted sm:text-base sm:leading-8">
+              {description}
             </p>
-            <h2 className="display-title mt-4 text-4xl font-semibold leading-none md:text-6xl">
-              {title}
-            </h2>
           </div>
+          <div className="soft-rule" />
           <div>{children}</div>
         </div>
       </motion.section>
@@ -373,109 +379,211 @@ export function PortfolioPage() {
           id="about"
           number="01"
           label="About"
-          title="Modern frontend builder with a product-first mindset."
+          title="Clear interfaces, cleaner systems, and a frontend style built for modern products."
+          description="A quick view into how I work, what I care about, and the direction I am building toward as a frontend developer."
         >
-          <motion.div
-            initial={{ opacity: 0, y: 26 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.65, ease: easing }}
-            className="frame-panel p-4 md:p-5"
-          >
-            <div className="grid gap-5 lg:grid-cols-[0.78fr_1.22fr]">
-              <div className="relative overflow-hidden rounded-[1.9rem] border border-[color:color-mix(in_oklab,var(--border)_82%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_60%,transparent)]">
-                <div className="relative aspect-[4/4.8] w-full">
-                  <Image
-                    src={jackolImage}
-                    alt="Jackol profile"
-                    className="h-full w-full object-cover"
-                    sizes="(max-width: 1024px) 100vw, 28vw"
-                    priority={false}
-                  />
-                </div>
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/72 via-black/18 to-transparent px-5 pb-5 pt-16">
-                  <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.24em] text-white/70">
-                    Developer identity
-                  </p>
-                  <h3 className="display-title mt-2 text-3xl font-semibold text-white">
-                    Jackal
-                  </h3>
-                  <p className="mt-2 text-sm uppercase tracking-[0.18em] text-white/75">
-                    UiTM student / frontend builder
-                  </p>
-                </div>
+          <div className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr]">
+            <motion.div
+              initial={{ opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.65, ease: easing }}
+              className="frame-panel px-6 py-6 md:px-8 md:py-8"
+            >
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="caps-label">Profile note</span>
+                <span className="rounded-full border border-[color:color-mix(in_oklab,var(--accent)_30%,transparent)] bg-[color:color-mix(in_oklab,var(--secondary)_85%,transparent)] px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[color:var(--muted-foreground)]">
+                  UiTM / Malaysia
+                </span>
+              </div>
+              <h3 className="display-title mt-5 max-w-3xl text-3xl font-semibold leading-[0.95] sm:text-4xl md:text-[3.2rem]">
+                I build digital experiences that feel sharp, responsive, and ready for real users.
+              </h3>
+              <p className="mt-5 max-w-2xl text-sm leading-8 text-muted sm:text-base">
+                I am a UiTM student focused on frontend development with React, TypeScript, and
+                Next.js. My work leans into structured layouts, modern interaction design, and UI
+                systems that stay polished without losing clarity.
+              </p>
+
+              <div className="mt-8 grid gap-4 md:grid-cols-3">
+                {[
+                  {
+                    label: "Focus",
+                    value: "Product pages, clean UI systems, and motion that supports the story.",
+                  },
+                  {
+                    label: "Mindset",
+                    value: "Design-first thinking backed by maintainable code and reusable structure.",
+                  },
+                  {
+                    label: "Next step",
+                    value: "Grow through internships and real delivery environments with stronger product work.",
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-[1.55rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_72%,transparent)] px-5 py-5"
+                  >
+                    <p className="caps-label">{item.label}</p>
+                    <p className="mt-4 text-sm leading-7 text-muted">{item.value}</p>
+                  </div>
+                ))}
               </div>
 
-              <div className="grid content-start gap-5">
-                <div className="rounded-[1.9rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_70%,transparent)] px-6 py-6 md:px-7 md:py-7">
-                  <p className="caps-label">Profile note</p>
-                  <p className="display-title mt-4 max-w-2xl text-2xl font-semibold leading-tight md:text-[2.35rem]">
-                    I build interfaces that feel clear, modern, and ready for real products.
-                  </p>
-                  <p className="mt-5 max-w-2xl text-base leading-8 text-muted">
-                    I am a UiTM student focused on frontend development with React, TypeScript,
-                    and Next.js. Most of my work goes into responsive layouts, cleaner UI systems,
-                    and digital experiences that look sharp without sacrificing usability.
-                  </p>
-                </div>
-
-                <div className="grid gap-5 md:grid-cols-2">
-                  <div className="rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_70%,transparent)] px-6 py-6">
-                    <p className="caps-label">Focus</p>
-                    <p className="mt-4 text-sm leading-8 text-muted">
-                      Responsive frontends, motion polish, and reusable UI patterns for product-style interfaces.
-                    </p>
-                  </div>
-                  <div className="rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_70%,transparent)] px-6 py-6">
-                    <p className="caps-label">Goal</p>
-                    <p className="mt-4 text-sm leading-8 text-muted">
-                      Keep growing through internships and practical builds that strengthen both design sense and implementation quality.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {["React.js", "TypeScript", "Next.js", "Motion UI"].map((item) => (
-                    <span
-                      key={item}
-                      className="tech-badge rounded-full px-3 py-1.5 font-mono text-[0.72rem] font-semibold uppercase tracking-[0.14em]"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
+              <div className="mt-8 flex flex-wrap gap-2">
+                {["React.js", "TypeScript", "Next.js", "Tailwind", "Motion UI"].map((item) => (
+                  <span
+                    key={item}
+                    className="tech-badge rounded-full px-3 py-1.5 font-mono text-[0.72rem] font-semibold uppercase tracking-[0.14em]"
+                  >
+                    {item}
+                  </span>
+                ))}
               </div>
+            </motion.div>
+
+            <div className="grid gap-5 content-start">
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={{ duration: 0.6, ease: easing, delay: 0.05 }}
+                className="frame-panel p-4"
+              >
+                <div className="relative overflow-hidden rounded-[1.8rem] border border-[color:color-mix(in_oklab,var(--border)_86%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_60%,transparent)]">
+                  <div className="relative aspect-[4/5] w-full">
+                    <Image
+                      src={jackolImage}
+                      alt="Amirul Fariz profile"
+                      fill
+                      className="object-cover object-center"
+                      sizes="(max-width: 1024px) 100vw, 30vw"
+                      priority={false}
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,10,20,0.06)_0%,rgba(6,10,20,0.12)_34%,rgba(6,10,20,0.78)_100%)]" />
+                  <div className="absolute left-4 top-4 rounded-2xl border border-white/15 bg-black/28 px-4 py-3 backdrop-blur-md">
+                    <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.24em] text-cyan-200/90">
+                      Visual profile
+                    </p>
+                    <p className="mt-2 text-sm font-medium text-white/78">
+                      Frontend student builder
+                    </p>
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/84 via-black/36 to-transparent px-5 pb-5 pt-20">
+                    <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.24em] text-white/70">
+                      Current identity
+                    </p>
+                    <h3 className="display-title mt-2 text-3xl font-semibold text-white">
+                      Amirul Fariz
+                    </h3>
+                    <p className="mt-2 text-sm uppercase tracking-[0.18em] text-white/75">
+                      UiTM student / frontend builder
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={{ duration: 0.6, ease: easing, delay: 0.1 }}
+                className="grid gap-4 sm:grid-cols-2"
+              >
+                {[
+                  ["Current focus", "Responsive frontends and stronger interaction polish."],
+                  ["2026 direction", "Internship-ready work with better product presentation."],
+                ].map(([labelText, valueText]) => (
+                  <div
+                    key={labelText}
+                    className="frame-panel px-5 py-5"
+                  >
+                    <p className="caps-label">{labelText}</p>
+                    <p className="mt-4 text-sm leading-7 text-muted">{valueText}</p>
+                  </div>
+                ))}
+              </motion.div>
             </div>
-          </motion.div>
+          </div>
         </SectionBlock>
 
         <SectionBlock
           id="skills"
           number="02"
           label="Skills"
-          title="Core capabilities for shipping polished frontend work and stronger UI systems."
+          title="A stack designed for product pages, UI systems, and responsive experiences."
+          description="These are the areas I rely on most when turning ideas into interfaces that feel modern, usable, and ready to scale."
         >
-          <div className="grid gap-5 md:grid-cols-2">
-            {skills.map((skill, index) => {
-              const Icon = skill.icon;
-              return (
-                <motion.article
-                  key={skill.title}
-                  initial={{ opacity: 0, y: 36, rotateX: 10 }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.6, delay: index * 0.08, ease: easing }}
-                  className="frame-panel px-6 py-6 transition-transform duration-300 hover:-translate-y-1"
-                >
-                  <div className="mb-5 inline-flex rounded-2xl border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--accent)_28%,var(--background))] p-3 text-theme-primary">
-                    <Icon className="size-5" />
-                  </div>
-                  <p className="caps-label">Capability {String(index + 1).padStart(2, "0")}</p>
-                  <h3 className="display-title mt-3 text-3xl font-semibold leading-none">{skill.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-muted">{skill.description}</p>
-                </motion.article>
-              );
-            })}
+          <div className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.62, ease: easing }}
+              className="frame-panel px-6 py-6 md:px-8 md:py-8"
+            >
+              <p className="caps-label">Capability map</p>
+              <h3 className="display-title mt-5 max-w-2xl text-3xl font-semibold leading-[0.96] sm:text-4xl">
+                I care about the balance between visual polish, responsive behavior, and code that stays organized.
+              </h3>
+              <p className="mt-5 max-w-2xl text-sm leading-8 text-muted sm:text-base">
+                My strongest work happens where layout systems, clean frontend structure, and subtle interaction design meet. I like building interfaces that feel premium but still easy to use.
+              </p>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_72%,transparent)] px-5 py-5">
+                  <p className="caps-label">Primary stack</p>
+                  <p className="mt-4 text-sm leading-7 text-muted">
+                    React, Next.js, TypeScript, Tailwind CSS, and component-based UI structure.
+                  </p>
+                </div>
+                <div className="rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_72%,transparent)] px-5 py-5">
+                  <p className="caps-label">Workflow</p>
+                  <p className="mt-4 text-sm leading-7 text-muted">
+                    Practical prototyping, Git-based iteration, debugging, and frontend refinement.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-2">
+                {["Next.js", "Tailwind CSS", "Framer Motion", "Responsive UI", "Git Workflow"].map(
+                  (item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_84%,transparent)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em]"
+                    >
+                      {item}
+                    </span>
+                  ),
+                )}
+              </div>
+            </motion.div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              {skills.map((skill, index) => {
+                const Icon = skill.icon;
+                return (
+                  <motion.article
+                    key={skill.title}
+                    initial={{ opacity: 0, y: 36, rotateX: 8 }}
+                    whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.6, delay: index * 0.08, ease: easing }}
+                    className="frame-panel px-6 py-6 transition-transform duration-300 hover:-translate-y-1"
+                  >
+                    <div className="mb-5 inline-flex rounded-2xl border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--accent)_24%,var(--background))] p-3 text-theme-primary">
+                      <Icon className="size-5" />
+                    </div>
+                    <p className="caps-label">Capability {String(index + 1).padStart(2, "0")}</p>
+                    <h3 className="display-title mt-3 text-3xl font-semibold leading-none">
+                      {skill.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-muted">{skill.description}</p>
+                  </motion.article>
+                );
+              })}
+            </div>
           </div>
         </SectionBlock>
 
@@ -483,60 +591,125 @@ export function PortfolioPage() {
           id="projects"
           number="03"
           label="Projects"
-          title="Selected builds that show my approach to layout, interaction, and product presentation."
+          title="Recent builds that show how I approach flow, hierarchy, and product storytelling."
+          description="A small set of projects that reflect my current design direction: cleaner sections, stronger pacing, and more intentional frontend presentation."
         >
-          <div className="grid gap-5 lg:grid-cols-3">
-            {projects.map((project, index) => (
-              <motion.article
-                key={project.title}
-                initial={{ opacity: 0, y: 36, scale: 0.96 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.62, delay: index * 0.08, ease: easing }}
-                className="frame-panel group px-6 py-6 transition-transform duration-300 hover:-translate-y-1"
-              >
-                <div className="rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[linear-gradient(135deg,color-mix(in_oklab,var(--accent)_40%,var(--background))_0%,color-mix(in_oklab,var(--secondary)_86%,var(--background))_100%)] px-5 py-5">
+          <div className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr]">
+            <motion.article
+              initial={{ opacity: 0, y: 36, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.62, ease: easing }}
+              className="frame-panel px-6 py-6 md:px-8 md:py-8"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="caps-label">Featured build</span>
+                  <span className="rounded-full border border-[color:color-mix(in_oklab,var(--accent)_34%,transparent)] bg-[color:color-mix(in_oklab,var(--secondary)_88%,transparent)] px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[color:var(--muted-foreground)]">
+                    {projects[0].year}
+                  </span>
+                </div>
+                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+                  {projects[0].label}
+                </span>
+              </div>
+
+              <div className="mt-7 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+                <div>
+                  <h3 className="display-title text-4xl font-semibold leading-[0.94] md:text-[3.2rem]">
+                    {projects[0].title}
+                  </h3>
+                  <p className="mt-5 max-w-2xl text-sm leading-8 text-muted sm:text-base">
+                    {projects[0].description}
+                  </p>
+
+                  <div className="mt-7 flex flex-wrap gap-2">
+                    {projects[0].stack.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_84%,transparent)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em]"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-7 flex flex-wrap items-center gap-4">
+                    <a
+                      href={projects[0].href}
+                      className="button-primary inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-bold"
+                    >
+                      View project
+                      <ArrowUpRight className="size-4" />
+                    </a>
+                    <a
+                      href="https://github.com/ProfFariz/Portfolio"
+                      className="inline-flex items-center gap-2 rounded-full border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] px-5 py-3 text-sm font-bold text-[color:var(--foreground)]"
+                    >
+                      <GitFork className="size-4" />
+                      GitHub repo
+                    </a>
+                  </div>
+                </div>
+
+                <div className="grid gap-4">
+                  {[
+                    ["Direction", "Motion-led UI with cleaner hierarchy and stronger hero-to-section flow."],
+                    ["Strength", "Responsive layout thinking with better section pacing and modern surface styling."],
+                    ["Use case", "Portfolio and landing page patterns that feel premium without becoming hard to use."],
+                  ].map(([labelText, valueText]) => (
+                    <div
+                      key={labelText}
+                      className="rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_72%,transparent)] px-5 py-5"
+                    >
+                      <p className="caps-label">{labelText}</p>
+                      <p className="mt-4 text-sm leading-7 text-muted">{valueText}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.article>
+
+            <div className="grid gap-5">
+              {projects.slice(1).map((project, index) => (
+                <motion.article
+                  key={project.title}
+                  initial={{ opacity: 0, y: 36, scale: 0.97 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.62, delay: index * 0.08, ease: easing }}
+                  className="frame-panel px-6 py-6"
+                >
                   <div className="flex items-center justify-between gap-4">
                     <p className="caps-label">{project.label}</p>
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
                       {project.year}
                     </p>
                   </div>
-                  <div className="soft-rule mt-5" />
-                  <p className="display-title mt-5 text-4xl font-semibold leading-none">
-                    {String(index + 1).padStart(2, "0")}
-                  </p>
-                </div>
-                <h3 className="display-title mt-6 text-3xl font-semibold leading-none">{project.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-muted">{project.description}</p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {project.stack.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-full border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_84%,transparent)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em]"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-6 flex items-center gap-4">
+                  <h3 className="display-title mt-5 text-3xl font-semibold leading-[0.98]">
+                    {project.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-muted">{project.description}</p>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {project.stack.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_84%,transparent)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em]"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                   <a
                     href={project.href}
-                    className="inline-flex items-center gap-2 text-sm font-bold text-theme-primary"
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-theme-primary"
                   >
-                    View Project
-                    <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    Explore build
+                    <ArrowUpRight className="size-4" />
                   </a>
-                  <a
-                    href="https://github.com/ProfFariz/Portfolio"
-                    className="inline-flex items-center gap-2 text-sm font-bold text-[color:var(--muted-foreground)]"
-                  >
-                    <GitFork className="size-4" />
-                    GitHub
-                  </a>
-                </div>
-              </motion.article>
-            ))}
+                </motion.article>
+              ))}
+            </div>
           </div>
         </SectionBlock>
 
@@ -544,36 +717,62 @@ export function PortfolioPage() {
           id="experience"
           number="04"
           label="Experience"
-          title="A growing path shaped by technical practice, frontend execution, and real-world readiness."
+          title="A frontend path built through learning fast, shipping often, and raising the quality bar."
+          description="I am still early in the journey, but the direction is clear: better product work, stronger execution, and more real-world team experience."
         >
           <div className="grid gap-5">
-            {experience.map((item, index) => {
-              const Icon = item.icon;
-              return (
-              <motion.article
-                key={item.title}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -24 : 24, scale: 0.98 }}
-                whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.62, ease: easing, delay: index * 0.05 }}
-                className="frame-panel px-6 py-6"
-              >
-                <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-                  <div className="flex items-start gap-4">
-                    <div className="inline-flex rounded-2xl border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--accent)_24%,var(--background))] p-3 text-theme-primary">
-                      <Icon className="size-5" />
-                    </div>
-                    <div>
-                      <p className="caps-label">{item.phase}</p>
-                      <h3 className="display-title mt-3 text-3xl font-semibold leading-none">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, ease: easing }}
+              className="frame-panel px-6 py-6 md:px-8 md:py-8"
+            >
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                <div className="max-w-2xl">
+                  <p className="caps-label">Trajectory</p>
+                  <h3 className="display-title mt-4 text-3xl font-semibold leading-[0.96] sm:text-4xl">
+                    Student foundation, product-facing practice, and a clear next step into internship-level work.
+                  </h3>
+                </div>
+                <p className="max-w-xl text-sm leading-8 text-muted">
+                  My experience is being shaped by building interfaces, improving visual judgment, and learning how frontend systems should look, feel, and scale in real products.
+                </p>
+              </div>
+            </motion.div>
+
+            <div className="relative">
+              <div className="pointer-events-none absolute left-8 right-8 top-9 hidden h-px bg-[linear-gradient(90deg,transparent,color-mix(in_oklab,var(--accent)_55%,transparent),transparent)] lg:block" />
+              <div className="grid gap-5 lg:grid-cols-3">
+                {experience.map((item, index) => {
+                  const Icon = item.icon;
+                  return (
+                    <motion.article
+                      key={item.title}
+                      initial={{ opacity: 0, y: 32 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.6, ease: easing, delay: index * 0.06 }}
+                      className="frame-panel px-6 py-6"
+                    >
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="inline-flex rounded-2xl border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--accent)_22%,var(--background))] p-3 text-theme-primary">
+                          <Icon className="size-5" />
+                        </div>
+                        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+                          0{index + 1}
+                        </span>
+                      </div>
+                      <p className="mt-5 caps-label">{item.phase}</p>
+                      <h3 className="display-title mt-3 text-3xl font-semibold leading-[0.98]">
                         {item.title}
                       </h3>
-                    </div>
-                  </div>
-                  <p className="max-w-xl text-sm leading-8 text-muted">{item.description}</p>
-                </div>
-              </motion.article>
-            )})}
+                      <p className="mt-4 text-sm leading-7 text-muted">{item.description}</p>
+                    </motion.article>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </SectionBlock>
 
@@ -581,33 +780,69 @@ export function PortfolioPage() {
           id="contact"
           number="05"
           label="Contact"
-          title="Interested in building something modern, interactive, and useful together?"
+          title="Open to internships, freelance projects, and product collaborations."
+          description="If the brief needs modern UI, responsive execution, and someone who cares about the final details, this is the easiest way to reach me."
         >
-          <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr]">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.65, ease: easing }}
-              className="frame-panel px-8 py-8"
+              className="frame-panel px-6 py-6 md:px-8 md:py-8"
             >
-              <p className="caps-label">Availability</p>
-              <h3 className="display-title mt-4 text-4xl font-semibold leading-none md:text-5xl">
-                Let&apos;s build something tech-focused together.
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="caps-label">Availability</span>
+                <span className="rounded-full border border-[color:color-mix(in_oklab,var(--accent)_35%,transparent)] bg-[color:color-mix(in_oklab,var(--secondary)_88%,transparent)] px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[color:var(--muted-foreground)]">
+                  Open for opportunities
+                </span>
+              </div>
+              <h3 className="display-title mt-5 max-w-3xl text-4xl font-semibold leading-[0.95] md:text-[3.25rem]">
+                Let&apos;s build something useful, modern, and visually sharp together.
               </h3>
-              <p className="mt-6 max-w-xl text-base leading-8 text-muted">
-                I am open to internships, freelance work, and collaborative projects where strong
-                frontend execution, responsive UI, and modern visual presentation matter.
+              <p className="mt-6 max-w-2xl text-sm leading-8 text-muted sm:text-base">
+                I am open to internships, freelance work, and collaborative builds where frontend quality, responsive UI, and polished presentation really matter.
               </p>
-              <div className="soft-rule mt-6" />
-              <p className="mt-6 text-sm leading-8 text-muted">
-                You can reach me directly through email or phone, or browse my GitHub profile for
-                current work and experiments.
-              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href="mailto:amirulfariz901@gmail.com"
+                  className="button-primary inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-bold"
+                >
+                  Email me
+                  <ArrowUpRight className="size-4" />
+                </a>
+                <ChatbotWidget
+                  triggerLabel="Ask AI about me"
+                  triggerClassName="button-secondary inline-flex rounded-full px-5 py-3 text-sm font-bold"
+                />
+                <a
+                  href="https://github.com/ProfFariz"
+                  className="inline-flex items-center gap-2 rounded-full border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] px-5 py-3 text-sm font-bold text-[color:var(--foreground)]"
+                >
+                  <GitFork className="size-4" />
+                  GitHub
+                </a>
+              </div>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                {[
+                  ["Response", "Best through email or the portfolio chat window."],
+                  ["Location", "Based in Malaysia and currently studying at UiTM."],
+                ].map(([labelText, valueText]) => (
+                  <div
+                    key={labelText}
+                    className="rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_72%,transparent)] px-5 py-5"
+                  >
+                    <p className="caps-label">{labelText}</p>
+                    <p className="mt-4 text-sm leading-7 text-muted">{valueText}</p>
+                  </div>
+                ))}
+              </div>
             </motion.div>
 
-            <div className="grid gap-3">
-              {contactLinks.map((item) => {
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
+              {contactLinks.map((item, index) => {
                 const Icon = item.icon;
                 return (
                   <motion.a
@@ -615,19 +850,21 @@ export function PortfolioPage() {
                     initial={{ opacity: 0, x: 22 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, amount: 0.25 }}
-                    transition={{ duration: 0.55, ease: easing }}
+                    transition={{ duration: 0.55, ease: easing, delay: index * 0.04 }}
                     href={item.href}
-                    className="surface-popover frame-panel flex items-center justify-between rounded-[24px] px-5 py-4 transition-transform duration-300 hover:-translate-y-0.5"
+                    className="frame-panel flex items-center justify-between gap-4 px-5 py-5 transition-transform duration-300 hover:-translate-y-0.5"
                   >
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.18em] text-theme-primary">
                         {item.label}
                       </p>
-                      <p className="mt-1 text-sm font-semibold text-[color:var(--foreground)]">
+                      <p className="mt-2 text-sm font-semibold text-[color:var(--foreground)] sm:text-base">
                         {item.value}
                       </p>
                     </div>
-                    <Icon className="size-5 text-theme-primary" />
+                    <div className="inline-flex rounded-2xl border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--accent)_18%,var(--background))] p-3 text-theme-primary">
+                      <Icon className="size-5" />
+                    </div>
                   </motion.a>
                 );
               })}
