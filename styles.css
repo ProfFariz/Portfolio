@@ -266,6 +266,11 @@ h3 {
   align-items: stretch;
 }
 
+.hero-visual-stack {
+  display: grid;
+  gap: 1.25rem;
+}
+
 .hero-copy h1 {
   margin: 0.7rem 0 1rem;
   font-size: clamp(2.8rem, 7vw, 5.4rem);
@@ -334,6 +339,38 @@ h3 {
       color-mix(in oklab, var(--primary) 10%, var(--surface-strong)) 0%,
       color-mix(in oklab, var(--chart-2) 8%, var(--surface-soft)) 100%
     );
+}
+
+.hero-card-animation {
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.hero-animation-shell {
+  position: relative;
+  min-height: 240px;
+  border: 1px solid color-mix(in oklab, var(--primary) 10%, var(--border));
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% 25%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 48%),
+    linear-gradient(180deg, color-mix(in oklab, var(--background) 84%, transparent), color-mix(in oklab, var(--secondary) 55%, transparent));
+  box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.18);
+}
+
+.hero-lottie {
+  width: 100%;
+  height: 240px;
+  border: 0;
+  background: transparent;
+}
+
+.hero-animation-copy {
+  margin-top: 1.25rem;
+}
+
+.hero-animation-copy h3 {
+  margin: 0.35rem 0 0.65rem;
+  font-size: 1.3rem;
 }
 
 .hero-chip-row {
@@ -543,6 +580,10 @@ h3 {
 
   .hero-meta {
     grid-template-columns: 1fr;
+  }
+
+  .hero-card-animation {
+    min-height: 0;
   }
 
   .nav-toggle {
