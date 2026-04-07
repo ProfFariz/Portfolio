@@ -80,8 +80,8 @@ const projects: Project[] = [
   {
     title: "Mathivity",
     description:
-      "An educational 2D tower defense game built as a final year project to help primary school students learn percentages, ratios, and fractions through immersive strategic play.",
-    stack: ["Godot 4", "GDScript", "HTML5/WebGL", "Windows Export", "Live2D Cubism"],
+      "An educational 2D tower defense game designed to reinforce mathematical fluency, allowing primary school students to test their knowledge of percentages, ratios, and fractions in a strategic environment.",
+    stack: ["Godot 4", "GDScript", "HTML5/WebGL", "Windows Export"],
     href: "https://amirulgodot.itch.io/mathivity",
     label: "Educational Game",
     year: "FYP",
@@ -118,7 +118,6 @@ const projects: Project[] = [
       "Presented successfully at the SULAM International Project in Perak, Malaysia.",
       "Validated through user testing with an 81.9% usability rating.",
       "Received 100% positive feedback on the visual art style.",
-      "Used Live2D Cubism for character assets and built related mobile security challenge work with Android Studio.",
       "Completed the UiTM Mobile SecOps 21 Days Challenge with the Rentverse Defender project.",
     ],
   },
