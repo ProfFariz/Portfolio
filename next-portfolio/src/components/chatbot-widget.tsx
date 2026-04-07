@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,11 +14,13 @@ type ChatMessage = {
 type ChatbotWidgetProps = {
   triggerClassName: string;
   triggerLabel: string;
+  triggerContent?: ReactNode;
 };
 
 export function ChatbotWidget({
   triggerClassName,
   triggerLabel,
+  triggerContent,
 }: ChatbotWidgetProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -199,8 +202,14 @@ export function ChatbotWidget({
 
   return (
     <>
-      <button type="button" onClick={() => setIsOpen(true)} className={triggerClassName}>
-        {triggerLabel}
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className={triggerClassName}
+        aria-label={triggerLabel}
+        title={triggerLabel}
+      >
+        {triggerContent ?? triggerLabel}
       </button>
 
       {isMounted ? createPortal(chatPanel, document.body) : null}

@@ -17,8 +17,8 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useRef } from "react";
-import amirulImage from "@/assets/project_images/amirul.jpg";
 import jackolImage from "@/assets/project_images/jackol.jpg";
+import motominiGif from "@/assets/project_images/motomini.gif";
 import { ChatbotWidget } from "@/components/chatbot-widget";
 import { TechBackground } from "@/components/tech-background";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -58,15 +58,69 @@ const skills = [
   },
 ];
 
-const projects = [
+type Project = {
+  title: string;
+  description: string;
+  stack: string[];
+  href: string;
+  label: string;
+  year: string;
+  ctaLabel?: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+  embedSrc?: string;
+  detailTitle?: string;
+  detailSummary?: string;
+  metaCards?: Array<{ label: string; value: string }>;
+  features?: string[];
+  achievements?: string[];
+};
+
+const projects: Project[] = [
   {
     title: "Mathivity",
     description:
-      "A modern web experience focused on smooth motion, responsive behavior, and polished interface storytelling.",
-    stack: ["Next.js", "Tailwind", "Framer Motion"],
-    href: "https://github.com/ProfFariz/Portfolio",
-    label: "UI System",
-    year: "2025",
+      "An educational 2D tower defense game built as a final year project to help primary school students learn percentages, ratios, and fractions through immersive strategic play.",
+    stack: ["Godot 4", "GDScript", "HTML5/WebGL", "Windows Export", "Live2D Cubism"],
+    href: "https://amirulgodot.itch.io/mathivity",
+    label: "Educational Game",
+    year: "FYP",
+    ctaLabel: "Play on itch.io",
+    secondaryHref: "#showcase",
+    secondaryLabel: "Open live showcase",
+    embedSrc: "https://itch.io/embed-upload/16436534?color=333333",
+    detailTitle:
+      "A 2D mathematical tower defense experience that turns core maths practice into a rewarding gameplay loop.",
+    detailSummary:
+      "Mathivity uses Math Popups, narrative-driven challenges, and three distinct thematic worlds to reduce student anxiety and make mathematical problem-solving feel more engaging than traditional worksheet-based learning.",
+    metaCards: [
+      {
+        label: "Learning layer",
+        value: "Three thematic worlds designed around percentages, ratios, and fractions.",
+      },
+      {
+        label: "Gameplay logic",
+        value: "Mathematical answers become strategic requirements for placement, path decisions, and victory.",
+      },
+      {
+        label: "Deployment",
+        value: "Optimized export builds for Windows Desktop and HTML5/WebGL to support low-end school hardware.",
+      },
+    ],
+    features: [
+      "Implemented a Target Lock system to synchronize ballistic projectiles with moving enemy targets for more accurate hit animation.",
+      "Built spatial validation logic with a 60-pixel distance check to prevent tower overlap and preserve path integrity.",
+      "Created Math Popup assessment modals that pause the game state with get_tree().paused = true while students answer questions.",
+      "Developed a dialogue system that gives actionable cues about upcoming path splits using percentage-based strategic hints.",
+      "Configured cross-platform delivery for offline Windows desktop play and browser-based HTML5/WebGL access.",
+    ],
+    achievements: [
+      "Presented successfully at the SULAM International Project in Perak, Malaysia.",
+      "Validated through user testing with an 81.9% usability rating.",
+      "Received 100% positive feedback on the visual art style.",
+      "Used Live2D Cubism for character assets and built related mobile security challenge work with Android Studio.",
+      "Completed the UiTM Mobile SecOps 21 Days Challenge with the Rentverse Defender project.",
+    ],
   },
   {
     title: "MotoGP FansBot",
@@ -212,6 +266,8 @@ export function PortfolioPage() {
   });
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 90]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.3]);
+  const featuredProject = projects[0];
+  const playableProject = projects[0];
 
   return (
     <main suppressHydrationWarning className="relative overflow-hidden">
@@ -227,6 +283,27 @@ export function PortfolioPage() {
           style={{ scaleY: pageProgress }}
         />
       </motion.div>
+      <div className="fixed bottom-5 right-5 z-[90]">
+        <ChatbotWidget
+          triggerLabel="Open Amirul chatbot"
+          triggerClassName="group inline-flex items-center justify-center rounded-full bg-transparent transition-transform duration-300 hover:-translate-y-1 focus:outline-none"
+          triggerContent={
+            <span className="relative inline-flex items-center justify-center">
+              <span className="absolute inset-0 rounded-full bg-[color:color-mix(in_oklab,var(--primary)_20%,transparent)] blur-2xl transition-opacity duration-300 group-hover:opacity-100" />
+              <span className="relative inline-flex rounded-full border border-[color:color-mix(in_oklab,var(--primary)_30%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_34%,transparent)] p-2 shadow-[0_18px_40px_-24px_color-mix(in_oklab,var(--primary)_55%,transparent)] backdrop-blur-md">
+                <Image
+                  src={motominiGif}
+                  alt="Motomini chatbot mascot"
+                  unoptimized
+                  className="h-16 w-16 rounded-full object-cover sm:h-[4.5rem] sm:w-[4.5rem]"
+                  sizes="72px"
+                  priority={false}
+                />
+              </span>
+            </span>
+          }
+        />
+      </div>
 
       <header className="sticky top-0 z-40 border-b border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_82%,transparent)] backdrop-blur-xl">
         <div className="mx-auto flex w-[min(1120px,calc(100vw-1.5rem))] items-center justify-between gap-4 py-4">
@@ -322,7 +399,7 @@ export function PortfolioPage() {
               <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(0,0,0,0.06)_100%)] dark:bg-[linear-gradient(180deg,transparent_0%,rgba(0,0,0,0.28)_100%)]" />
               <div className="relative aspect-[4/4.85] w-full">
                 <Image
-                  src={amirulImage}
+                  src={jackolImage}
                   alt="Amirul portrait"
                   className="h-full w-full object-cover"
                   sizes="(max-width: 768px) 100vw, 42vw"
@@ -378,6 +455,126 @@ export function PortfolioPage() {
             </p>
           </div>
         </motion.div>
+      </motion.section>
+
+      <motion.section
+        id="showcase"
+        initial={{ opacity: 0, y: 36 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.7, ease: easing }}
+        className="mx-auto w-[min(1120px,calc(100vw-1.5rem))] pb-10"
+      >
+        <div className="section-shell px-6 py-6 md:px-8 md:py-8">
+          <div className="max-w-4xl">
+            <div className="flex items-center gap-3">
+              <span className="section-number">00</span>
+              <div className="section-divider w-14 sm:w-20" />
+              <p className="caps-label">Main attraction</p>
+            </div>
+            <h2 className="display-title mt-5 max-w-4xl text-4xl font-semibold leading-[0.94] sm:text-5xl lg:text-[4.5rem]">
+              Play Mathivity directly from the portfolio.
+            </h2>
+          </div>
+
+          <div className="soft-rule mt-7" />
+
+          <div className="mt-7 grid gap-6 xl:grid-cols-[1.18fr_0.82fr]">
+            <div className="grid gap-5 content-start">
+              <div className="frame-panel p-3 md:p-4">
+                <div className="relative overflow-hidden rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-black/35">
+                  <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-black/20 to-transparent" />
+                  <div className="absolute left-4 top-4 z-10 rounded-full border border-[color:color-mix(in_oklab,var(--primary)_28%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_24%,black)] px-3 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[color:color-mix(in_oklab,white_18%,var(--primary))] backdrop-blur-md">
+                    Browser playable
+                  </div>
+                  <div className="relative aspect-[1152/668] w-full">
+                    <iframe
+                      title="Play Mathivity on itch.io"
+                      src={playableProject.embedSrc}
+                      allowFullScreen
+                      loading="eager"
+                      className="absolute inset-0 h-full w-full border-0"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="frame-panel px-6 py-6 md:px-7 md:py-7">
+                <p className="caps-label">About this game</p>
+                <h3 className="display-title mt-4 text-3xl font-semibold leading-[0.96]">
+                  A final year project that mixes tower defense gameplay with mathematical learning.
+                </h3>
+                <p className="mt-5 text-sm leading-8 text-muted sm:text-base">
+                  {playableProject.description}
+                </p>
+                <p className="mt-4 text-sm leading-8 text-muted sm:text-base">
+                  {playableProject.detailSummary}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-5 content-start">
+              <div className="frame-panel px-6 py-6">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="caps-label">Featured now</span>
+                  <span className="rounded-full border border-[color:color-mix(in_oklab,var(--accent)_32%,transparent)] bg-[color:color-mix(in_oklab,var(--secondary)_88%,transparent)] px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[color:var(--muted-foreground)]">
+                    Final year project
+                  </span>
+                </div>
+                <h3 className="display-title mt-5 text-4xl font-semibold leading-[0.95]">
+                  {playableProject.title}
+                </h3>
+                <p className="mt-4 text-sm leading-8 text-muted sm:text-base">
+                  Educational tower defense built with Godot 4, interactive Math Popups, and accessible Windows plus HTML5 deployment.
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Playable on itch.io", "Windows + HTML5", "Educational tower defense"].map(
+                    (item) => (
+                      <span
+                        key={item}
+                        className="tech-badge rounded-full px-3 py-1.5 font-mono text-[0.72rem] font-semibold uppercase tracking-[0.14em]"
+                      >
+                        {item}
+                      </span>
+                    ),
+                  )}
+                </div>
+
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <a
+                    href={playableProject.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="button-primary inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-bold"
+                  >
+                    {playableProject.ctaLabel}
+                    <ArrowUpRight className="size-4" />
+                  </a>
+                  <a
+                    href={playableProject.secondaryHref}
+                    className="button-secondary inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-bold"
+                  >
+                    {playableProject.secondaryLabel}
+                  </a>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-3 xl:grid-cols-1">
+                {[
+                  ["Worlds", "3 thematic learning worlds"],
+                  ["Validation", "81.9% usability rating"],
+                  ["Feedback", "100% positive art-style response"],
+                ].map(([labelText, valueText]) => (
+                  <div key={labelText} className="frame-panel px-5 py-5">
+                    <p className="caps-label">{labelText}</p>
+                    <p className="mt-4 text-sm leading-7 text-muted">{valueText}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </motion.section>
 
       <div className="mx-auto flex w-[min(1120px,calc(100vw-1.5rem))] flex-col gap-10 pb-24">
@@ -612,25 +809,31 @@ export function PortfolioPage() {
                 <div className="flex items-center gap-3">
                   <span className="caps-label">Featured build</span>
                   <span className="rounded-full border border-[color:color-mix(in_oklab,var(--accent)_34%,transparent)] bg-[color:color-mix(in_oklab,var(--secondary)_88%,transparent)] px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[color:var(--muted-foreground)]">
-                    {projects[0].year}
+                    {featuredProject.year}
                   </span>
                 </div>
                 <span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                  {projects[0].label}
+                  {featuredProject.label}
                 </span>
               </div>
 
               <div className="mt-7 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
                 <div>
                   <h3 className="display-title text-4xl font-semibold leading-[0.94] md:text-[3.2rem]">
-                    {projects[0].title}
+                    {featuredProject.title}
                   </h3>
+                  <p className="mt-4 max-w-2xl text-lg font-medium leading-8 text-[color:var(--foreground)]/88">
+                    {featuredProject.detailTitle}
+                  </p>
                   <p className="mt-5 max-w-2xl text-sm leading-8 text-muted sm:text-base">
-                    {projects[0].description}
+                    {featuredProject.description}
+                  </p>
+                  <p className="mt-4 max-w-2xl text-sm leading-8 text-muted sm:text-base">
+                    {featuredProject.detailSummary}
                   </p>
 
                   <div className="mt-7 flex flex-wrap gap-2">
-                    {projects[0].stack.map((item) => (
+                    {featuredProject.stack.map((item) => (
                       <span
                         key={item}
                         className="rounded-full border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_84%,transparent)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em]"
@@ -642,36 +845,64 @@ export function PortfolioPage() {
 
                   <div className="mt-7 flex flex-wrap items-center gap-4">
                     <a
-                      href={projects[0].href}
+                      href={featuredProject.href}
+                      target="_blank"
+                      rel="noreferrer"
                       className="button-primary inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-bold"
                     >
-                      View project
+                      {featuredProject.ctaLabel ?? "View project"}
                       <ArrowUpRight className="size-4" />
                     </a>
                     <a
-                      href="https://github.com/ProfFariz/Portfolio"
+                      href={featuredProject.secondaryHref ?? "#showcase"}
                       className="inline-flex items-center gap-2 rounded-full border border-[color:color-mix(in_oklab,var(--border)_88%,transparent)] px-5 py-3 text-sm font-bold text-[color:var(--foreground)]"
                     >
-                      <GitFork className="size-4" />
-                      GitHub repo
+                      <ArrowUpRight className="size-4" />
+                      {featuredProject.secondaryLabel ?? "Open showcase"}
                     </a>
                   </div>
                 </div>
 
                 <div className="grid gap-4">
-                  {[
-                    ["Direction", "Motion-led UI with cleaner hierarchy and stronger hero-to-section flow."],
-                    ["Strength", "Responsive layout thinking with better section pacing and modern surface styling."],
-                    ["Use case", "Portfolio and landing page patterns that feel premium without becoming hard to use."],
-                  ].map(([labelText, valueText]) => (
+                  {featuredProject.metaCards?.map((item) => (
                     <div
-                      key={labelText}
+                      key={item.label}
                       className="rounded-[1.6rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_72%,transparent)] px-5 py-5"
                     >
-                      <p className="caps-label">{labelText}</p>
-                      <p className="mt-4 text-sm leading-7 text-muted">{valueText}</p>
+                      <p className="caps-label">{item.label}</p>
+                      <p className="mt-4 text-sm leading-7 text-muted">{item.value}</p>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-4 lg:grid-cols-[1.08fr_0.92fr]">
+                <div className="rounded-[1.7rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_72%,transparent)] px-5 py-5 md:px-6 md:py-6">
+                  <p className="caps-label">Key technical features</p>
+                  <div className="mt-4 grid gap-3">
+                    {featuredProject.features?.map((item) => (
+                      <div
+                        key={item}
+                        className="rounded-[1.2rem] border border-[color:color-mix(in_oklab,var(--border)_62%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_84%,transparent)] px-4 py-4"
+                      >
+                        <p className="text-sm leading-7 text-muted">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-[1.7rem] border border-[color:color-mix(in_oklab,var(--border)_78%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_72%,transparent)] px-5 py-5 md:px-6 md:py-6">
+                  <p className="caps-label">Validation & achievements</p>
+                  <div className="mt-4 grid gap-3">
+                    {featuredProject.achievements?.map((item) => (
+                      <div
+                        key={item}
+                        className="rounded-[1.2rem] border border-[color:color-mix(in_oklab,var(--border)_62%,transparent)] bg-[color:color-mix(in_oklab,var(--background)_84%,transparent)] px-4 py-4"
+                      >
+                        <p className="text-sm leading-7 text-muted">{item}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </motion.article>
