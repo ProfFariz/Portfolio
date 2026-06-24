@@ -618,5 +618,30 @@
     radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.04) 0%, transparent 40%);
 }
 
+/* Retro Cyber-Arcade HUD styles */
+.bg-grid-tech {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+@keyframes arcade-scanline-move {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.arcade-scanline {
+  animation: arcade-scanline-move 2.5s linear infinite;
+}
+
+@keyframes arcade-flicker-anim {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+  25%, 75% { opacity: 0.9; }
+}
+
+.arcade-flicker {
+  animation: arcade-flicker-anim 3s ease-in-out infinite;
+}
+
 
 

@@ -3,10 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  User, BookOpen, Briefcase, FolderGit2, Dumbbell, 
   Volume2, VolumeX, ArrowLeft, ArrowRight,
-  ArrowUp, ArrowDown, ExternalLink, RefreshCw,
-  Settings
+  ArrowUp, ArrowDown, ExternalLink, RefreshCw
 } from "lucide-react";
 
 // ==========================================
@@ -562,6 +560,309 @@ const PROJECTS_DATA = [
     badge: "Mockup App"
   }
 ];
+
+// ==========================================
+// 3.5. CUSTOM ANIMATED SVG HUD ICONS
+// ==========================================
+function AnimatedProfileIcon({ isHovered }: { isHovered: boolean }) {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
+      <motion.path
+        d="M 2,12 L 6,16 L 2,20 Z"
+        fill="currentColor"
+        stroke="none"
+        animate={isHovered ? { opacity: [0, 1, 0] } : { opacity: 0 }}
+        transition={{ repeat: Infinity, duration: 0.3 }}
+      />
+      <motion.circle
+        cx="16"
+        cy="11"
+        r="5"
+        strokeWidth="2"
+        animate={isHovered ? { scale: [1, 1.05, 1], y: [0, -0.5, 0] } : { y: [0, -0.4, 0] }}
+        transition={{ repeat: Infinity, duration: isHovered ? 1 : 3, ease: "easeInOut" }}
+      />
+      <motion.line
+        x1="14" y1="11" x2="14.5" y2="11"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        animate={{ scaleY: [1, 0.1, 1] }}
+        transition={{ repeat: Infinity, repeatDelay: 4, duration: 0.15 }}
+      />
+      <motion.line
+        x1="17.5" y1="11" x2="18" y2="11"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        animate={{ scaleY: [1, 0.1, 1] }}
+        transition={{ repeat: Infinity, repeatDelay: 4, duration: 0.15 }}
+      />
+      <motion.path
+        d="M 8,23 C 8,19 11,18 16,18 C 21,18 24,19 24,23 L 24,26 L 8,26 Z"
+        strokeWidth="2"
+        strokeLinejoin="round"
+        animate={isHovered ? { y: [0, -0.5, 0] } : { y: 0 }}
+      />
+    </svg>
+  );
+}
+
+function AnimatedEducationIcon({ isHovered }: { isHovered: boolean }) {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
+      <path d="M 16,24 L 16,8" strokeWidth="2.5" />
+      <path d="M 16,24 C 11,24 6,21 6,21 L 6,9 C 6,9 11,12 16,12" strokeWidth="2" strokeLinecap="round" />
+      <path d="M 16,24 C 21,24 26,21 26,21 L 26,9 C 26,9 21,12 16,12" strokeWidth="2" strokeLinecap="round" />
+      <motion.path
+        d="M 16,12 C 20,12 23,10 25,9"
+        strokeWidth="1.5"
+        animate={isHovered ? { rotateY: [0, -180, 0] } : { rotateY: 0 }}
+        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+        style={{ originX: "16px" }}
+      />
+      <motion.path
+        d="M 16,12 C 12,12 9,10 7,9"
+        strokeWidth="1.5"
+        animate={isHovered ? { rotateY: [0, 180, 0] } : { rotateY: 0 }}
+        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", delay: 0.3 }}
+        style={{ originX: "16px" }}
+      />
+      <motion.path
+        d="M 8,15 L 14,15"
+        strokeWidth="1"
+        animate={{ opacity: [0.3, 0.8, 0.3] }}
+        transition={{ repeat: Infinity, duration: 2 }}
+      />
+      <motion.path
+        d="M 18,15 L 24,15"
+        strokeWidth="1"
+        animate={{ opacity: [0.3, 0.8, 0.3] }}
+        transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
+      />
+    </svg>
+  );
+}
+
+function AnimatedProjectsIcon({ isHovered }: { isHovered: boolean }) {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
+      <path d="M 4,26 L 4,8 C 4,8 6,6 9,6 L 14,6 L 17,9 L 28,9 L 28,26 Z" strokeWidth="2" strokeLinejoin="round" />
+      <motion.path
+        d="M 4,26 L 4,12 L 28,12 L 28,26 Z"
+        strokeWidth="2"
+        strokeLinejoin="round"
+        fill="rgba(0,0,0,0.2)"
+        animate={isHovered ? { skewX: -6, scaleY: 0.85, originY: "26px" } : { skewX: 0, scaleY: 1 }}
+        transition={{ type: "spring", stiffness: 200, damping: 12 }}
+      />
+      <motion.g
+        animate={isHovered ? { y: [-2, -14, -2], opacity: [0.4, 1, 0.4] } : { y: [0, -3, 0], opacity: 0.6 }}
+        transition={{ repeat: Infinity, duration: isHovered ? 1.5 : 3, ease: "easeInOut" }}
+      >
+        <path d="M 12,11 L 9,14 L 12,17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M 20,11 L 23,14 L 20,17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M 17,9 L 15,19" strokeWidth="1.5" strokeLinecap="round" />
+      </motion.g>
+    </svg>
+  );
+}
+
+function AnimatedExperienceIcon({ isHovered }: { isHovered: boolean }) {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
+      <motion.path
+        d="M 2,4 L 4,2 L 6,4 L 4,6 Z"
+        fill="currentColor"
+        stroke="none"
+        animate={{ scale: [0, 1, 0], opacity: [0, 0.8, 0] }}
+        transition={{ repeat: Infinity, duration: 1.8, delay: 0.2 }}
+      />
+      <motion.path
+        d="M 28,6 L 29,4 L 30,6 L 29,8 Z"
+        fill="currentColor"
+        stroke="none"
+        animate={{ scale: [0, 1, 0], opacity: [0, 0.8, 0] }}
+        transition={{ repeat: Infinity, duration: 1.5, delay: 0.9 }}
+      />
+      <path d="M 6,18 L 6,26 L 26,26 L 26,18 Z" strokeWidth="2" strokeLinejoin="round" />
+      <rect x="14" y="16" width="4" height="4" rx="1" fill="currentColor" />
+      <motion.path
+        d="M 6,18 L 6,12 C 6,12 11,8 16,8 C 21,8 26,12 26,12 L 26,18 Z"
+        strokeWidth="2"
+        strokeLinejoin="round"
+        fill="rgba(0,0,0,0.15)"
+        animate={isHovered ? { y: -6, rotate: -8, originX: "6px", originY: "18px" } : { y: 0, rotate: 0 }}
+        transition={{ type: "spring", stiffness: 200, damping: 10 }}
+      />
+      <motion.g
+        animate={isHovered ? { y: [4, -12, 4], opacity: [0, 1, 0], scale: [0.8, 1.2, 0.8] } : { y: 4, opacity: 0 }}
+        transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
+      >
+        <circle cx="16" cy="12" r="3.5" strokeWidth="1.5" fill="rgba(250,204,21,0.2)" className="text-yellow-400" />
+        <line x1="16" y1="10.5" x2="16" y2="13.5" strokeWidth="1" className="text-yellow-400" />
+      </motion.g>
+    </svg>
+  );
+}
+
+function AnimatedSkillsIcon({ isHovered }: { isHovered: boolean }) {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
+      <motion.g
+        animate={isHovered ? { 
+          x: [-1, 1, -1, 1, 0],
+          y: [-0.5, 0.5, -0.5, 0.5, 0],
+        } : { 
+          rotate: [-3, 3, -3],
+        }}
+        transition={isHovered ? { 
+          repeat: Infinity, 
+          duration: 0.12, 
+          ease: "linear"
+        } : { 
+          repeat: Infinity, 
+          duration: 4, 
+          ease: "easeInOut" 
+        }}
+        style={{ originX: "16px", originY: "16px" }}
+      >
+        <line x1="6" y1="16" x2="26" y2="16" strokeWidth="2.5" />
+        <rect x="4" y="11" width="3" height="10" rx="1.5" strokeWidth="2" fill="currentColor" />
+        <rect x="1.5" y="13" width="2" height="6" rx="1" strokeWidth="1.5" />
+        <rect x="25" y="11" width="3" height="10" rx="1.5" strokeWidth="2" fill="currentColor" />
+        <rect x="28.5" y="13" width="2" height="6" rx="1" strokeWidth="1.5" />
+        <motion.path
+          d="M 12,6 L 10,4"
+          strokeWidth="1.5"
+          animate={isHovered ? { opacity: [0, 1, 0], scale: [0.5, 1, 0.5] } : { opacity: 0 }}
+          transition={{ repeat: Infinity, duration: 0.6 }}
+        />
+        <motion.path
+          d="M 20,6 L 22,4"
+          strokeWidth="1.5"
+          animate={isHovered ? { opacity: [0, 1, 0], scale: [0.5, 1, 0.5] } : { opacity: 0 }}
+          transition={{ repeat: Infinity, duration: 0.6, delay: 0.3 }}
+        />
+      </motion.g>
+    </svg>
+  );
+}
+
+function AnimatedContactIcon({ isHovered }: { isHovered: boolean }) {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
+      <motion.circle
+        cx="27"
+        cy="5"
+        r="2.5"
+        fill="#ef4444"
+        stroke="none"
+        animate={{ y: [0, -3, 0] }}
+        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+      />
+      <motion.path
+        d="M 10,13 L 22,13 L 22,23 L 10,23 Z"
+        strokeWidth="1.5"
+        fill="currentColor"
+        animate={isHovered ? { y: -8, scaleY: 1.1 } : { y: 0, scaleY: 1 }}
+        transition={{ type: "spring", stiffness: 200, damping: 15 }}
+        style={{ originY: "23px" }}
+      />
+      <path d="M 5,12 L 5,25 L 27,25 L 27,12 Z" strokeWidth="2" strokeLinejoin="round" fill="rgba(0,0,0,0.2)" />
+      <motion.path
+        d="M 5,12 L 16,20 L 27,12"
+        strokeWidth="2"
+        strokeLinejoin="round"
+        animate={isHovered ? { scaleY: -1, y: -0.5, originY: "12px" } : { scaleY: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 200, damping: 15 }}
+      />
+    </svg>
+  );
+}
+
+interface MenuCardProps {
+  title: string;
+  hexColor: string;
+  isActive: boolean;
+  onClick: () => void;
+  renderIcon: (isHovered: boolean) => React.ReactNode;
+}
+
+function MenuCard({
+  title,
+  hexColor,
+  isActive,
+  onClick,
+  renderIcon
+}: MenuCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const baseBoxShadow = isActive ? `6px 6px 0px ${hexColor}` : "4px 4px 0px #000000";
+  const baseTranslate = isActive ? { x: -2, y: -2 } : { x: 0, y: 0 };
+
+  return (
+    <motion.button
+      variants={{
+        hidden: { opacity: 0, scale: 0.85, y: 25 },
+        visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 12 } }
+      }}
+      animate={baseTranslate}
+      whileHover={{ 
+        x: -6,
+        y: -6,
+        boxShadow: `10px 10px 0px ${hexColor}`,
+        borderColor: "#000000",
+        transition: { type: "spring", stiffness: 450, damping: 14 }
+      }}
+      whileTap={{ 
+        x: 4,
+        y: 4,
+        boxShadow: "0px 0px 0px #000000",
+        transition: { type: "spring", stiffness: 450, damping: 14 }
+      }}
+      onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{ boxShadow: baseBoxShadow }}
+      className="group relative flex flex-col items-center justify-center p-[3px] bg-black/35 backdrop-blur-md border-4 border-black text-white rounded-none aspect-[1/1] transition-colors duration-200 overflow-hidden"
+    >
+      {/* Inner dashed console border frame */}
+      <div 
+        className="w-full h-full border-2 border-dashed p-4 flex flex-col items-center justify-center relative rounded-none transition-colors duration-200 z-10"
+        style={{ borderColor: isHovered || isActive ? hexColor : "rgba(255,255,255,0.12)" }}
+      >
+        {/* Tech grid dot texture */}
+        <div className="absolute inset-0 bg-grid-tech opacity-[0.06] pointer-events-none z-0" />
+        
+        {/* Scanline moving overlay */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0">
+          <div className="w-full h-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent absolute top-0 left-0 arcade-scanline" />
+        </div>
+
+        {/* Pulsing indicator block (square) */}
+        <span 
+          className="absolute top-2 right-2 w-2 h-2 rounded-none shadow-[0_0_6px_currentColor] arcade-flicker"
+          style={{ backgroundColor: hexColor, color: hexColor }}
+        />
+
+        {/* Custom Icon Box container (sharp corners) */}
+        <div className="relative mb-2 flex items-center justify-center">
+          {/* Flat colored light pool behind the icon */}
+          <div 
+            className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-200 rounded-none"
+            style={{ backgroundColor: hexColor }}
+          />
+          <div className="relative p-3 bg-white/5 border border-white/10 rounded-none group-hover:scale-105 group-hover:bg-white/10 group-hover:border-white/20 transition-all duration-200">
+            {renderIcon(isHovered)}
+          </div>
+        </div>
+
+        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-white transition-colors select-none font-retro">
+          {title}
+        </span>
+      </div>
+    </motion.button>
+  );
+}
 
 // ==========================================
 // 4. MAIN COMPONENT
@@ -1841,160 +2142,58 @@ export function MarioPortfolio() {
             className="grid grid-cols-3 gap-4 sm:gap-6 w-full"
           >
             {/* Profile Card */}
-            <motion.button
-              variants={{
-                hidden: { opacity: 0, scale: 0.85, y: 25 },
-                visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 12 } }
-              }}
-              whileHover={{ 
-                scale: 1.04, 
-                y: -4,
-                borderColor: "rgba(239, 68, 68, 0.4)",
-                boxShadow: "0px 0px 15px rgba(239, 68, 68, 0.25)",
-                transition: { type: "spring", stiffness: 300, damping: 10 }
-              }}
-              whileTap={{ scale: 0.97 }}
+            <MenuCard
+              title="Profile"
+              hexColor="#ef4444"
+              isActive={activeSection === "profile"}
               onClick={() => openSection("profile")}
-              className={`group relative flex flex-col items-center justify-center p-6 bg-black/25 backdrop-blur-[20px] border border-white/10 text-white rounded-[2rem] transition-all aspect-[1/1] ${
-                activeSection === "profile" ? "border-red-500 scale-[0.98] shadow-[0_0_15px_rgba(239,68,68,0.2)]" : ""
-              }`}
-            >
-              <span className="absolute top-4 right-4 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_6px_#ef4444]" />
-              <div className="p-3 bg-white/5 rounded-2xl group-hover:scale-110 group-hover:bg-white/10 transition-all duration-200 mb-2">
-                <User className="size-6 sm:size-8 text-white" />
-              </div>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-white transition-colors">Profile</span>
-            </motion.button>
+              renderIcon={(isHovered) => <AnimatedProfileIcon isHovered={isHovered} />}
+            />
 
             {/* Education Card */}
-            <motion.button
-              variants={{
-                hidden: { opacity: 0, scale: 0.85, y: 25 },
-                visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 12 } }
-              }}
-              whileHover={{ 
-                scale: 1.04, 
-                y: -4,
-                borderColor: "rgba(96, 165, 250, 0.4)",
-                boxShadow: "0px 0px 15px rgba(96, 165, 250, 0.25)",
-                transition: { type: "spring", stiffness: 300, damping: 10 }
-              }}
-              whileTap={{ scale: 0.97 }}
+            <MenuCard
+              title="Education"
+              hexColor="#60a5fa"
+              isActive={activeSection === "education"}
               onClick={() => openSection("education")}
-              className={`group relative flex flex-col items-center justify-center p-6 bg-black/25 backdrop-blur-[20px] border border-white/10 text-white rounded-[2rem] transition-all aspect-[1/1] ${
-                activeSection === "education" ? "border-blue-500 scale-[0.98] shadow-[0_0_15px_rgba(96,165,250,0.2)]" : ""
-              }`}
-            >
-              <span className="absolute top-4 right-4 w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_6px_#60a5fa]" />
-              <div className="p-3 bg-white/5 rounded-2xl group-hover:scale-110 group-hover:bg-white/10 transition-all duration-200 mb-2">
-                <BookOpen className="size-6 sm:size-8 text-white" />
-              </div>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-white transition-colors font-retro">Education</span>
-            </motion.button>
+              renderIcon={(isHovered) => <AnimatedEducationIcon isHovered={isHovered} />}
+            />
 
             {/* Projects Card */}
-            <motion.button
-              variants={{
-                hidden: { opacity: 0, scale: 0.85, y: 25 },
-                visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 12 } }
-              }}
-              whileHover={{ 
-                scale: 1.04, 
-                y: -4,
-                borderColor: "rgba(250, 204, 21, 0.4)",
-                boxShadow: "0px 0px 15px rgba(250, 204, 21, 0.25)",
-                transition: { type: "spring", stiffness: 300, damping: 10 }
-              }}
-              whileTap={{ scale: 0.97 }}
+            <MenuCard
+              title="Projects"
+              hexColor="#facc15"
+              isActive={activeSection === "projects"}
               onClick={() => openSection("projects")}
-              className={`group relative flex flex-col items-center justify-center p-6 bg-black/25 backdrop-blur-[20px] border border-white/10 text-white rounded-[2rem] transition-all aspect-[1/1] ${
-                activeSection === "projects" ? "border-yellow-500 scale-[0.98] shadow-[0_0_15px_rgba(250,204,21,0.2)]" : ""
-              }`}
-            >
-              <span className="absolute top-4 right-4 w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_6px_#facc15]" />
-              <div className="p-3 bg-white/5 rounded-2xl group-hover:scale-110 group-hover:bg-white/10 transition-all duration-200 mb-2">
-                <FolderGit2 className="size-6 sm:size-8 text-white" />
-              </div>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-white transition-colors">Projects</span>
-            </motion.button>
+              renderIcon={(isHovered) => <AnimatedProjectsIcon isHovered={isHovered} />}
+            />
 
             {/* Experience Card */}
-            <motion.button
-              variants={{
-                hidden: { opacity: 0, scale: 0.85, y: 25 },
-                visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 12 } }
-              }}
-              whileHover={{ 
-                scale: 1.04, 
-                y: -4,
-                borderColor: "rgba(52, 211, 153, 0.4)",
-                boxShadow: "0px 0px 15px rgba(52, 211, 153, 0.25)",
-                transition: { type: "spring", stiffness: 300, damping: 10 }
-              }}
-              whileTap={{ scale: 0.97 }}
+            <MenuCard
+              title="Experience"
+              hexColor="#34d399"
+              isActive={activeSection === "experience"}
               onClick={() => openSection("experience")}
-              className={`group relative flex flex-col items-center justify-center p-6 bg-black/25 backdrop-blur-[20px] border border-white/10 text-white rounded-[2rem] transition-all aspect-[1/1] ${
-                activeSection === "experience" ? "border-emerald-500 scale-[0.98] shadow-[0_0_15px_rgba(52,211,153,0.2)]" : ""
-              }`}
-            >
-              <span className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
-              <div className="p-3 bg-white/5 rounded-2xl group-hover:scale-110 group-hover:bg-white/10 transition-all duration-200 mb-2">
-                <Briefcase className="size-6 sm:size-8 text-white" />
-              </div>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-white transition-colors font-retro">Experience</span>
-            </motion.button>
+              renderIcon={(isHovered) => <AnimatedExperienceIcon isHovered={isHovered} />}
+            />
 
             {/* Skills Card */}
-            <motion.button
-              variants={{
-                hidden: { opacity: 0, scale: 0.85, y: 25 },
-                visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 12 } }
-              }}
-              whileHover={{ 
-                scale: 1.04, 
-                y: -4,
-                borderColor: "rgba(192, 132, 252, 0.4)",
-                boxShadow: "0px 0px 15px rgba(192, 132, 252, 0.25)",
-                transition: { type: "spring", stiffness: 300, damping: 10 }
-              }}
-              whileTap={{ scale: 0.97 }}
+            <MenuCard
+              title="Skills"
+              hexColor="#c084fc"
+              isActive={activeSection === "skills"}
               onClick={() => openSection("skills")}
-              className={`group relative flex flex-col items-center justify-center p-6 bg-black/25 backdrop-blur-[20px] border border-white/10 text-white rounded-[2rem] transition-all aspect-[1/1] ${
-                activeSection === "skills" ? "border-purple-500 scale-[0.98] shadow-[0_0_15px_rgba(192,132,252,0.2)]" : ""
-              }`}
-            >
-              <span className="absolute top-4 right-4 w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_6px_#c084fc]" />
-              <div className="p-3 bg-white/5 rounded-2xl group-hover:scale-110 group-hover:bg-white/10 transition-all duration-200 mb-2">
-                <Dumbbell className="size-6 sm:size-8 text-white" />
-              </div>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-white transition-colors">Skills</span>
-            </motion.button>
+              renderIcon={(isHovered) => <AnimatedSkillsIcon isHovered={isHovered} />}
+            />
 
-            {/* Settings Card */}
-            <motion.button
-              variants={{
-                hidden: { opacity: 0, scale: 0.85, y: 25 },
-                visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 12 } }
-              }}
-              whileHover={{ 
-                scale: 1.04, 
-                y: -4,
-                borderColor: "rgba(244, 114, 182, 0.4)",
-                boxShadow: "0px 0px 15px rgba(244, 114, 182, 0.25)",
-                transition: { type: "spring", stiffness: 300, damping: 10 }
-              }}
-              whileTap={{ scale: 0.97 }}
+            {/* Contact Card */}
+            <MenuCard
+              title="Contact"
+              hexColor="#f472b6"
+              isActive={activeSection === "contact"}
               onClick={() => openSection("contact")}
-              className={`group relative flex flex-col items-center justify-center p-6 bg-black/25 backdrop-blur-[20px] border border-white/10 text-white rounded-[2rem] transition-all aspect-[1/1] ${
-                activeSection === "contact" ? "border-pink-500 scale-[0.98] shadow-[0_0_15px_rgba(244,114,182,0.2)]" : ""
-              }`}
-            >
-              <span className="absolute top-4 right-4 w-2 h-2 rounded-full bg-pink-400 shadow-[0_0_6px_#f472b6]" />
-              <div className="p-3 bg-white/5 rounded-2xl group-hover:scale-110 group-hover:bg-white/10 transition-all duration-200 mb-2">
-                <Settings className="size-6 sm:size-8 text-white" />
-              </div>
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-white transition-colors">Settings</span>
-            </motion.button>
+              renderIcon={(isHovered) => <AnimatedContactIcon isHovered={isHovered} />}
+            />
           </motion.div>
 
           {/* Description Helper text card */}
