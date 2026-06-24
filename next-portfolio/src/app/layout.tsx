@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Syne } from "next/font/google";
+import { Inter, JetBrains_Mono, Syne, Press_Start_2P, VT323, Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,6 +18,29 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+const pressStart2D = Press_Start_2P({
+  variable: "--font-press-start",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const vt323 = VT323({
+  variable: "--font-vt323",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
+  subsets: ["latin"],
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 export const metadata: Metadata = {
   title: "Fariz Portfolio",
   description: "Animated personal portfolio built with Next.js and Tailwind CSS.",
@@ -32,7 +55,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${syne.variable} ${jetbrainsMono.variable} h-full`}
+      className={`${inter.variable} ${syne.variable} ${jetbrainsMono.variable} ${pressStart2D.variable} ${vt323.variable} ${plusJakartaSans.variable} ${outfit.variable} h-full`}
     >
       <body
         suppressHydrationWarning

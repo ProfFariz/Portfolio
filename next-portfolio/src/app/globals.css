@@ -456,3 +456,167 @@
     }
   }
 }
+
+/* 3D Book Portfolio Styles */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.book-viewport {
+  perspective: 2200px;
+  perspective-origin: 50% 35%;
+  overflow: hidden;
+}
+
+.book-desk {
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.book-shadow {
+  box-shadow: 
+    0 30px 70px -10px rgba(0, 0, 0, 0.7),
+    0 15px 30px -15px rgba(0, 0, 0, 0.5);
+}
+
+.blueprint-page-bg {
+  background-color: oklch(0.22 0.035 250); /* Dark Blueprint Slate */
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.12) 0%, transparent 80%),
+    linear-gradient(rgba(56, 189, 248, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.07) 1px, transparent 1px);
+  background-size: 100% 100%, 24px 24px, 24px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glowing tech border lines */
+.blueprint-page-bg::before {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border: 1px dashed rgba(56, 189, 248, 0.3);
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+/* Blueprint details: schematic corner markings */
+.blueprint-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: rgba(56, 189, 248, 0.6);
+  pointer-events: none;
+}
+.blueprint-corner-tl { top: 12px; left: 12px; border-top: 2px solid; border-left: 2px solid; }
+.blueprint-corner-tr { top: 12px; right: 12px; border-top: 2px solid; border-right: 2px solid; }
+.blueprint-corner-bl { bottom: 12px; left: 12px; border-bottom: 2px solid; border-left: 2px solid; }
+.blueprint-corner-br { bottom: 12px; right: 12px; border-bottom: 2px solid; border-right: 2px solid; }
+
+/* 3D metal corner protectors for the book cover */
+.metal-corner {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #b8860b 0%, #e8c350 40%, #b8860b 70%, #8b6508 100%); /* Copper/Gold metal */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+.metal-corner-tl { top: 0; left: 0; clip-path: polygon(0 0, 100% 0, 0 100%); }
+.metal-corner-tr { top: 0; right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.metal-corner-bl { bottom: 0; left: 0; clip-path: polygon(0 0, 0 100%, 100% 100%); }
+.metal-corner-br { bottom: 0; right: 0; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+/* 3D Pop-up elements base */
+.popup-3d-element {
+  transform-style: preserve-3d;
+  transform-origin: bottom center;
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease;
+  will-change: transform, opacity;
+}
+
+.popup-active {
+  transform: rotateX(-72deg) translateZ(8px) !important;
+  opacity: 1 !important;
+}
+
+.popup-flat {
+  transform: rotateX(0deg) translateZ(0px) !important;
+  opacity: 0.1 !important;
+}
+
+/* Page turn shadow overlay */
+.page-shadow-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.8s ease;
+}
+
+/* CRT and Terminal glow styles */
+.bg-grid-lines {
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+.bg-radial-glow {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 80%);
+}
+
+/* Steam Portfolio Styles */
+.font-outfit {
+  font-family: var(--font-outfit), var(--font-inter), sans-serif;
+}
+
+.font-plus-jakarta {
+  font-family: var(--font-plus-jakarta), var(--font-inter), sans-serif;
+}
+
+.steam-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.steam-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.steam-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 99px;
+}
+
+.steam-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+@keyframes status-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0px rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+  }
+}
+
+.status-pulse-ring {
+  animation: status-pulse 2s infinite;
+}
+
+.steam-light-bg {
+  background-color: #f9fafb;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.04) 0%, transparent 40%);
+}
+
+
+
