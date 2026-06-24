@@ -564,26 +564,32 @@ const PROJECTS_DATA = [
 // ==========================================
 // 3.5. CUSTOM ANIMATED SVG HUD ICONS
 // ==========================================
-function AnimatedProfileIcon({ isHovered }: { isHovered: boolean }) {
+function AnimatedProfileIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
+  const color = hexColor || "#ef4444";
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
+      {/* Selector arrow (yellow) */}
       <motion.path
         d="M 2,12 L 6,16 L 2,20 Z"
-        fill="currentColor"
+        fill="#facc15"
         stroke="none"
         animate={isHovered ? { opacity: [0, 1, 0] } : { opacity: 0 }}
         transition={{ repeat: Infinity, duration: 0.3 }}
       />
+      {/* Silhouette head (red) */}
       <motion.circle
         cx="16"
         cy="11"
         r="5"
+        stroke={color}
         strokeWidth="2"
         animate={isHovered ? { scale: [1, 1.05, 1], y: [0, -0.5, 0] } : { y: [0, -0.4, 0] }}
         transition={{ repeat: Infinity, duration: isHovered ? 1 : 3, ease: "easeInOut" }}
       />
+      {/* Eyes (white) */}
       <motion.line
         x1="14" y1="11" x2="14.5" y2="11"
+        stroke="#ffffff"
         strokeWidth="1.5"
         strokeLinecap="round"
         animate={{ scaleY: [1, 0.1, 1] }}
@@ -591,13 +597,16 @@ function AnimatedProfileIcon({ isHovered }: { isHovered: boolean }) {
       />
       <motion.line
         x1="17.5" y1="11" x2="18" y2="11"
+        stroke="#ffffff"
         strokeWidth="1.5"
         strokeLinecap="round"
         animate={{ scaleY: [1, 0.1, 1] }}
         transition={{ repeat: Infinity, repeatDelay: 4, duration: 0.15 }}
       />
+      {/* Silhouette body (red) */}
       <motion.path
         d="M 8,23 C 8,19 11,18 16,18 C 21,18 24,19 24,23 L 24,26 L 8,26 Z"
+        stroke={color}
         strokeWidth="2"
         strokeLinejoin="round"
         animate={isHovered ? { y: [0, -0.5, 0] } : { y: 0 }}
@@ -606,14 +615,16 @@ function AnimatedProfileIcon({ isHovered }: { isHovered: boolean }) {
   );
 }
 
-function AnimatedEducationIcon({ isHovered }: { isHovered: boolean }) {
+function AnimatedEducationIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
+  const color = hexColor || "#60a5fa";
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
-      <path d="M 16,24 L 16,8" strokeWidth="2.5" />
-      <path d="M 16,24 C 11,24 6,21 6,21 L 6,9 C 6,9 11,12 16,12" strokeWidth="2" strokeLinecap="round" />
-      <path d="M 16,24 C 21,24 26,21 26,21 L 26,9 C 26,9 21,12 16,12" strokeWidth="2" strokeLinecap="round" />
+      <path d="M 16,24 L 16,8" stroke={color} strokeWidth="2.5" />
+      <path d="M 16,24 C 11,24 6,21 6,21 L 6,9 C 6,9 11,12 16,12" stroke={color} strokeWidth="2" strokeLinecap="round" />
+      <path d="M 16,24 C 21,24 26,21 26,21 L 26,9 C 26,9 21,12 16,12" stroke={color} strokeWidth="2" strokeLinecap="round" />
       <motion.path
         d="M 16,12 C 20,12 23,10 25,9"
+        stroke="#ffffff"
         strokeWidth="1.5"
         animate={isHovered ? { rotateY: [0, -180, 0] } : { rotateY: 0 }}
         transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
@@ -621,6 +632,7 @@ function AnimatedEducationIcon({ isHovered }: { isHovered: boolean }) {
       />
       <motion.path
         d="M 16,12 C 12,12 9,10 7,9"
+        stroke="#ffffff"
         strokeWidth="1.5"
         animate={isHovered ? { rotateY: [0, 180, 0] } : { rotateY: 0 }}
         transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", delay: 0.3 }}
@@ -628,12 +640,14 @@ function AnimatedEducationIcon({ isHovered }: { isHovered: boolean }) {
       />
       <motion.path
         d="M 8,15 L 14,15"
+        stroke="#ffffff"
         strokeWidth="1"
         animate={{ opacity: [0.3, 0.8, 0.3] }}
         transition={{ repeat: Infinity, duration: 2 }}
       />
       <motion.path
         d="M 18,15 L 24,15"
+        stroke="#ffffff"
         strokeWidth="1"
         animate={{ opacity: [0.3, 0.8, 0.3] }}
         transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
@@ -642,12 +656,14 @@ function AnimatedEducationIcon({ isHovered }: { isHovered: boolean }) {
   );
 }
 
-function AnimatedProjectsIcon({ isHovered }: { isHovered: boolean }) {
+function AnimatedProjectsIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
+  const color = hexColor || "#facc15";
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
-      <path d="M 4,26 L 4,8 C 4,8 6,6 9,6 L 14,6 L 17,9 L 28,9 L 28,26 Z" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M 4,26 L 4,8 C 4,8 6,6 9,6 L 14,6 L 17,9 L 28,9 L 28,26 Z" stroke={color} strokeWidth="2" strokeLinejoin="round" />
       <motion.path
         d="M 4,26 L 4,12 L 28,12 L 28,26 Z"
+        stroke={color}
         strokeWidth="2"
         strokeLinejoin="round"
         fill="rgba(0,0,0,0.2)"
@@ -658,35 +674,37 @@ function AnimatedProjectsIcon({ isHovered }: { isHovered: boolean }) {
         animate={isHovered ? { y: [-2, -14, -2], opacity: [0.4, 1, 0.4] } : { y: [0, -3, 0], opacity: 0.6 }}
         transition={{ repeat: Infinity, duration: isHovered ? 1.5 : 3, ease: "easeInOut" }}
       >
-        <path d="M 12,11 L 9,14 L 12,17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M 20,11 L 23,14 L 20,17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M 17,9 L 15,19" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M 12,11 L 9,14 L 12,17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M 20,11 L 23,14 L 20,17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M 17,9 L 15,19" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
       </motion.g>
     </svg>
   );
 }
 
-function AnimatedExperienceIcon({ isHovered }: { isHovered: boolean }) {
+function AnimatedExperienceIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
+  const color = hexColor || "#34d399";
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
       <motion.path
         d="M 2,4 L 4,2 L 6,4 L 4,6 Z"
-        fill="currentColor"
+        fill="#ffffff"
         stroke="none"
         animate={{ scale: [0, 1, 0], opacity: [0, 0.8, 0] }}
         transition={{ repeat: Infinity, duration: 1.8, delay: 0.2 }}
       />
       <motion.path
         d="M 28,6 L 29,4 L 30,6 L 29,8 Z"
-        fill="currentColor"
+        fill="#ffffff"
         stroke="none"
         animate={{ scale: [0, 1, 0], opacity: [0, 0.8, 0] }}
         transition={{ repeat: Infinity, duration: 1.5, delay: 0.9 }}
       />
-      <path d="M 6,18 L 6,26 L 26,26 L 26,18 Z" strokeWidth="2" strokeLinejoin="round" />
-      <rect x="14" y="16" width="4" height="4" rx="1" fill="currentColor" />
+      <path d="M 6,18 L 6,26 L 26,26 L 26,18 Z" stroke={color} strokeWidth="2" strokeLinejoin="round" />
+      <rect x="14" y="16" width="4" height="4" rx="1" fill="#facc15" stroke="none" />
       <motion.path
         d="M 6,18 L 6,12 C 6,12 11,8 16,8 C 21,8 26,12 26,12 L 26,18 Z"
+        stroke={color}
         strokeWidth="2"
         strokeLinejoin="round"
         fill="rgba(0,0,0,0.15)"
@@ -697,14 +715,15 @@ function AnimatedExperienceIcon({ isHovered }: { isHovered: boolean }) {
         animate={isHovered ? { y: [4, -12, 4], opacity: [0, 1, 0], scale: [0.8, 1.2, 0.8] } : { y: 4, opacity: 0 }}
         transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
       >
-        <circle cx="16" cy="12" r="3.5" strokeWidth="1.5" fill="rgba(250,204,21,0.2)" className="text-yellow-400" />
-        <line x1="16" y1="10.5" x2="16" y2="13.5" strokeWidth="1" className="text-yellow-400" />
+        <circle cx="16" cy="12" r="3.5" stroke="#facc15" strokeWidth="1.5" fill="rgba(250,204,21,0.2)" />
+        <line x1="16" y1="10.5" x2="16" y2="13.5" stroke="#facc15" strokeWidth="1" />
       </motion.g>
     </svg>
   );
 }
 
-function AnimatedSkillsIcon({ isHovered }: { isHovered: boolean }) {
+function AnimatedSkillsIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
+  const color = hexColor || "#c084fc";
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
       <motion.g
@@ -725,19 +744,21 @@ function AnimatedSkillsIcon({ isHovered }: { isHovered: boolean }) {
         }}
         style={{ originX: "16px", originY: "16px" }}
       >
-        <line x1="6" y1="16" x2="26" y2="16" strokeWidth="2.5" />
-        <rect x="4" y="11" width="3" height="10" rx="1.5" strokeWidth="2" fill="currentColor" />
-        <rect x="1.5" y="13" width="2" height="6" rx="1" strokeWidth="1.5" />
-        <rect x="25" y="11" width="3" height="10" rx="1.5" strokeWidth="2" fill="currentColor" />
-        <rect x="28.5" y="13" width="2" height="6" rx="1" strokeWidth="1.5" />
+        <line x1="6" y1="16" x2="26" y2="16" stroke="#ffffff" strokeWidth="2.5" />
+        <rect x="4" y="11" width="3" height="10" rx="1.5" stroke={color} strokeWidth="2" fill={color} />
+        <rect x="1.5" y="13" width="2" height="6" rx="1" stroke={color} strokeWidth="1.5" />
+        <rect x="25" y="11" width="3" height="10" rx="1.5" stroke={color} strokeWidth="2" fill={color} />
+        <rect x="28.5" y="13" width="2" height="6" rx="1" stroke={color} strokeWidth="1.5" />
         <motion.path
           d="M 12,6 L 10,4"
+          stroke="#facc15"
           strokeWidth="1.5"
           animate={isHovered ? { opacity: [0, 1, 0], scale: [0.5, 1, 0.5] } : { opacity: 0 }}
           transition={{ repeat: Infinity, duration: 0.6 }}
         />
         <motion.path
           d="M 20,6 L 22,4"
+          stroke="#facc15"
           strokeWidth="1.5"
           animate={isHovered ? { opacity: [0, 1, 0], scale: [0.5, 1, 0.5] } : { opacity: 0 }}
           transition={{ repeat: Infinity, duration: 0.6, delay: 0.3 }}
@@ -747,7 +768,8 @@ function AnimatedSkillsIcon({ isHovered }: { isHovered: boolean }) {
   );
 }
 
-function AnimatedContactIcon({ isHovered }: { isHovered: boolean }) {
+function AnimatedContactIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
+  const color = hexColor || "#f472b6";
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
       <motion.circle
@@ -761,15 +783,17 @@ function AnimatedContactIcon({ isHovered }: { isHovered: boolean }) {
       />
       <motion.path
         d="M 10,13 L 22,13 L 22,23 L 10,23 Z"
+        stroke="#ffffff"
         strokeWidth="1.5"
-        fill="currentColor"
+        fill="#ffffff"
         animate={isHovered ? { y: -8, scaleY: 1.1 } : { y: 0, scaleY: 1 }}
         transition={{ type: "spring", stiffness: 200, damping: 15 }}
         style={{ originY: "23px" }}
       />
-      <path d="M 5,12 L 5,25 L 27,25 L 27,12 Z" strokeWidth="2" strokeLinejoin="round" fill="rgba(0,0,0,0.2)" />
+      <path d="M 5,12 L 5,25 L 27,25 L 27,12 Z" stroke={color} strokeWidth="2" strokeLinejoin="round" fill="rgba(0,0,0,0.2)" />
       <motion.path
         d="M 5,12 L 16,20 L 27,12"
+        stroke={color}
         strokeWidth="2"
         strokeLinejoin="round"
         animate={isHovered ? { scaleY: -1, y: -0.5, originY: "12px" } : { scaleY: 1, y: 0 }}
@@ -784,8 +808,20 @@ interface MenuCardProps {
   hexColor: string;
   isActive: boolean;
   onClick: () => void;
-  renderIcon: (isHovered: boolean) => React.ReactNode;
+  renderIcon: (isHovered: boolean, hexColor: string) => React.ReactNode;
 }
+
+const getLegibleColor = (hex: string) => {
+  switch (hex) {
+    case "#ef4444": return "#b91c1c";
+    case "#60a5fa": return "#1d4ed8";
+    case "#facc15": return "#a16207";
+    case "#34d399": return "#047857";
+    case "#c084fc": return "#6b21a8";
+    case "#f472b6": return "#be185d";
+    default: return hex;
+  }
+};
 
 function MenuCard({
   title,
@@ -798,6 +834,7 @@ function MenuCard({
 
   const baseBoxShadow = isActive ? `6px 6px 0px ${hexColor}` : "4px 4px 0px #000000";
   const baseTranslate = isActive ? { x: -2, y: -2 } : { x: 0, y: 0 };
+  const contrastColor = getLegibleColor(hexColor);
 
   return (
     <motion.button
@@ -823,40 +860,91 @@ function MenuCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ boxShadow: baseBoxShadow }}
-      className="group relative flex flex-col items-center justify-center p-[3px] bg-black/35 backdrop-blur-md border-4 border-black text-white rounded-none aspect-[1/1] transition-colors duration-200 overflow-hidden"
+      className="group relative flex flex-col items-center justify-center p-[3px] bg-[#a2a6a8] border-4 border-black text-white rounded-none aspect-[1/1] transition-colors duration-200 overflow-hidden"
     >
       {/* Inner dashed console border frame */}
       <div 
-        className="w-full h-full border-2 border-dashed p-4 flex flex-col items-center justify-center relative rounded-none transition-colors duration-200 z-10"
-        style={{ borderColor: isHovered || isActive ? hexColor : "rgba(255,255,255,0.12)" }}
+        className="w-full h-full border-2 border-dashed p-4 flex flex-col items-center justify-center relative rounded-none transition-all duration-200 z-10"
+        style={{ 
+          borderColor: isHovered || isActive ? contrastColor : `${contrastColor}25`,
+          boxShadow: isHovered || isActive ? "inset 0 0 16px rgba(0,0,0,0.15)" : "inset 0 0 8px rgba(0,0,0,0.06)"
+        }}
       >
-        {/* Tech grid dot texture */}
-        <div className="absolute inset-0 bg-grid-tech opacity-[0.06] pointer-events-none z-0" />
+        {/* Dynamic Center Glow */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-0 transition-opacity duration-300"
+          style={{ 
+            background: `radial-gradient(circle at center, ${contrastColor}18 0%, transparent 75%)`,
+            opacity: isHovered || isActive ? 1 : 0
+          }}
+        />
+
+        {/* Diagonal Gloss Glass Reflection */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-0 opacity-40"
+          style={{ 
+            background: "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 45%, transparent 45.1%)"
+          }}
+        />
+
+        {/* Tech Vector Grid texture */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-0 transition-all duration-300"
+          style={{ 
+            backgroundImage: isHovered || isActive
+              ? `linear-gradient(to right, ${contrastColor}22 1px, transparent 1px), linear-gradient(to bottom, ${contrastColor}22 1px, transparent 1px)`
+              : `linear-gradient(to right, ${contrastColor}0f 1px, transparent 1px), linear-gradient(to bottom, ${contrastColor}0f 1px, transparent 1px)`,
+            backgroundSize: "16px 16px"
+          }}
+        />
         
         {/* Scanline moving overlay */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0">
-          <div className="w-full h-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent absolute top-0 left-0 arcade-scanline" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div 
+            className="w-full h-1/2 bg-gradient-to-b from-transparent via-black/5 to-transparent absolute top-0 left-0 arcade-scanline transition-opacity duration-300"
+            style={{ opacity: isHovered || isActive ? 0.6 : 0.15 }}
+          />
         </div>
+
+        {/* Retro HUD Corner L-Brackets */}
+        <div 
+          className="absolute top-1.5 left-1.5 w-2.5 h-2.5 border-t-2 border-l-2 transition-colors duration-200 pointer-events-none"
+          style={{ borderColor: isHovered || isActive ? contrastColor : `${contrastColor}35` }}
+        />
+        <div 
+          className="absolute top-1.5 right-1.5 w-2.5 h-2.5 border-t-2 border-r-2 transition-colors duration-200 pointer-events-none"
+          style={{ borderColor: isHovered || isActive ? contrastColor : `${contrastColor}35` }}
+        />
+        <div 
+          className="absolute bottom-1.5 left-1.5 w-2.5 h-2.5 border-b-2 border-l-2 transition-colors duration-200 pointer-events-none"
+          style={{ borderColor: isHovered || isActive ? contrastColor : `${contrastColor}35` }}
+        />
+        <div 
+          className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 border-b-2 border-r-2 transition-colors duration-200 pointer-events-none"
+          style={{ borderColor: isHovered || isActive ? contrastColor : `${contrastColor}35` }}
+        />
 
         {/* Pulsing indicator block (square) */}
         <span 
           className="absolute top-2 right-2 w-2 h-2 rounded-none shadow-[0_0_6px_currentColor] arcade-flicker"
-          style={{ backgroundColor: hexColor, color: hexColor }}
+          style={{ backgroundColor: contrastColor, color: contrastColor }}
         />
 
-        {/* Custom Icon Box container (sharp corners) */}
+        {/* Custom Icon Box container (dark insert slot) */}
         <div className="relative mb-2 flex items-center justify-center">
-          {/* Flat colored light pool behind the icon */}
           <div 
             className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-200 rounded-none"
             style={{ backgroundColor: hexColor }}
           />
-          <div className="relative p-3 bg-white/5 border border-white/10 rounded-none group-hover:scale-105 group-hover:bg-white/10 group-hover:border-white/20 transition-all duration-200">
-            {renderIcon(isHovered)}
+          <div className="relative p-3 bg-[#18181b] border-2 border-black rounded-none group-hover:scale-105 group-hover:bg-[#111113] transition-all duration-200 shadow-md">
+            {renderIcon(isHovered, hexColor)}
           </div>
         </div>
 
-        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-300 group-hover:text-white transition-colors select-none font-retro">
+        <span 
+          className="text-[10px] sm:text-xs font-bold uppercase tracking-wider select-none font-retro transition-colors duration-200"
+          style={{ color: isHovered || isActive ? "#000000" : contrastColor }}
+        >
           {title}
         </span>
       </div>
@@ -2147,7 +2235,7 @@ export function MarioPortfolio() {
               hexColor="#ef4444"
               isActive={activeSection === "profile"}
               onClick={() => openSection("profile")}
-              renderIcon={(isHovered) => <AnimatedProfileIcon isHovered={isHovered} />}
+              renderIcon={(isHovered, hexColor) => <AnimatedProfileIcon isHovered={isHovered} hexColor={hexColor} />}
             />
 
             {/* Education Card */}
@@ -2156,7 +2244,7 @@ export function MarioPortfolio() {
               hexColor="#60a5fa"
               isActive={activeSection === "education"}
               onClick={() => openSection("education")}
-              renderIcon={(isHovered) => <AnimatedEducationIcon isHovered={isHovered} />}
+              renderIcon={(isHovered, hexColor) => <AnimatedEducationIcon isHovered={isHovered} hexColor={hexColor} />}
             />
 
             {/* Projects Card */}
@@ -2165,7 +2253,7 @@ export function MarioPortfolio() {
               hexColor="#facc15"
               isActive={activeSection === "projects"}
               onClick={() => openSection("projects")}
-              renderIcon={(isHovered) => <AnimatedProjectsIcon isHovered={isHovered} />}
+              renderIcon={(isHovered, hexColor) => <AnimatedProjectsIcon isHovered={isHovered} hexColor={hexColor} />}
             />
 
             {/* Experience Card */}
@@ -2174,7 +2262,7 @@ export function MarioPortfolio() {
               hexColor="#34d399"
               isActive={activeSection === "experience"}
               onClick={() => openSection("experience")}
-              renderIcon={(isHovered) => <AnimatedExperienceIcon isHovered={isHovered} />}
+              renderIcon={(isHovered, hexColor) => <AnimatedExperienceIcon isHovered={isHovered} hexColor={hexColor} />}
             />
 
             {/* Skills Card */}
@@ -2183,7 +2271,7 @@ export function MarioPortfolio() {
               hexColor="#c084fc"
               isActive={activeSection === "skills"}
               onClick={() => openSection("skills")}
-              renderIcon={(isHovered) => <AnimatedSkillsIcon isHovered={isHovered} />}
+              renderIcon={(isHovered, hexColor) => <AnimatedSkillsIcon isHovered={isHovered} hexColor={hexColor} />}
             />
 
             {/* Contact Card */}
@@ -2192,7 +2280,7 @@ export function MarioPortfolio() {
               hexColor="#f472b6"
               isActive={activeSection === "contact"}
               onClick={() => openSection("contact")}
-              renderIcon={(isHovered) => <AnimatedContactIcon isHovered={isHovered} />}
+              renderIcon={(isHovered, hexColor) => <AnimatedContactIcon isHovered={isHovered} hexColor={hexColor} />}
             />
           </motion.div>
 
