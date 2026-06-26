@@ -643,5 +643,10 @@
   animation: arcade-flicker-anim 3s ease-in-out infinite;
 }
 
+.font-retro {
+  font-family: var(--font-press-start), monospace;
+}
+
+
 
 

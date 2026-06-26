@@ -4,7 +4,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Volume2, VolumeX, ArrowLeft, ArrowRight,
-  ArrowUp, ArrowDown, ExternalLink, RefreshCw
+  ArrowUp, ArrowDown, ExternalLink,
+  Home, User, Code, Folder, Mail,
+  Gamepad2, Settings, ChevronRight,
+  LineChart
 } from "lucide-react";
 
 // ==========================================
@@ -12,8 +15,7 @@ import {
 // ==========================================
 class MarioSynth {
   private ctx: AudioContext | null = null;
-  private bgmInterval: NodeJS.Timeout | null = null;
-  private bgmStep = 0;
+  private bgmAudio: HTMLAudioElement | null = null;
   public sfxMuted = false;
   public bgmMuted = true;
 
@@ -24,12 +26,20 @@ class MarioSynth {
         this.ctx = new AudioCtx();
       }
     }
+    if (!this.bgmAudio && typeof window !== "undefined") {
+      this.bgmAudio = new Audio("/Mossy Save Point.mp3");
+      this.bgmAudio.loop = true;
+      this.bgmAudio.volume = 0.25; // 25% volume for a gentle background ambiance
+    }
   }
 
   resume() {
     this.init();
     if (this.ctx && this.ctx.state === "suspended") {
       this.ctx.resume();
+    }
+    if (this.bgmAudio && !this.bgmMuted && this.bgmAudio.paused) {
+      this.bgmAudio.play().catch(() => {});
     }
   }
 
@@ -128,7 +138,10 @@ class MarioSynth {
     this.resume();
     if (!this.ctx) return;
 
-    this.playTone(600, 0.04, "sine", 0.04, this.ctx.currentTime);
+    // Satisfying retro 8-bit double-beep selection sound
+    const t = this.ctx.currentTime;
+    this.playTone(880, 0.05, "square", 0.03, t);
+    this.playTone(1320, 0.05, "square", 0.02, t + 0.04);
   }
 
   playShrink() {
@@ -167,35 +180,15 @@ class MarioSynth {
 
   startBGM() {
     this.init();
-    if (!this.ctx || this.bgmMuted) return;
-    this.stopBGM();
-
-    // A simple retro 8-bit baseline loop
-    // Mario theme main motifs simplified
-    const melody = [
-      660, 660, 0, 660, 0, 523, 660, 0,
-      784, 0, 0, 0, 392, 0, 0, 0,
-      523, 0, 0, 392, 0, 0, 330, 0,
-      440, 0, 494, 0, 466, 440, 0, 0
-    ];
-    
-    this.bgmStep = 0;
-    this.bgmInterval = setInterval(() => {
-      if (this.bgmMuted || !this.ctx) return;
-      if (this.ctx.state === "suspended") return;
-
-      const note = melody[this.bgmStep];
-      if (note > 0) {
-        this.playTone(note, 0.12, "square", 0.02, this.ctx.currentTime);
-      }
-      this.bgmStep = (this.bgmStep + 1) % melody.length;
-    }, 150); // 150ms per beat
+    if (this.bgmMuted || !this.bgmAudio) return;
+    this.bgmAudio.play().catch(err => {
+      console.warn("Autoplay blocked or BGM failed to play:", err);
+    });
   }
 
   stopBGM() {
-    if (this.bgmInterval) {
-      clearInterval(this.bgmInterval);
-      this.bgmInterval = null;
+    if (this.bgmAudio) {
+      this.bgmAudio.pause();
     }
   }
 }
@@ -567,239 +560,109 @@ const PROJECTS_DATA = [
 function AnimatedProfileIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
   const color = hexColor || "#ef4444";
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
-      {/* Selector arrow (yellow) */}
-      <motion.path
-        d="M 2,12 L 6,16 L 2,20 Z"
-        fill="#facc15"
-        stroke="none"
-        animate={isHovered ? { opacity: [0, 1, 0] } : { opacity: 0 }}
-        transition={{ repeat: Infinity, duration: 0.3 }}
-      />
-      {/* Silhouette head (red) */}
-      <motion.circle
-        cx="16"
-        cy="11"
-        r="5"
-        stroke={color}
-        strokeWidth="2"
-        animate={isHovered ? { scale: [1, 1.05, 1], y: [0, -0.5, 0] } : { y: [0, -0.4, 0] }}
-        transition={{ repeat: Infinity, duration: isHovered ? 1 : 3, ease: "easeInOut" }}
-      />
-      {/* Eyes (white) */}
-      <motion.line
-        x1="14" y1="11" x2="14.5" y2="11"
-        stroke="#ffffff"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        animate={{ scaleY: [1, 0.1, 1] }}
-        transition={{ repeat: Infinity, repeatDelay: 4, duration: 0.15 }}
-      />
-      <motion.line
-        x1="17.5" y1="11" x2="18" y2="11"
-        stroke="#ffffff"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        animate={{ scaleY: [1, 0.1, 1] }}
-        transition={{ repeat: Infinity, repeatDelay: 4, duration: 0.15 }}
-      />
-      {/* Silhouette body (red) */}
-      <motion.path
-        d="M 8,23 C 8,19 11,18 16,18 C 21,18 24,19 24,23 L 24,26 L 8,26 Z"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinejoin="round"
-        animate={isHovered ? { y: [0, -0.5, 0] } : { y: 0 }}
-      />
-    </svg>
+    <motion.svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className="fill-none stroke-current"
+      animate={isHovered ? { y: [0, -3, 0] } : {}}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
+      <rect x="12" y="6" width="8" height="8" stroke={color} strokeWidth="2" />
+      <rect x="14" y="14" width="4" height="2" stroke={color} strokeWidth="2" />
+      <path d="M 6,24 L 6,18 L 26,18 L 26,24" stroke={color} strokeWidth="2" />
+    </motion.svg>
   );
 }
 
 function AnimatedEducationIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
   const color = hexColor || "#60a5fa";
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
-      <path d="M 16,24 L 16,8" stroke={color} strokeWidth="2.5" />
-      <path d="M 16,24 C 11,24 6,21 6,21 L 6,9 C 6,9 11,12 16,12" stroke={color} strokeWidth="2" strokeLinecap="round" />
-      <path d="M 16,24 C 21,24 26,21 26,21 L 26,9 C 26,9 21,12 16,12" stroke={color} strokeWidth="2" strokeLinecap="round" />
-      <motion.path
-        d="M 16,12 C 20,12 23,10 25,9"
-        stroke="#ffffff"
-        strokeWidth="1.5"
-        animate={isHovered ? { rotateY: [0, -180, 0] } : { rotateY: 0 }}
-        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-        style={{ originX: "16px" }}
-      />
-      <motion.path
-        d="M 16,12 C 12,12 9,10 7,9"
-        stroke="#ffffff"
-        strokeWidth="1.5"
-        animate={isHovered ? { rotateY: [0, 180, 0] } : { rotateY: 0 }}
-        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", delay: 0.3 }}
-        style={{ originX: "16px" }}
-      />
-      <motion.path
-        d="M 8,15 L 14,15"
-        stroke="#ffffff"
-        strokeWidth="1"
-        animate={{ opacity: [0.3, 0.8, 0.3] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      />
-      <motion.path
-        d="M 18,15 L 24,15"
-        stroke="#ffffff"
-        strokeWidth="1"
-        animate={{ opacity: [0.3, 0.8, 0.3] }}
-        transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
-      />
-    </svg>
+    <motion.svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className="fill-none stroke-current"
+      animate={isHovered ? { y: [0, -3, 0] } : {}}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
+      <rect x="8" y="12" width="16" height="12" stroke={color} strokeWidth="2" />
+      <path d="M 12,12 L 12,8 L 20,8 L 20,12" stroke={color} strokeWidth="2" />
+      <rect x="11" y="20" width="2" height="4" fill={color} stroke="none" />
+      <rect x="19" y="20" width="2" height="4" fill={color} stroke="none" />
+    </motion.svg>
   );
 }
 
 function AnimatedProjectsIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
   const color = hexColor || "#facc15";
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
-      <path d="M 4,26 L 4,8 C 4,8 6,6 9,6 L 14,6 L 17,9 L 28,9 L 28,26 Z" stroke={color} strokeWidth="2" strokeLinejoin="round" />
-      <motion.path
-        d="M 4,26 L 4,12 L 28,12 L 28,26 Z"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinejoin="round"
-        fill="rgba(0,0,0,0.2)"
-        animate={isHovered ? { skewX: -6, scaleY: 0.85, originY: "26px" } : { skewX: 0, scaleY: 1 }}
-        transition={{ type: "spring", stiffness: 200, damping: 12 }}
-      />
-      <motion.g
-        animate={isHovered ? { y: [-2, -14, -2], opacity: [0.4, 1, 0.4] } : { y: [0, -3, 0], opacity: 0.6 }}
-        transition={{ repeat: Infinity, duration: isHovered ? 1.5 : 3, ease: "easeInOut" }}
-      >
-        <path d="M 12,11 L 9,14 L 12,17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M 20,11 L 23,14 L 20,17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M 17,9 L 15,19" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
-      </motion.g>
-    </svg>
+    <motion.svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className="fill-none stroke-current"
+      animate={isHovered ? { y: [0, -3, 0] } : {}}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
+      <path d="M 4,8 L 12,8 L 15,12 L 28,12 L 28,26 L 4,26 Z" stroke={color} strokeWidth="2" />
+      <line x1="8" y1="16" x2="24" y2="16" stroke={color} strokeWidth="2" />
+      <line x1="8" y1="20" x2="20" y2="20" stroke={color} strokeWidth="2" />
+    </motion.svg>
   );
 }
 
 function AnimatedExperienceIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
   const color = hexColor || "#34d399";
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
-      <motion.path
-        d="M 2,4 L 4,2 L 6,4 L 4,6 Z"
-        fill="#ffffff"
-        stroke="none"
-        animate={{ scale: [0, 1, 0], opacity: [0, 0.8, 0] }}
-        transition={{ repeat: Infinity, duration: 1.8, delay: 0.2 }}
-      />
-      <motion.path
-        d="M 28,6 L 29,4 L 30,6 L 29,8 Z"
-        fill="#ffffff"
-        stroke="none"
-        animate={{ scale: [0, 1, 0], opacity: [0, 0.8, 0] }}
-        transition={{ repeat: Infinity, duration: 1.5, delay: 0.9 }}
-      />
-      <path d="M 6,18 L 6,26 L 26,26 L 26,18 Z" stroke={color} strokeWidth="2" strokeLinejoin="round" />
-      <rect x="14" y="16" width="4" height="4" rx="1" fill="#facc15" stroke="none" />
-      <motion.path
-        d="M 6,18 L 6,12 C 6,12 11,8 16,8 C 21,8 26,12 26,12 L 26,18 Z"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinejoin="round"
-        fill="rgba(0,0,0,0.15)"
-        animate={isHovered ? { y: -6, rotate: -8, originX: "6px", originY: "18px" } : { y: 0, rotate: 0 }}
-        transition={{ type: "spring", stiffness: 200, damping: 10 }}
-      />
-      <motion.g
-        animate={isHovered ? { y: [4, -12, 4], opacity: [0, 1, 0], scale: [0.8, 1.2, 0.8] } : { y: 4, opacity: 0 }}
-        transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
-      >
-        <circle cx="16" cy="12" r="3.5" stroke="#facc15" strokeWidth="1.5" fill="rgba(250,204,21,0.2)" />
-        <line x1="16" y1="10.5" x2="16" y2="13.5" stroke="#facc15" strokeWidth="1" />
-      </motion.g>
-    </svg>
+    <motion.svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className="fill-none stroke-current"
+      animate={isHovered ? { y: [0, -3, 0] } : {}}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
+      <rect x="4" y="6" width="24" height="20" stroke={color} strokeWidth="2" />
+      <line x1="4" y1="12" x2="28" y2="12" stroke={color} strokeWidth="2" />
+      <path d="M 8,16 L 12,19 L 8,22" stroke={color} strokeWidth="2" />
+      <line x1="14" y1="22" x2="19" y2="22" stroke={color} strokeWidth="2" />
+    </motion.svg>
   );
 }
 
 function AnimatedSkillsIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
   const color = hexColor || "#c084fc";
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
-      <motion.g
-        animate={isHovered ? { 
-          x: [-1, 1, -1, 1, 0],
-          y: [-0.5, 0.5, -0.5, 0.5, 0],
-        } : { 
-          rotate: [-3, 3, -3],
-        }}
-        transition={isHovered ? { 
-          repeat: Infinity, 
-          duration: 0.12, 
-          ease: "linear"
-        } : { 
-          repeat: Infinity, 
-          duration: 4, 
-          ease: "easeInOut" 
-        }}
-        style={{ originX: "16px", originY: "16px" }}
-      >
-        <line x1="6" y1="16" x2="26" y2="16" stroke="#ffffff" strokeWidth="2.5" />
-        <rect x="4" y="11" width="3" height="10" rx="1.5" stroke={color} strokeWidth="2" fill={color} />
-        <rect x="1.5" y="13" width="2" height="6" rx="1" stroke={color} strokeWidth="1.5" />
-        <rect x="25" y="11" width="3" height="10" rx="1.5" stroke={color} strokeWidth="2" fill={color} />
-        <rect x="28.5" y="13" width="2" height="6" rx="1" stroke={color} strokeWidth="1.5" />
-        <motion.path
-          d="M 12,6 L 10,4"
-          stroke="#facc15"
-          strokeWidth="1.5"
-          animate={isHovered ? { opacity: [0, 1, 0], scale: [0.5, 1, 0.5] } : { opacity: 0 }}
-          transition={{ repeat: Infinity, duration: 0.6 }}
-        />
-        <motion.path
-          d="M 20,6 L 22,4"
-          stroke="#facc15"
-          strokeWidth="1.5"
-          animate={isHovered ? { opacity: [0, 1, 0], scale: [0.5, 1, 0.5] } : { opacity: 0 }}
-          transition={{ repeat: Infinity, duration: 0.6, delay: 0.3 }}
-        />
-      </motion.g>
-    </svg>
+    <motion.svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className="fill-none stroke-current"
+      animate={isHovered ? { y: [0, -3, 0] } : {}}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
+      <rect x="8" y="14" width="16" height="4" stroke={color} strokeWidth="2" />
+      <rect x="4" y="8" width="4" height="16" stroke={color} strokeWidth="2" />
+      <rect x="24" y="8" width="4" height="16" stroke={color} strokeWidth="2" />
+    </motion.svg>
   );
 }
 
 function AnimatedContactIcon({ isHovered, hexColor }: { isHovered: boolean; hexColor?: string }) {
   const color = hexColor || "#f472b6";
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" className="fill-none stroke-current text-white overflow-visible">
-      <motion.circle
-        cx="27"
-        cy="5"
-        r="2.5"
-        fill="#ef4444"
-        stroke="none"
-        animate={{ y: [0, -3, 0] }}
-        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-      />
-      <motion.path
-        d="M 10,13 L 22,13 L 22,23 L 10,23 Z"
-        stroke="#ffffff"
-        strokeWidth="1.5"
-        fill="#ffffff"
-        animate={isHovered ? { y: -8, scaleY: 1.1 } : { y: 0, scaleY: 1 }}
-        transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        style={{ originY: "23px" }}
-      />
-      <path d="M 5,12 L 5,25 L 27,25 L 27,12 Z" stroke={color} strokeWidth="2" strokeLinejoin="round" fill="rgba(0,0,0,0.2)" />
-      <motion.path
-        d="M 5,12 L 16,20 L 27,12"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinejoin="round"
-        animate={isHovered ? { scaleY: -1, y: -0.5, originY: "12px" } : { scaleY: 1, y: 0 }}
-        transition={{ type: "spring", stiffness: 200, damping: 15 }}
-      />
-    </svg>
+    <motion.svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className="fill-none stroke-current"
+      animate={isHovered ? { y: [0, -3, 0] } : {}}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
+      <rect x="4" y="8" width="24" height="16" stroke={color} strokeWidth="2" />
+      <path d="M 4,8 L 16,16 L 28,8" stroke={color} strokeWidth="2" />
+    </motion.svg>
   );
 }
 
@@ -811,18 +674,6 @@ interface MenuCardProps {
   renderIcon: (isHovered: boolean, hexColor: string) => React.ReactNode;
 }
 
-const getLegibleColor = (hex: string) => {
-  switch (hex) {
-    case "#ef4444": return "#b91c1c";
-    case "#60a5fa": return "#1d4ed8";
-    case "#facc15": return "#a16207";
-    case "#34d399": return "#047857";
-    case "#c084fc": return "#6b21a8";
-    case "#f472b6": return "#be185d";
-    default: return hex;
-  }
-};
-
 function MenuCard({
   title,
   hexColor,
@@ -831,124 +682,153 @@ function MenuCard({
   renderIcon
 }: MenuCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [scanIdx, setScanIdx] = useState(0);
 
-  const baseBoxShadow = isActive ? `6px 6px 0px ${hexColor}` : "4px 4px 0px #000000";
-  const baseTranslate = isActive ? { x: -2, y: -2 } : { x: 0, y: 0 };
-  const contrastColor = getLegibleColor(hexColor);
+  useEffect(() => {
+    // 8 segments + 4 steps pause = 12 total steps in one animation sweep cycle
+    const interval = setInterval(() => {
+      setScanIdx(prev => (prev + 1) % 12);
+    }, 150);
+    return () => clearInterval(interval);
+  }, []);
+
+  const key = title.toLowerCase();
+  const headerText = key === "profile" ? "ABOUT ME" : title.toUpperCase();
+
+  const descMap: Record<string, string> = {
+    profile: "Get to know me",
+    education: "My academic path",
+    projects: "Things I've built",
+    experience: "Where I've worked",
+    skills: "What I'm good at",
+    contact: "Let's connect",
+  };
+
+  const segmentMap: Record<string, number> = {
+    profile: 3,      // 3/8 segments filled
+    education: 2,    // 2/8 segments filled
+    projects: 5,     // 5/8 segments filled
+    experience: 4,   // 4/8 segments filled
+    skills: 6,       // 6/8 segments filled
+    contact: 2,      // 2/8 segments filled
+  };
+
+  const desc = descMap[key] || "";
+  const filledSegments = segmentMap[key] || 2;
 
   return (
-    <motion.button
-      variants={{
-        hidden: { opacity: 0, scale: 0.85, y: 25 },
-        visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 12 } }
-      }}
-      animate={baseTranslate}
-      whileHover={{ 
-        x: -6,
-        y: -6,
-        boxShadow: `10px 10px 0px ${hexColor}`,
-        borderColor: "#000000",
-        transition: { type: "spring", stiffness: 450, damping: 14 }
-      }}
-      whileTap={{ 
-        x: 4,
-        y: 4,
-        boxShadow: "0px 0px 0px #000000",
-        transition: { type: "spring", stiffness: 450, damping: 14 }
-      }}
+    <div
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{ boxShadow: baseBoxShadow }}
-      className="group relative flex flex-col items-center justify-center p-[3px] bg-[#a2a6a8] border-4 border-black text-white rounded-none aspect-[1/1] transition-colors duration-200 overflow-hidden"
+      className="relative flex flex-col aspect-square cursor-pointer transition-all duration-300 border-[6px] border-[#16171d] rounded-xl overflow-hidden font-retro"
+      style={{
+        boxShadow: isHovered || isActive
+          ? `0 0 24px ${hexColor}80`
+          : `0 0 8px rgba(0,0,0,0.5)`,
+      }}
     >
-      {/* Inner dashed console border frame */}
+      {/* Inner Glowing and Grid Panel */}
       <div 
-        className="w-full h-full border-2 border-dashed p-4 flex flex-col items-center justify-center relative rounded-none transition-all duration-200 z-10"
-        style={{ 
-          borderColor: isHovered || isActive ? contrastColor : `${contrastColor}25`,
-          boxShadow: isHovered || isActive ? "inset 0 0 16px rgba(0,0,0,0.15)" : "inset 0 0 8px rgba(0,0,0,0.06)"
+        className="flex-1 flex flex-col justify-between p-3 bg-[#08090d] border"
+        style={{
+          borderColor: isHovered || isActive ? hexColor : `${hexColor}40`,
+          boxShadow: isHovered || isActive
+            ? `0 0 12px ${hexColor}50, inset 0 0 8px ${hexColor}25`
+            : `inset 0 0 6px ${hexColor}10`,
+          backgroundImage: `
+            linear-gradient(${hexColor}0f 1px, transparent 1px),
+            linear-gradient(to right, ${hexColor}0f 1px, transparent 1px)
+          `,
+          backgroundSize: "12px 12px",
         }}
       >
-        {/* Dynamic Center Glow */}
+        {/* Top Capsule Status Bar */}
         <div 
-          className="absolute inset-0 pointer-events-none z-0 transition-opacity duration-300"
-          style={{ 
-            background: `radial-gradient(circle at center, ${contrastColor}18 0%, transparent 75%)`,
-            opacity: isHovered || isActive ? 1 : 0
-          }}
-        />
-
-        {/* Diagonal Gloss Glass Reflection */}
-        <div 
-          className="absolute inset-0 pointer-events-none z-0 opacity-40"
-          style={{ 
-            background: "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 45%, transparent 45.1%)"
-          }}
-        />
-
-        {/* Tech Vector Grid texture */}
-        <div 
-          className="absolute inset-0 pointer-events-none z-0 transition-all duration-300"
-          style={{ 
-            backgroundImage: isHovered || isActive
-              ? `linear-gradient(to right, ${contrastColor}22 1px, transparent 1px), linear-gradient(to bottom, ${contrastColor}22 1px, transparent 1px)`
-              : `linear-gradient(to right, ${contrastColor}0f 1px, transparent 1px), linear-gradient(to bottom, ${contrastColor}0f 1px, transparent 1px)`,
-            backgroundSize: "16px 16px"
-          }}
-        />
-        
-        {/* Scanline moving overlay */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <div 
-            className="w-full h-1/2 bg-gradient-to-b from-transparent via-black/5 to-transparent absolute top-0 left-0 arcade-scanline transition-opacity duration-300"
-            style={{ opacity: isHovered || isActive ? 0.6 : 0.15 }}
-          />
+          className="w-[85%] mx-auto h-[10px] border flex items-center justify-between rounded-full overflow-hidden p-[1.5px] mb-2"
+          style={{ borderColor: `${hexColor}40` }}
+        >
+          {Array.from({ length: 5 }).map((_, idx) => (
+            <div 
+              key={idx}
+              className="h-full flex-1 border-r last:border-r-0"
+              style={{ 
+                borderColor: `${hexColor}20`,
+                backgroundColor: "transparent"
+              }}
+            />
+          ))}
         </div>
 
-        {/* Retro HUD Corner L-Brackets */}
-        <div 
-          className="absolute top-1.5 left-1.5 w-2.5 h-2.5 border-t-2 border-l-2 transition-colors duration-200 pointer-events-none"
-          style={{ borderColor: isHovered || isActive ? contrastColor : `${contrastColor}35` }}
-        />
-        <div 
-          className="absolute top-1.5 right-1.5 w-2.5 h-2.5 border-t-2 border-r-2 transition-colors duration-200 pointer-events-none"
-          style={{ borderColor: isHovered || isActive ? contrastColor : `${contrastColor}35` }}
-        />
-        <div 
-          className="absolute bottom-1.5 left-1.5 w-2.5 h-2.5 border-b-2 border-l-2 transition-colors duration-200 pointer-events-none"
-          style={{ borderColor: isHovered || isActive ? contrastColor : `${contrastColor}35` }}
-        />
-        <div 
-          className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 border-b-2 border-r-2 transition-colors duration-200 pointer-events-none"
-          style={{ borderColor: isHovered || isActive ? contrastColor : `${contrastColor}35` }}
-        />
-
-        {/* Pulsing indicator block (square) */}
-        <span 
-          className="absolute top-2 right-2 w-2 h-2 rounded-none shadow-[0_0_6px_currentColor] arcade-flicker"
-          style={{ backgroundColor: contrastColor, color: contrastColor }}
-        />
-
-        {/* Custom Icon Box container (dark insert slot) */}
-        <div className="relative mb-2 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-200 rounded-none"
-            style={{ backgroundColor: hexColor }}
-          />
-          <div className="relative p-3 bg-[#18181b] border-2 border-black rounded-none group-hover:scale-105 group-hover:bg-[#111113] transition-all duration-200 shadow-md">
+        {/* Icon Box */}
+        <div className="flex-1 flex flex-col items-center justify-center text-center py-1">
+          <div className="mb-2 flex items-center justify-center scale-90 sm:scale-100">
             {renderIcon(isHovered, hexColor)}
+          </div>
+
+          {/* Heading */}
+          <div 
+            className="text-xs sm:text-[13px] font-retro font-bold uppercase tracking-wider mb-1"
+            style={{ 
+              color: "white", 
+              textShadow: `0 0 8px ${hexColor}70` 
+            }}
+          >
+            {headerText}
+          </div>
+
+          {/* Description */}
+          <div className="text-[8px] sm:text-[9px] text-slate-400 font-retro tracking-normal leading-normal text-center max-w-[90%]">
+            {desc}
           </div>
         </div>
 
-        <span 
-          className="text-[10px] sm:text-xs font-bold uppercase tracking-wider select-none font-retro transition-colors duration-200"
-          style={{ color: isHovered || isActive ? "#000000" : contrastColor }}
-        >
-          {title}
-        </span>
+        {/* 8-Segmented Status Progress Blocks with sweep animation */}
+        <div className="mt-2 flex justify-between gap-[3px] items-center px-0.5">
+          {Array.from({ length: 8 }).map((_, idx) => {
+            const isFilled = idx < filledSegments;
+            const isScanning = idx === scanIdx;
+
+            let bgStyle = "transparent";
+            let borderStyle = `1.5px solid ${hexColor}33`;
+            let shadowStyle = "none";
+
+            if (isFilled) {
+              if (isScanning) {
+                // Bright scan highlight on filled segment
+                bgStyle = "#ffffff";
+                borderStyle = `1.5px solid #ffffff`;
+                shadowStyle = `0 0 14px #ffffff, 0 0 8px ${hexColor}`;
+              } else {
+                // Normal filled segment
+                bgStyle = hexColor;
+                borderStyle = `1.5px solid ${hexColor}`;
+                shadowStyle = `0 0 8px ${hexColor}b0, inset 0 0 2px ${hexColor}`;
+              }
+            } else {
+              if (isScanning) {
+                // Faint sweep trace on unfilled segment
+                bgStyle = `${hexColor}aa`;
+                borderStyle = `1.5px solid ${hexColor}`;
+                shadowStyle = `0 0 8px ${hexColor}b0`;
+              }
+            }
+
+            return (
+              <div
+                key={idx}
+                className="h-[6px] flex-1 rounded-[1px] transition-all duration-100"
+                style={{
+                  backgroundColor: bgStyle,
+                  border: borderStyle,
+                  boxShadow: shadowStyle,
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
-    </motion.button>
+    </div>
   );
 }
 
@@ -961,7 +841,7 @@ export function MarioPortfolio() {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingText, setLoadingText] = useState("WORLD 1-1");
   const [bgmMuted, setBgmMuted] = useState(true);
-  const [sfxMuted, setSfxMuted] = useState(false);
+  const [sfxMuted] = useState(false);
 
   // Form states for Contact peach letter
   const [contactForm, setContactForm] = useState({ name: "", email: "", message: "" });
@@ -1058,7 +938,7 @@ export function MarioPortfolio() {
   };
 
   const openSection = (section: string) => {
-    synth.playCoin();
+    synth.playClick();
     setActiveSection(section);
   };
 
@@ -2156,230 +2036,359 @@ export function MarioPortfolio() {
   };
 
   // Main menu dashboard screen view
-  const renderDashboard = () => (
-    <div className="w-full min-h-screen bg-transparent flex flex-col relative select-none font-retro overflow-hidden">
-      
-      {/* 2. Top Header HUD Panel */}
-      <div className="w-full bg-black/40 backdrop-blur-md border-b border-white/10 text-white px-6 py-3 flex justify-between items-center z-10 relative select-none">
-        <div className="flex items-center gap-2 text-[10px] sm:text-xs tracking-wider">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-slate-400 font-bold uppercase mr-1">PLAYER</span>
-          <span className="text-white font-retro font-black">FARIZ</span>
-        </div>
+  const renderDashboard = () => {
+    // Determine color of current active section for the details panel outline glow
+    const activeColor = 
+      activeSection === "profile" ? "#ef4444" :
+      activeSection === "education" ? "#60a5fa" :
+      activeSection === "projects" ? "#facc15" :
+      activeSection === "experience" ? "#34d399" :
+      activeSection === "skills" ? "#c084fc" :
+      activeSection === "contact" ? "#f472b6" : "#00ffcc";
 
-        {/* Global Controls & Mode HUD */}
-        <div className="flex items-center gap-6 text-[10px] sm:text-xs tracking-wider">
-          {/* Mode label */}
-          <div className="flex items-center gap-1.5">
-            <span className="text-slate-400 font-bold uppercase">MODE</span>
-            <span className="text-white font-retro font-black uppercase">EXPLORE</span>
-          </div>
-          
-          {/* Level label */}
-          <div className="flex items-center gap-1.5 border-l border-white/20 pl-4">
-            <span className="text-slate-400 font-bold uppercase">LVL</span>
-            <span className="text-yellow-400 font-retro font-black">01</span>
-          </div>
-
-          {/* Audio & Reset Controls */}
-          <div className="flex items-center gap-2 border-l border-white/20 pl-4">
-            <button 
-              onClick={() => setBgmMuted(!bgmMuted)}
-              className="p-1 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded transition-colors"
-              title="Toggle Music"
-            >
-              {bgmMuted ? <VolumeX className="size-3.5 text-red-500" /> : <Volume2 className="size-3.5 text-green-500" />}
-            </button>
-            <button 
-              onClick={() => setSfxMuted(!sfxMuted)}
-              className="p-1 bg-white/5 border border-white/10 hover:bg-white/10 text-white text-[8px] font-bold rounded transition-colors uppercase px-1.5"
-              title="Toggle SFX"
-            >
-              SFX: {sfxMuted ? "OFF" : "ON"}
-            </button>
-            <button 
-              onClick={handleResetGame}
-              className="p-1 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded transition-colors"
-              title="Reset Game"
-            >
-              <RefreshCw className="size-3.5" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Main Dashboard Layout splits */}
-      <div className="flex-1 flex flex-col lg:flex-row z-10 relative max-w-7xl mx-auto w-full p-4 md:p-8 gap-8 items-center justify-center">
+    return (
+      <div className="w-full min-h-screen bg-transparent flex flex-col relative select-none font-retro overflow-hidden">
         
-        {/* Left Side: Playground 3x2 Grid and Helper Text */}
-        <div className={`w-full lg:w-[55%] xl:w-[60%] flex flex-col gap-6 ${
-          activeSection && activeSection !== "clear" ? "hidden lg:flex" : "flex"
-        }`}>
-          <motion.div 
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.08
-                }
-              }
-            }}
-            className="grid grid-cols-3 gap-4 sm:gap-6 w-full"
-          >
-            {/* Profile Card */}
-            <MenuCard
-              title="Profile"
-              hexColor="#ef4444"
-              isActive={activeSection === "profile"}
-              onClick={() => openSection("profile")}
-              renderIcon={(isHovered, hexColor) => <AnimatedProfileIcon isHovered={isHovered} hexColor={hexColor} />}
-            />
+        {/* 2. Top Header HUD Panel */}
+        <div className="w-full bg-black/40 backdrop-blur-md border-b border-white/10 text-white px-6 py-3 flex justify-between items-center z-20 relative select-none">
+          <div className="flex items-center gap-2 text-[9px] sm:text-[10px] tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-slate-400 font-bold uppercase mr-1">PLAYER</span>
+            <span className="text-white font-retro font-black">FARIZ</span>
+          </div>
 
-            {/* Education Card */}
-            <MenuCard
-              title="Education"
-              hexColor="#60a5fa"
-              isActive={activeSection === "education"}
-              onClick={() => openSection("education")}
-              renderIcon={(isHovered, hexColor) => <AnimatedEducationIcon isHovered={isHovered} hexColor={hexColor} />}
-            />
+          {/* Global Controls & Mode HUD */}
+          <div className="flex items-center gap-5 text-[9px] sm:text-[10px] tracking-widest font-retro">
+            {/* Mode label */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-slate-400 font-bold uppercase">MODE</span>
+              <span className="text-white font-retro font-black uppercase">EXPLORE</span>
+            </div>
+            
+            {/* Level label */}
+            <div className="flex items-center gap-1.5 border-l border-white/20 pl-4">
+              <span className="text-slate-400 font-bold uppercase">LVL</span>
+              <span className="text-yellow-400 font-retro font-black">01</span>
+            </div>
 
-            {/* Projects Card */}
-            <MenuCard
-              title="Projects"
-              hexColor="#facc15"
-              isActive={activeSection === "projects"}
-              onClick={() => openSection("projects")}
-              renderIcon={(isHovered, hexColor) => <AnimatedProjectsIcon isHovered={isHovered} hexColor={hexColor} />}
-            />
+            {/* HUD controls (gamepad, mute, settings) */}
+            <div className="flex items-center gap-3.5 border-l border-white/20 pl-4">
+              {/* Gamepad Icon */}
+              <Gamepad2 className="size-3.5 text-emerald-400 animate-pulse" />
 
-            {/* Experience Card */}
-            <MenuCard
-              title="Experience"
-              hexColor="#34d399"
-              isActive={activeSection === "experience"}
-              onClick={() => openSection("experience")}
-              renderIcon={(isHovered, hexColor) => <AnimatedExperienceIcon isHovered={isHovered} hexColor={hexColor} />}
-            />
+              {/* Speaker / Music Mute */}
+              <button 
+                onClick={() => {
+                  synth.playClick();
+                  setBgmMuted(!bgmMuted);
+                }}
+                className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                title="Toggle Music"
+              >
+                {bgmMuted ? <VolumeX className="size-3.5 text-red-500" /> : <Volume2 className="size-3.5 text-slate-300" />}
+              </button>
 
-            {/* Skills Card */}
-            <MenuCard
-              title="Skills"
-              hexColor="#c084fc"
-              isActive={activeSection === "skills"}
-              onClick={() => openSection("skills")}
-              renderIcon={(isHovered, hexColor) => <AnimatedSkillsIcon isHovered={isHovered} hexColor={hexColor} />}
-            />
-
-            {/* Contact Card */}
-            <MenuCard
-              title="Contact"
-              hexColor="#f472b6"
-              isActive={activeSection === "contact"}
-              onClick={() => openSection("contact")}
-              renderIcon={(isHovered, hexColor) => <AnimatedContactIcon isHovered={isHovered} hexColor={hexColor} />}
-            />
-          </motion.div>
-
-          {/* Description Helper text card */}
-          <div className="bg-black/25 backdrop-blur-[20px] border border-white/10 p-4 rounded-2xl text-[9px] sm:text-[10px] text-slate-400 max-w-md uppercase tracking-wider leading-relaxed text-left">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-slate-400 mr-2 animate-pulse" />
-            Ultra-thin glass — 25% black, 20px blur, 1px border. No heavy fills, just subtle dots. Designed to showcase your GIF, not compete with it.
+              {/* Reset / Settings */}
+              <button 
+                onClick={handleResetGame}
+                className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                title="Reset Game"
+              >
+                <Settings className="size-3.5" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Right Side: Interactive Display Console Screen */}
-        <div className={`flex-1 w-full lg:w-[45%] xl:w-[40%] flex flex-col justify-center items-center ${
-          activeSection && activeSection !== "clear" ? "block" : "block"
-        }`}>
-          <AnimatePresence mode="wait">
-            {!activeSection || activeSection === "clear" ? (
-              <motion.div 
-                key="adventure-time"
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                transition={{ duration: 0.2 }}
-                className="flex flex-col justify-between items-center lg:items-end min-h-[400px] py-4 w-full"
-              >
-                {/* Main Menu Title Box */}
-                <div className="flex-1 flex flex-col justify-center items-center text-center lg:text-right w-full pr-0 lg:pr-8">
-                  <div className="text-[9px] text-yellow-400 uppercase tracking-widest font-black mb-3 bg-black/40 border border-white/10 px-3.5 py-1 rounded-full backdrop-blur-md">
-                    MAIN MENU
-                  </div>
-                  
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] font-retro select-none">
-                    ADVENTURE<br />TIME!
-                  </h2>
-                </div>
+        {/* 3. Main Split View: Sidebar + Content Area */}
+        <div className="flex-1 flex flex-row relative z-10 overflow-hidden">
+          {/* Left Vertical Sidebar Navigation */}
+          <div className="w-14 lg:w-44 shrink-0 bg-black/25 backdrop-blur-[10px] border-r border-white/10 flex flex-col justify-between py-6 px-2 lg:px-4 z-10 select-none">
+            <div className="flex flex-col gap-2.5">
+              {[
+                { id: "home", label: "HOME", icon: Home, section: null },
+                { id: "about", label: "ABOUT", icon: User, section: "profile" },
+                { id: "skills", label: "SKILLS", icon: Code, section: "skills" },
+                { id: "projects", label: "PROJECTS", icon: Folder, section: "projects" },
+                { id: "journey", label: "JOURNEY", icon: LineChart, section: "experience" },
+                { id: "contact", label: "CONTACT", icon: Mail, section: "contact" }
+              ].map(item => {
+                const isItemActive = activeSection === item.section;
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => openSection(item.section as string)}
+                    className={`w-full flex items-center justify-center lg:justify-start gap-3 px-2 lg:px-4 py-3 border rounded-xl font-retro text-[9px] tracking-widest transition-all duration-200 uppercase font-bold cursor-pointer ${
+                      isItemActive 
+                        ? "bg-[#0d1e1f] text-[#00ffcc] border-[#00ffcc]/40 shadow-[0_0_15px_rgba(0,255,204,0.25)]"
+                        : "bg-transparent text-slate-400 border-transparent hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    <Icon className="size-4 shrink-0" />
+                    <span className="hidden lg:inline-block">{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
 
-                {/* Circular Play button with text label */}
-                <div className="flex items-center gap-4 justify-end w-full pr-0 lg:pr-8 mt-6">
-                  <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider text-right max-w-[180px] leading-normal hidden sm:block">
-                    Elegant floating controls.<br />Let your animated background shine through.
-                  </div>
-                  
-                  <div className="relative">
-                    <motion.div 
-                      animate={{ scale: [1, 1.3], opacity: [0.3, 0] }}
-                      transition={{ repeat: Infinity, duration: 2, ease: "easeOut" }}
-                      className="absolute inset-0 border-2 border-white/20 rounded-full pointer-events-none"
-                    />
-                    <motion.button
-                      onClick={startPlatformer}
-                      whileHover={{ scale: 1.08 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-24 h-24 md:w-28 md:h-28 flex items-center justify-center bg-black/25 backdrop-blur-[20px] border border-white/10 rounded-full hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all cursor-pointer"
-                      title="Play Minigame"
-                    >
-                      <svg 
-                        className="w-10 h-10 text-white fill-white translate-x-1" 
-                        viewBox="0 0 24 24"
-                      >
-                        <polygon points="5 3 19 12 5 21 5 3" />
-                      </svg>
-                    </motion.button>
-                  </div>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div 
-                key={activeSection}
-                initial={{ opacity: 0, scale: 0.92, y: 30 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.92, y: 30 }}
-                transition={{ type: "spring", stiffness: 180, damping: 15 }}
-                className="w-full bg-black/35 backdrop-blur-[20px] border border-white/10 text-white p-5 sm:p-6 md:p-8 rounded-[2rem] flex flex-col relative z-10"
-              >
-                {/* Back Button */}
-                <motion.button
-                  whileHover={{ scale: 1.05, x: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={closeSection}
-                  className="absolute top-4 right-4 bg-white/5 border border-white/10 hover:bg-white/15 text-white px-3.5 py-1.5 rounded-2xl text-[9px] font-black tracking-wider transition-all flex items-center gap-1 cursor-pointer font-retro"
-                  title="Return to Menu"
+            {/* Scroll Explore Indicator at Sidebar Bottom */}
+            <div className="flex items-center justify-center lg:justify-start gap-2.5 px-1 mt-auto">
+              <div className="w-8 h-8 rounded-full border border-slate-500/50 flex items-center justify-center text-[10px] font-retro text-slate-400 font-bold shrink-0">
+                N
+              </div>
+              <div className="hidden lg:block text-[7px] text-slate-400 font-retro leading-tight uppercase font-bold select-none">
+                SCROLL<br />TO EXPLORE
+              </div>
+            </div>
+          </div>
+
+          {/* Right Main Content Panel */}
+          <div className="flex-1 overflow-y-auto p-4 md:p-8 flex justify-center items-center">
+            <div className="max-w-7xl w-full flex flex-col lg:flex-row gap-8 items-center justify-center">
+              
+              {/* Left Column: 3x2 Grid (Hidden on mobile if a section is active) */}
+              <div className={`w-full lg:w-[55%] xl:w-[60%] flex flex-col gap-6 ${
+                activeSection && activeSection !== "clear" ? "hidden lg:flex" : "flex"
+              }`}>
+                <motion.div 
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                      opacity: 1,
+                      transition: {
+                        staggerChildren: 0.08
+                      }
+                    }
+                  }}
+                  className="grid grid-cols-3 gap-4 sm:gap-6 w-full"
                 >
-                  <ArrowLeft className="size-3" />
-                  <span>BACK</span>
-                </motion.button>
+                  {/* Profile Card */}
+                  <MenuCard
+                    title="Profile"
+                    hexColor="#ef4444"
+                    isActive={activeSection === "profile"}
+                    onClick={() => openSection("profile")}
+                    renderIcon={(isHovered, hexColor) => <AnimatedProfileIcon isHovered={isHovered} hexColor={hexColor} />}
+                  />
 
-                <h3 className="text-sm sm:text-base md:text-lg text-yellow-400 border-b border-white/10 pb-4 mb-6 uppercase tracking-widest font-black pr-16 text-left leading-relaxed">
-                  {getSectionTitle(activeSection)}
-                </h3>
+                  {/* Education Card */}
+                  <MenuCard
+                    title="Education"
+                    hexColor="#60a5fa"
+                    isActive={activeSection === "education"}
+                    onClick={() => openSection("education")}
+                    renderIcon={(isHovered, hexColor) => <AnimatedEducationIcon isHovered={isHovered} hexColor={hexColor} />}
+                  />
 
-                <div className="text-xs text-left max-h-[50vh] overflow-y-auto pr-1">
-                  {getSectionContent(activeSection)}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  {/* Projects Card */}
+                  <MenuCard
+                    title="Projects"
+                    hexColor="#facc15"
+                    isActive={activeSection === "projects"}
+                    onClick={() => openSection("projects")}
+                    renderIcon={(isHovered, hexColor) => <AnimatedProjectsIcon isHovered={isHovered} hexColor={hexColor} />}
+                  />
+
+                  {/* Experience Card */}
+                  <MenuCard
+                    title="Experience"
+                    hexColor="#34d399"
+                    isActive={activeSection === "experience"}
+                    onClick={() => openSection("experience")}
+                    renderIcon={(isHovered, hexColor) => <AnimatedExperienceIcon isHovered={isHovered} hexColor={hexColor} />}
+                  />
+
+                  {/* Skills Card */}
+                  <MenuCard
+                    title="Skills"
+                    hexColor="#c084fc"
+                    isActive={activeSection === "skills"}
+                    onClick={() => openSection("skills")}
+                    renderIcon={(isHovered, hexColor) => <AnimatedSkillsIcon isHovered={isHovered} hexColor={hexColor} />}
+                  />
+
+                  {/* Contact Card */}
+                  <MenuCard
+                    title="Contact"
+                    hexColor="#f472b6"
+                    isActive={activeSection === "contact"}
+                    onClick={() => openSection("contact")}
+                    renderIcon={(isHovered, hexColor) => <AnimatedContactIcon isHovered={isHovered} hexColor={hexColor} />}
+                  />
+                </motion.div>
+              </div>
+
+              {/* Right Column: Adventure Time Dashboard Welcome OR Content Detail Panel */}
+              <div className={`flex-1 w-full lg:w-[45%] xl:w-[40%] flex flex-col justify-center items-center ${
+                activeSection && activeSection !== "clear" ? "block" : "block"
+              }`}>
+                <AnimatePresence mode="wait">
+                  {!activeSection || activeSection === "clear" ? (
+                    <motion.div 
+                      key="adventure-time"
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -30 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex flex-col justify-between items-center lg:items-start min-h-[420px] py-4 w-full"
+                    >
+                      {/* Welcome Headers */}
+                      <div className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left w-full">
+                        <div className="text-[9px] text-[#00ffcc] uppercase tracking-widest font-black mb-3 bg-black/40 border border-[#00ffcc]/30 px-3.5 py-1.5 rounded-none backdrop-blur-md">
+                          WELCOME TO MY PORTFOLIO 💖
+                        </div>
+                        
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight leading-none drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] font-retro select-none mb-4">
+                          ADVENTURE<br />TIME!
+                        </h2>
+
+                        <p className="text-[9px] sm:text-[10px] text-slate-400 tracking-wide leading-relaxed font-retro max-w-sm uppercase mb-6">
+                          {"I'm Fariz, a passionate developer who turns ideas into immersive digital experiences. Explore my journey, projects, and skills."}
+                        </p>
+
+                        {/* Slanted red exploration button */}
+                        <motion.button
+                          onClick={startPlatformer}
+                          whileHover={{ scale: 1.05, skewX: -12 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="px-6 py-4 bg-gradient-to-r from-[#ef4444] to-[#991b1b] border-2 border-red-500/30 text-white font-retro text-[10px] tracking-widest font-black uppercase flex items-center gap-2.5 skew-x-[-12deg] shadow-[0_0_15px_rgba(239,68,68,0.3)] cursor-pointer"
+                        >
+                          <span className="skew-x-[12deg] flex items-center gap-2">
+                            START EXPLORING <ChevronRight className="size-3.5 stroke-[3px]" />
+                          </span>
+                        </motion.button>
+                      </div>
+
+                      {/* Current Location Box with Pointing Avatar behind it */}
+                      <div className="relative w-full max-w-sm mt-10">
+                        {/* Pointing Avatar Character with floating animation, hidden behind box */}
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                          animate={{ 
+                            opacity: 1, 
+                            scale: 1, 
+                            y: [0, -4, 0]
+                          }}
+                          transition={{ 
+                            opacity: { duration: 0.3 },
+                            scale: { type: "spring" },
+                            y: {
+                              repeat: Infinity,
+                              duration: 2.2,
+                              ease: "easeInOut"
+                            }
+                          }}
+                          className="absolute right-[-140px] sm:right-[-340px] bottom-[calc(100%-80px)] w-[22rem] h-[16.5rem] sm:w-[32rem] sm:h-[24rem] pointer-events-none select-none z-0 overflow-hidden"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src="/amirulfarizavatar.png"
+                            alt="Amirul Fariz Avatar pointing"
+                            className="w-full h-full object-contain object-bottom translate-y-6 sm:translate-y-12"
+                            style={{ imageRendering: "pixelated" }}
+                          />
+                        </motion.div>
+
+                        <div 
+                          className="w-full p-4 bg-[#0c0d10] border-2 border-black rounded-none text-left relative z-10" 
+                          style={{ outline: "1px solid #00ffcc", boxShadow: "0 0 12px rgba(0,255,204,0.15)" }}
+                        >
+                          <div className="text-[7.5px] text-[#00ffcc] font-retro tracking-widest uppercase font-bold mb-1">
+                            CURRENT LOCATION
+                          </div>
+                          <div className="text-[11px] font-retro text-white font-black tracking-wide uppercase mb-2">
+                            PIXEL CITY, CREATIVE DISTRICT
+                          </div>
+                          <div className="text-[7.5px] text-slate-400 font-retro tracking-wider uppercase font-bold flex gap-4">
+                            <span>• DAY 01</span>
+                            <span>• 08:30 PM</span>
+                            <span>• CLEAR</span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div 
+                      key={activeSection}
+                      initial={{ opacity: 0, scale: 0.92, y: 30 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.92, y: 30 }}
+                      transition={{ type: "spring", stiffness: 180, damping: 15 }}
+                      className="w-full bg-[#0c0d10] border-2 border-black text-white p-5 sm:p-6 md:p-8 rounded-none flex flex-col relative z-10 text-left"
+                      style={{
+                        outline: `1px solid ${activeColor}`,
+                        boxShadow: `0 0 25px ${activeColor}60`,
+                      }}
+                    >
+                      {/* Back Button */}
+                      <motion.button
+                        whileHover={{ scale: 1.05, x: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={closeSection}
+                        className="absolute top-4 right-4 bg-white/5 border border-white/10 hover:bg-white/15 text-white px-3.5 py-1.5 rounded-none text-[8px] font-black tracking-wider transition-all flex items-center gap-1 cursor-pointer font-retro"
+                        title="Return to Menu"
+                      >
+                        <ArrowLeft className="size-3" />
+                        <span>BACK</span>
+                      </motion.button>
+
+                      <h3 className="text-xs sm:text-sm text-yellow-400 border-b border-white/10 pb-4 mb-6 uppercase tracking-widest font-black pr-16 leading-relaxed">
+                        {getSectionTitle(activeSection)}
+                      </h3>
+
+                      <div className="text-xs max-h-[50vh] overflow-y-auto pr-1">
+                        {getSectionContent(activeSection)}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+            </div>
+          </div>
         </div>
+
+        {/* Floating Social Pill Capsule (Bottom Right) */}
+        {phase === "dashboard" && (
+          <div 
+            className="absolute bottom-6 right-6 bg-[#0c0d10] border-2 border-black rounded-full py-2.5 px-6 flex items-center gap-4.5 z-20 shadow-[0_0_15px_rgba(0,0,0,0.6)] select-none"
+            style={{ outline: "1px solid rgba(255,255,255,0.1)" }}
+          >
+            <a 
+              href="https://github.com/ProfFariz" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={() => synth.playClick()}
+              className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="fill-none"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </a>
+            <a 
+              href="https://linkedin.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={() => synth.playClick()}
+              className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="fill-none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+            <a 
+              href="https://twitter.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={() => synth.playClick()}
+              className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="fill-none"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+            </a>
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   // Platformer Minigame view (with retro arcade layout and touch buttons)
   const renderMinigame = () => (
@@ -2564,13 +2573,15 @@ export function MarioPortfolio() {
   // Switch between stages
   return (
     <div className="w-full min-h-screen relative overflow-hidden select-none bg-slate-950 text-white">
-      {/* Global Background GIF (only on start, dashboard, minigame phases) */}
+      {/* Global Background Video (only on start, dashboard, minigame phases) */}
       {phase !== "loading" && (
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/209343.gif"
-            alt="Background"
+          <video
+            src="/watermark-removed-Swaying_cherry_blossom_branche.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
             className="absolute inset-0 w-full h-full object-cover"
           />
           {/* Dark Overlay for better contrast and readability */}
