@@ -9,6 +9,7 @@ import {
   Gamepad2, Settings, ChevronRight,
   LineChart
 } from "lucide-react";
+import jackolImage from "@/assets/project_images/jackol.jpg";
 
 // ==========================================
 // 1. SOUND SYNTHESIZER (WEB AUDIO API)
@@ -1633,50 +1634,58 @@ export function MarioPortfolio() {
       case "profile":
         return (
           <div className="space-y-6">
+            {/* Main Profile Info Header Card */}
             <motion.div 
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: "spring", stiffness: 120, damping: 12 }}
-              className="flex items-center gap-4 flex-col sm:flex-row bg-slate-950 border-4 border-black p-4 rounded-2xl shadow-[4px_4px_0px_#000] relative overflow-hidden text-white"
+              className="flex items-center gap-6 flex-col sm:flex-row bg-[#080d16] border-4 border-black p-5 rounded-none shadow-[4px_4px_0px_#000] outline outline-2 outline-sky-500 relative overflow-hidden text-white w-full"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-red-500/10 rounded-full blur-2xl -z-10 pointer-events-none" />
-              <motion.span 
-                animate={{ y: [0, -6, 0] }}
-                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                className="text-5xl bg-red-500/20 p-4 border-2 border-dashed border-red-500 rounded-full"
-              >
-                👨‍💻
-              </motion.span>
-              <div className="text-center sm:text-left space-y-1.5 z-10">
-                <div className="text-base sm:text-lg font-bold text-yellow-400">{PROFILE_DATA.name} ({PROFILE_DATA.nickname})</div>
-                <div className="text-[10px] sm:text-xs text-sky-400 uppercase tracking-widest font-black">{PROFILE_DATA.title}</div>
+              {/* Circular Avatar with red dashed border */}
+              <div className="rounded-full border-4 border-dashed border-red-500 p-1 bg-red-950/40 w-24 h-24 sm:w-28 sm:h-28 shrink-0 flex items-center justify-center relative select-none">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={jackolImage.src} 
+                  alt="Amirul Fariz (Jackal)" 
+                  className="w-full h-full object-cover rounded-full" 
+                  style={{ imageRendering: "pixelated" }}
+                />
+              </div>
+              <div className="text-center sm:text-left space-y-2.5 z-10 flex-1">
+                <div className="text-base sm:text-lg font-black text-yellow-400 font-retro uppercase tracking-wider text-shadow">
+                  {PROFILE_DATA.name} ({PROFILE_DATA.nickname})
+                </div>
+                <div className="text-[10px] sm:text-xs text-sky-400 uppercase tracking-widest font-black font-retro">
+                  {PROFILE_DATA.title}
+                </div>
               </div>
             </motion.div>
 
-            <motion.p 
+            {/* Bio Box with custom retro scrollbar and high contrast */}
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15 }}
-              className="text-xs leading-relaxed uppercase tracking-wider text-slate-300 bg-slate-950/60 p-4 border-2 border-black rounded-2xl"
+              className="bg-[#05070a] border-4 border-black p-5 rounded-none font-retro leading-relaxed text-slate-200 text-xs sm:text-sm uppercase max-h-[180px] overflow-y-auto pr-2.5 retro-scrollbar shadow-[4px_4px_0px_#000]"
             >
               {PROFILE_DATA.bio}
-            </motion.p>
+            </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {/* Email Card (Interactive Copy) */}
               <motion.div
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => copyToClipboard(PROFILE_DATA.email, "email")}
-                className="cursor-pointer bg-slate-950 p-4 border-4 border-black rounded-2xl shadow-[4px_4px_0px_#000] relative group transition-all"
+                className="cursor-pointer bg-slate-950 p-4 border-4 border-black rounded-none shadow-[4px_4px_0px_#000] relative group transition-all"
               >
-                <span className="text-red-400 font-bold text-[10px] tracking-wider uppercase">EMAIL (CLICK TO COPY)</span>
-                <div className="text-xs text-slate-200 mt-1 truncate group-hover:text-red-400 transition-colors">{PROFILE_DATA.email}</div>
+                <span className="text-red-400 font-bold text-[10px] tracking-wider uppercase font-retro">EMAIL (CLICK TO COPY)</span>
+                <div className="text-[11px] text-slate-200 mt-1.5 truncate group-hover:text-red-400 transition-colors font-retro uppercase">{PROFILE_DATA.email}</div>
                 {copiedField === "email" && (
                   <motion.span 
                     initial={{ opacity: 0, y: 10, scale: 0.8 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    className="absolute -top-3 right-4 px-2 py-1 bg-yellow-400 text-black text-[8px] font-black border-2 border-black rounded-full"
+                    className="absolute -top-3 right-4 px-2.5 py-1 bg-yellow-400 text-black text-[8px] font-black border-2 border-black rounded-none font-retro"
                   >
                     COPIED! 🪙
                   </motion.span>
@@ -1688,15 +1697,15 @@ export function MarioPortfolio() {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => copyToClipboard(PROFILE_DATA.phone, "phone")}
-                className="cursor-pointer bg-slate-950 p-4 border-4 border-black rounded-2xl shadow-[4px_4px_0px_#000] relative group transition-all"
+                className="cursor-pointer bg-slate-950 p-4 border-4 border-black rounded-none shadow-[4px_4px_0px_#000] relative group transition-all"
               >
-                <span className="text-blue-400 font-bold text-[10px] tracking-wider uppercase">PHONE (CLICK TO COPY)</span>
-                <div className="text-xs text-slate-200 mt-1 group-hover:text-blue-400 transition-colors">{PROFILE_DATA.phone}</div>
+                <span className="text-blue-400 font-bold text-[10px] tracking-wider uppercase font-retro">PHONE (CLICK TO COPY)</span>
+                <div className="text-[11px] text-slate-200 mt-1.5 group-hover:text-blue-400 transition-colors font-retro uppercase">{PROFILE_DATA.phone}</div>
                 {copiedField === "phone" && (
                   <motion.span 
                     initial={{ opacity: 0, y: 10, scale: 0.8 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    className="absolute -top-3 right-4 px-2 py-1 bg-yellow-400 text-black text-[8px] font-black border-2 border-black rounded-full"
+                    className="absolute -top-3 right-4 px-2.5 py-1 bg-yellow-400 text-black text-[8px] font-black border-2 border-black rounded-none font-retro"
                   >
                     COPIED! 🪙
                   </motion.span>
@@ -1706,10 +1715,10 @@ export function MarioPortfolio() {
               {/* Location Card */}
               <motion.div
                 whileHover={{ scale: 1.03, y: -2 }}
-                className="bg-slate-950 p-4 border-4 border-black rounded-2xl shadow-[4px_4px_0px_#000]"
+                className="bg-slate-950 p-4 border-4 border-black rounded-none shadow-[4px_4px_0px_#000]"
               >
-                <span className="text-yellow-400 font-bold text-[10px] tracking-wider uppercase">LOCATION</span>
-                <div className="text-xs text-slate-200 mt-1 flex items-center gap-1.5">
+                <span className="text-yellow-400 font-bold text-[10px] tracking-wider uppercase font-retro">LOCATION</span>
+                <div className="text-[11px] text-slate-200 mt-1.5 flex items-center gap-1.5 font-retro uppercase">
                   <span>{PROFILE_DATA.location}</span> 
                   <motion.span animate={{ rotate: [0, 15, -15, 0] }} transition={{ repeat: Infinity, duration: 2.5 }}>🇲🇾</motion.span>
                 </div>
@@ -1722,19 +1731,20 @@ export function MarioPortfolio() {
                 href={PROFILE_DATA.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-slate-950 p-4 border-4 border-black rounded-2xl shadow-[4px_4px_0px_#000] block group transition-all"
+                className="bg-slate-950 p-4 border-4 border-black rounded-none shadow-[4px_4px_0px_#000] block group transition-all"
               >
-                <span className="text-green-400 font-bold text-[10px] tracking-wider uppercase flex justify-between items-center">
+                <span className="text-green-400 font-bold text-[10px] tracking-wider uppercase flex justify-between items-center font-retro">
                   <span>GITHUB CASTLE</span>
-                  <ExternalLink className="size-3 text-green-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  <ExternalLink className="size-3.5 text-green-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </span>
-                <div className="text-xs text-slate-200 mt-1 group-hover:text-green-400 transition-colors">github.com/ProfFariz</div>
+                <div className="text-[11px] text-slate-200 mt-1.5 group-hover:text-green-400 transition-colors font-retro uppercase">github.com/ProfFariz</div>
               </motion.a>
             </div>
 
+            {/* Favorite Food Item Block */}
             <motion.div 
               whileHover={{ scale: 1.02 }}
-              className="bg-yellow-950/60 p-3.5 border-2 border-yellow-500 rounded-2xl text-[10px] text-yellow-400 uppercase tracking-widest text-center shadow-[4px_4px_0px_rgba(234,179,8,0.2)]"
+              className="bg-yellow-950/60 p-4 border-4 border-black rounded-none text-xs text-yellow-400 uppercase tracking-widest text-center shadow-[4px_4px_0px_rgba(234,179,8,0.25)] font-retro"
             >
               ⚡ Favorite Food Power-Up: <span className="text-white font-bold">{PROFILE_DATA.favoriteFood}</span>
             </motion.div>
@@ -1747,15 +1757,15 @@ export function MarioPortfolio() {
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-blue-950/40 border-4 border-blue-500 p-5 rounded-2xl shadow-[4px_4px_0px_#000] space-y-3 relative overflow-hidden"
+              className="bg-blue-950/40 border-4 border-blue-500 p-5 rounded-none shadow-[4px_4px_0px_#000] space-y-3.5 relative overflow-hidden"
             >
               <div className="absolute top-2 right-4 text-3xl opacity-20 pointer-events-none select-none">🎓</div>
-              <div className="text-yellow-400 font-bold text-sm sm:text-base uppercase tracking-wider">{EDUCATION_DATA.school}</div>
+              <div className="text-yellow-400 font-black text-sm sm:text-base uppercase tracking-wider font-retro">{EDUCATION_DATA.school}</div>
               <div className="flex gap-2 flex-wrap">
-                <span className="text-[9px] px-2 py-0.5 bg-emerald-500 text-white font-black border-2 border-black rounded-full uppercase tracking-wider">
+                <span className="text-[9px] px-2.5 py-1 bg-emerald-500 text-white font-black border-2 border-black rounded-none uppercase tracking-wider font-retro">
                   STATUS: {EDUCATION_DATA.status}
                 </span>
-                <span className="text-[9px] px-2 py-0.5 bg-sky-500 text-white font-black border-2 border-black rounded-full uppercase tracking-wider">
+                <span className="text-[9px] px-2.5 py-1 bg-sky-500 text-white font-black border-2 border-black rounded-none uppercase tracking-wider font-retro">
                   {EDUCATION_DATA.focus}
                 </span>
               </div>
@@ -1765,31 +1775,27 @@ export function MarioPortfolio() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15 }}
-              className="bg-slate-950 border-4 border-black p-5 rounded-2xl leading-relaxed text-slate-300 text-[11px] sm:text-xs tracking-wide uppercase font-retro"
+              className="bg-slate-950 border-4 border-black p-5 rounded-none leading-relaxed text-slate-200 text-xs sm:text-sm tracking-wide uppercase font-retro shadow-[4px_4px_0px_#000]"
             >
               {EDUCATION_DATA.description}
             </motion.p>
 
             {/* Interactive Subjects/Badges block */}
-            <div className="space-y-2.5">
-              <div className="text-[9px] text-slate-400 uppercase tracking-widest font-black">CLICK COURSES TO BOUNCE:</div>
-              <div className="flex flex-wrap gap-2">
+            <div className="space-y-3">
+              <div className="text-[10px] text-slate-400 uppercase tracking-widest font-black font-retro">CLICK COURSES TO BOUNCE:</div>
+              <div className="flex flex-wrap gap-2.5">
                 {["Data Structures", "Algorithms", "Web Architecture", "UI Design", "Software Life Cycle", "Database Systems"].map((subj, idx) => (
                    <motion.button
                      key={idx}
                      whileHover={{ scale: 1.08, y: -2 }}
                      whileTap={{ scale: 0.95 }}
                      onClick={() => synth.playJump()}
-                     className="px-3 py-1.5 bg-slate-950 border-2 border-slate-700 text-sky-400 text-[9px] uppercase font-bold rounded-xl hover:border-sky-400 transition-colors shadow-[2px_2px_0px_#000]"
+                     className="px-3.5 py-2 bg-slate-950 border-2 border-slate-700 hover:border-sky-400 text-sky-400 text-[10px] uppercase font-black rounded-none transition-colors shadow-[2px_2px_0px_#000] font-retro cursor-pointer"
                    >
                      📘 {subj}
                    </motion.button>
                 ))}
               </div>
-            </div>
-
-            <div className="flex justify-center text-4xl animate-bounce pt-2">
-              🎓
             </div>
           </div>
         );
@@ -1798,7 +1804,7 @@ export function MarioPortfolio() {
         return (
           <div className="space-y-6 relative pl-6 sm:pl-8 py-2">
             {/* Vertical level track line */}
-            <div className="absolute left-[13px] sm:left-[17px] top-4 bottom-4 w-1.5 bg-slate-800 border-l border-r border-slate-600 rounded-full" />
+            <div className="absolute left-[13px] sm:left-[17px] top-4 bottom-4 w-1.5 bg-slate-800 border-l border-r border-slate-600 rounded-none" />
 
             {EXPERIENCE_DATA.map((exp, idx) => (
               <motion.div 
@@ -1807,23 +1813,23 @@ export function MarioPortfolio() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.15, type: "spring", stiffness: 100 }}
                 whileHover={{ scale: 1.02 }}
-                className="relative bg-slate-950 border-4 border-black p-4 sm:p-5 rounded-2xl shadow-[4px_4px_0px_#000] flex flex-col md:flex-row gap-4"
+                className="relative bg-slate-950 border-4 border-black p-5 rounded-none shadow-[4px_4px_0px_#000] flex flex-col md:flex-row gap-4"
               >
                 {/* Timeline Dot Node */}
                 <motion.div 
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ repeat: Infinity, duration: 3, delay: idx * 0.5 }}
-                  className="absolute -left-[27px] sm:-left-[35px] top-6 w-5 h-5 rounded-full bg-emerald-500 border-4 border-black flex items-center justify-center text-[7px]"
+                  className="absolute -left-[27px] sm:-left-[35px] top-6 w-5 h-5 bg-emerald-500 border-4 border-black flex items-center justify-center text-[7px] rounded-none font-retro"
                 >
                   ⭐
                 </motion.div>
 
-                <div className="md:w-36 text-yellow-400 shrink-0 uppercase tracking-wider space-y-1">
-                  <div className="text-[10px] font-black">{exp.period}</div>
-                  <div className="text-[9px] text-sky-400 font-bold bg-sky-950/40 px-2 py-0.5 border border-sky-800/40 rounded-full inline-block md:block text-center">{exp.company}</div>
+                <div className="md:w-36 text-yellow-400 shrink-0 uppercase tracking-wider space-y-1.5 font-retro">
+                  <div className="text-[11px] font-black">{exp.period}</div>
+                  <div className="text-[9px] text-sky-400 font-bold bg-sky-950/40 px-2.5 py-1 border border-sky-800/40 rounded-none inline-block md:block text-center">{exp.company}</div>
                 </div>
-                <div className="flex-1 text-slate-300 leading-relaxed uppercase tracking-wider space-y-1.5">
-                  <div className="text-white font-bold text-xs sm:text-sm">{exp.role}</div>
+                <div className="flex-1 text-slate-300 leading-relaxed uppercase tracking-wider space-y-2 font-retro">
+                  <div className="text-white font-black text-xs sm:text-sm">{exp.role}</div>
                   <div className="text-[10px] sm:text-xs text-slate-400 font-retro leading-normal">{exp.desc}</div>
                 </div>
               </motion.div>
@@ -1834,7 +1840,7 @@ export function MarioPortfolio() {
       case "projects":
         return (
           <div className="space-y-6">
-            <div className="text-[9px] text-slate-400 uppercase tracking-widest font-black mb-1">STAGES CLEAR SELECTION:</div>
+            <div className="text-[10px] text-slate-400 uppercase tracking-widest font-black mb-1 font-retro">STAGES CLEAR SELECTION:</div>
             {PROJECTS_DATA.map((proj, idx) => (
               <motion.div 
                 key={proj.id} 
@@ -1842,18 +1848,18 @@ export function MarioPortfolio() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ delay: idx * 0.12, type: "spring" }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-slate-950 border-4 border-black p-5 text-[10px] sm:text-xs rounded-2xl space-y-3 relative overflow-hidden shadow-[6px_6px_0px_#000] hover:shadow-[8px_8px_0px_#000] transition-all"
+                className="bg-slate-950 border-4 border-black p-5 text-xs sm:text-sm rounded-none space-y-3.5 relative overflow-hidden shadow-[6px_6px_0px_#000] hover:shadow-[8px_8px_0px_#000] transition-all font-retro"
               >
-                <div className="absolute top-3 right-3 px-3 py-1 bg-yellow-500 text-black text-[7px] font-black border-2 border-black rounded-full uppercase tracking-wider font-retro">
+                <div className="absolute top-3 right-3 px-3 py-1 bg-yellow-500 text-black text-[8px] font-black border-2 border-black rounded-none uppercase tracking-wider font-retro">
                   {proj.badge}
                 </div>
                 
                 <h3 className="text-sm font-black text-yellow-400 uppercase tracking-wider font-retro flex items-center gap-2">
-                  <span className="w-5 h-5 flex items-center justify-center bg-red-500 border border-black text-white rounded text-[8px]">1-{idx+1}</span>
+                  <span className="w-5 h-5 flex items-center justify-center bg-red-500 border border-black text-white rounded-none text-[8px]">{idx+1}</span>
                   {proj.title}
                 </h3>
                 
-                <p className="text-[10px] sm:text-xs text-slate-300 uppercase tracking-wide leading-relaxed font-retro">
+                <p className="text-[10px] sm:text-xs text-slate-200 uppercase tracking-wide leading-relaxed font-retro">
                   {proj.desc}
                 </p>
 
@@ -1863,7 +1869,7 @@ export function MarioPortfolio() {
                       key={i} 
                       whileHover={{ y: -2, scale: 1.05 }}
                       onClick={() => synth.playCoin()}
-                      className="cursor-default px-2.5 py-1 bg-slate-900 border-2 border-slate-700 text-[8px] text-sky-400 font-bold uppercase tracking-wider rounded-lg shadow-[1px_1px_0px_#000]"
+                      className="cursor-default px-2.5 py-1 bg-slate-900 border-2 border-slate-700 text-[8px] text-sky-400 font-bold uppercase tracking-wider rounded-none shadow-[1px_1px_0px_#000]"
                     >
                       {s}
                     </motion.span>
@@ -1878,9 +1884,9 @@ export function MarioPortfolio() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => synth.playCoin()}
-                    className="inline-flex items-center gap-2.5 px-4 py-2.5 bg-red-600 border-4 border-black text-[10px] text-white uppercase font-bold tracking-widest font-retro shadow-[3px_3px_0px_#000] hover:bg-red-500 hover:shadow-[4px_4px_0px_#000] active:translate-y-0.5 active:shadow-none transition-all rounded-xl"
+                    className="inline-flex items-center gap-2.5 px-4 py-2.5 bg-red-600 border-4 border-black text-[10px] text-white uppercase font-bold tracking-widest font-retro shadow-[3px_3px_0px_#000] hover:bg-red-500 hover:shadow-[4px_4px_0px_#000] active:translate-y-0.5 active:shadow-none transition-all rounded-none cursor-pointer"
                   >
-                    <span>Visit Castle</span>
+                    <span>VISIT CASTLE</span>
                     <ExternalLink className="size-3 stroke-[2.5px]" />
                   </motion.a>
                 </div>
@@ -1892,7 +1898,7 @@ export function MarioPortfolio() {
       case "skills":
         return (
           <div className="space-y-6">
-            <p className="text-center text-slate-400 text-[10px] uppercase font-black tracking-widest mb-2 animate-pulse">
+            <p className="text-center text-slate-400 text-[10px] uppercase font-black tracking-widest mb-2 animate-pulse font-retro">
               ❓ HIT QUESTION BLOCKS TO SEE POWER RATING ❓
             </p>
 
@@ -1910,31 +1916,31 @@ export function MarioPortfolio() {
                     transition: { type: "spring", stiffness: 300, damping: 10 }
                   }}
                   onClick={() => synth.playCoin()}
-                  className="cursor-pointer bg-slate-950 border-4 border-black p-4 rounded-2xl space-y-3 shadow-[4px_4px_0px_#000] relative overflow-hidden select-none transition-all group animate-fade-in"
+                  className="cursor-pointer bg-slate-950 border-4 border-black p-4 rounded-none space-y-3.5 shadow-[4px_4px_0px_#000] relative overflow-hidden select-none transition-all group animate-fade-in font-retro"
                 >
-                  <div className="flex justify-between items-center gap-2">
+                  <div className="flex justify-between items-center gap-2 font-retro">
                     <span className="text-[11px] font-black text-yellow-400 uppercase tracking-wider">{skill.name}</span>
-                    <span className="text-[8px] px-2 py-0.5 bg-indigo-900 border-2 border-indigo-500 text-white font-black rounded-full uppercase group-hover:animate-bounce">
+                    <span className="text-[8px] px-2 py-0.5 bg-indigo-900 border-2 border-indigo-500 text-white font-black rounded-none uppercase group-hover:animate-bounce">
                       {skill.item.split(" ").slice(-1)[0]}
                     </span>
                   </div>
                   
-                  <p className="text-[9px] text-slate-400 leading-normal uppercase">
+                  <p className="text-[10px] text-slate-350 leading-normal uppercase font-retro">
                     {skill.desc}
                   </p>
 
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between text-[8px] text-slate-550 font-bold">
+                  <div className="space-y-1.5 font-retro">
+                    <div className="flex justify-between text-[8px] text-slate-400 font-bold">
                       <span>POWER LEVEL</span>
                       <span className="text-emerald-400 group-hover:scale-110 transition-transform">{skill.rating}%</span>
                     </div>
                     {/* Retro health/power bar that animates from 0% to rating% */}
-                    <div className="w-full h-4 bg-slate-900 border-2 border-black p-0.5 rounded-full overflow-hidden">
+                    <div className="w-full h-4 bg-slate-900 border-2 border-black p-0.5 rounded-none overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${skill.rating}%` }}
                         transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
-                        className="h-full bg-emerald-500 rounded-full"
+                        className="h-full bg-emerald-500 rounded-none"
                       />
                     </div>
                   </div>
@@ -1951,7 +1957,7 @@ export function MarioPortfolio() {
               <motion.div 
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="bg-slate-950 border-4 border-black p-8 text-center space-y-5 font-retro uppercase rounded-2xl shadow-[6px_6px_0px_#000]"
+                className="bg-slate-950 border-4 border-black p-8 text-center space-y-5 font-retro uppercase rounded-none shadow-[6px_6px_0px_#000]"
               >
                 <motion.span 
                   animate={{ y: [0, -12, 0] }}
@@ -1971,13 +1977,13 @@ export function MarioPortfolio() {
                     synth.playCoin();
                     setFormSubmitted(false);
                   }}
-                  className="px-5 py-2.5 bg-red-600 border-4 border-black text-white hover:bg-red-500 text-[10px] uppercase font-bold tracking-widest shadow-[3px_3px_0px_#000] active:translate-y-0.5 active:shadow-none transition-all rounded-xl"
+                  className="px-5 py-2.5 bg-red-600 border-4 border-black text-white hover:bg-red-500 text-[10px] uppercase font-bold tracking-widest shadow-[3px_3px_0px_#000] active:translate-y-0.5 active:shadow-none transition-all rounded-none cursor-pointer font-retro"
                 >
                   Send another letter
                 </motion.button>
               </motion.div>
             ) : (
-              <form onSubmit={handleContactSubmit} className="space-y-4 font-retro text-[10px] sm:text-xs bg-amber-50 p-5 sm:p-6 border-4 border-black text-slate-900 rounded-3xl shadow-[6px_6px_0px_#000] relative text-left">
+              <form onSubmit={handleContactSubmit} className="space-y-4 font-retro text-[10px] sm:text-xs bg-[#fdf6e2] p-5 sm:p-6 border-4 border-black text-slate-900 rounded-none shadow-[6px_6px_0px_#000] relative text-left">
                 <div className="absolute top-2 right-4 text-xs opacity-50 font-bold font-mono tracking-tighter text-slate-600 select-none">
                   POSTAGE 1-UP
                 </div>
@@ -1989,7 +1995,7 @@ export function MarioPortfolio() {
                     required
                     value={contactForm.name}
                     onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-black text-slate-950 font-bold rounded-xl focus:ring-2 focus:ring-pink-500 focus:outline-none uppercase"
+                    className="w-full p-3 bg-white border-2 border-black text-slate-950 font-bold rounded-none focus:ring-2 focus:ring-pink-500 focus:outline-none uppercase font-retro"
                     placeholder="E.G. MARIO"
                   />
                 </div>
@@ -2001,7 +2007,7 @@ export function MarioPortfolio() {
                     required
                     value={contactForm.email}
                     onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-black text-slate-950 font-bold rounded-xl focus:ring-2 focus:ring-pink-500 focus:outline-none uppercase"
+                    className="w-full p-3 bg-white border-2 border-black text-slate-950 font-bold rounded-none focus:ring-2 focus:ring-pink-500 focus:outline-none uppercase font-retro"
                     placeholder="E.G. MARIO@MUSHROOM.COM"
                   />
                 </div>
@@ -2013,7 +2019,7 @@ export function MarioPortfolio() {
                     rows={3}
                     value={contactForm.message}
                     onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-black text-slate-950 font-bold rounded-xl focus:ring-2 focus:ring-pink-500 focus:outline-none uppercase"
+                    className="w-full p-3 bg-white border-2 border-black text-slate-950 font-bold rounded-none focus:ring-2 focus:ring-pink-500 focus:outline-none uppercase font-retro"
                     placeholder="ENTER COOPERATIVE WORK DETAILS..."
                   />
                 </div>
@@ -2022,7 +2028,7 @@ export function MarioPortfolio() {
                   type="submit"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 border-4 border-black text-white font-bold uppercase tracking-widest text-[10px] sm:text-xs shadow-[4px_4px_0px_#000] active:translate-y-0.5 active:shadow-none transition-all rounded-2xl"
+                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 border-4 border-black text-white font-bold uppercase tracking-widest text-[10px] sm:text-xs shadow-[4px_4px_0px_#000] active:translate-y-0.5 active:shadow-none transition-all rounded-none cursor-pointer font-retro"
                 >
                   Send Letter ✉️
                 </motion.button>
@@ -2148,8 +2154,8 @@ export function MarioPortfolio() {
             <div className="max-w-7xl w-full flex flex-col lg:flex-row gap-8 items-center justify-center">
               
               {/* Left Column: 3x2 Grid (Hidden on mobile if a section is active) */}
-              <div className={`w-full lg:w-[55%] xl:w-[60%] flex flex-col gap-6 ${
-                activeSection && activeSection !== "clear" ? "hidden lg:flex" : "flex"
+              <div className={`w-full flex flex-col gap-6 ${
+                activeSection && activeSection !== "clear" ? "hidden" : "flex"
               }`}>
                 <motion.div 
                   initial="hidden"
@@ -2222,8 +2228,8 @@ export function MarioPortfolio() {
               </div>
 
               {/* Right Column: Adventure Time Dashboard Welcome OR Content Detail Panel */}
-              <div className={`flex-1 w-full lg:w-[45%] xl:w-[40%] flex flex-col justify-center items-center ${
-                activeSection && activeSection !== "clear" ? "block" : "block"
+              <div className={`flex-1 w-full flex flex-col justify-center items-center ${
+                activeSection && activeSection !== "clear" ? "max-w-4xl" : "lg:w-[45%] xl:w-[40%]"
               }`}>
                 <AnimatePresence mode="wait">
                   {!activeSection || activeSection === "clear" ? (
@@ -2281,13 +2287,13 @@ export function MarioPortfolio() {
                               ease: "easeInOut"
                             }
                           }}
-                          className="absolute right-[-140px] sm:right-[-340px] bottom-[calc(100%-80px)] w-[22rem] h-[16.5rem] sm:w-[32rem] sm:h-[24rem] pointer-events-none select-none z-0 overflow-hidden"
+                          className="absolute right-[-110px] sm:right-[-325px] bottom-[-50px] sm:bottom-[-95px] w-[21rem] h-[14rem] sm:w-[33rem] sm:h-[22rem] pointer-events-none select-none z-0 overflow-visible"
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src="/amirulfarizavatar.png"
                             alt="Amirul Fariz Avatar pointing"
-                            className="w-full h-full object-contain object-bottom translate-y-6 sm:translate-y-12"
+                            className="w-full h-full object-contain object-bottom"
                             style={{ imageRendering: "pixelated" }}
                           />
                         </motion.div>
@@ -2317,29 +2323,29 @@ export function MarioPortfolio() {
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.92, y: 30 }}
                       transition={{ type: "spring", stiffness: 180, damping: 15 }}
-                      className="w-full bg-[#0c0d10] border-2 border-black text-white p-5 sm:p-6 md:p-8 rounded-none flex flex-col relative z-10 text-left"
+                      className="w-full bg-[#0c0d10] border-4 border-black text-white p-6 sm:p-8 rounded-none flex flex-col relative z-10 text-left"
                       style={{
-                        outline: `1px solid ${activeColor}`,
-                        boxShadow: `0 0 25px ${activeColor}60`,
+                        outline: `2px solid ${activeColor}`,
+                        boxShadow: `0 0 25px ${activeColor}50, 8px 8px 0px #000`,
                       }}
                     >
                       {/* Back Button */}
                       <motion.button
-                        whileHover={{ scale: 1.05, x: -2 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
                         onClick={closeSection}
-                        className="absolute top-4 right-4 bg-white/5 border border-white/10 hover:bg-white/15 text-white px-3.5 py-1.5 rounded-none text-[8px] font-black tracking-wider transition-all flex items-center gap-1 cursor-pointer font-retro"
+                        className="absolute top-4 right-4 bg-[#cccccc] border-2 border-black hover:bg-[#b3b3b3] active:translate-y-0.5 text-black px-4 py-2 rounded-none text-[9px] font-black tracking-wider transition-all flex items-center gap-1.5 cursor-pointer font-retro shadow-[3px_3px_0px_#000] hover:shadow-[2px_2px_0px_#000]"
                         title="Return to Menu"
                       >
-                        <ArrowLeft className="size-3" />
+                        <ArrowLeft className="size-3 stroke-[3px]" />
                         <span>BACK</span>
                       </motion.button>
 
-                      <h3 className="text-xs sm:text-sm text-yellow-400 border-b border-white/10 pb-4 mb-6 uppercase tracking-widest font-black pr-16 leading-relaxed">
+                      <h3 className="text-xs sm:text-sm text-yellow-400 border-b border-black pb-4 mb-6 uppercase tracking-widest font-black pr-28 leading-relaxed font-retro">
                         {getSectionTitle(activeSection)}
                       </h3>
 
-                      <div className="text-xs max-h-[50vh] overflow-y-auto pr-1">
+                      <div className="text-xs max-h-[60vh] overflow-y-auto pr-2.5 retro-scrollbar">
                         {getSectionContent(activeSection)}
                       </div>
                     </motion.div>

@@ -647,6 +647,43 @@
   font-family: var(--font-press-start), monospace;
 }
 
+/* Retro Webkit Scrollbar */
+.retro-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+.retro-scrollbar::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-left: 3px solid #000000;
+}
+.retro-scrollbar::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border: 3px solid #000000;
+}
+.retro-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #b3b3b3;
+}
+.retro-scrollbar::-webkit-scrollbar-button:single-button {
+  background-color: #cccccc;
+  border: 3px solid #000000;
+  display: block;
+  height: 16px;
+  width: 16px;
+}
+.retro-scrollbar::-webkit-scrollbar-button:single-button:decrement {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><polygon points='5,2 2,7 8,7' fill='black'/></svg>");
+  background-size: 10px 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.retro-scrollbar::-webkit-scrollbar-button:single-button:increment {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><polygon points='5,8 2,3 8,3' fill='black'/></svg>");
+  background-size: 10px 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
 
 
 
