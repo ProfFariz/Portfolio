@@ -330,58 +330,33 @@ const SPRITES = {
   },
   goomba: {
     walk1: [
-      "      dddddd      ",
-      "    dddddddddd    ",
-      "   dddddddddddd   ",
-      "  dddwkddkddwddd  ",
-      " ddddwkddkddwdddd ",
-      " dddddddddddddddd ",
-      " dddddkddddkddddd ",
-      " ddddddkkkkdddddd ",
-      "  dddddddddddddd  ",
-      "    nnnnnnnnnn    ",
-      "   nnnnnnnnnnnn   ",
-      "  nnnnnnnnnnnnnn  ",
-      "  ddddd    ddddd  ",
-      " dddddd   dddddd  ",
-      " ddddd     ddddd  ",
-      "  ddd       ddd   "
+      "    g      g    ",
+      "     g    g     ",
+      "   gggggggggg   ",
+      "  gggdkgggdkggg ",
+      " gggggggggggggg ",
+      " g gggggggggg g ",
+      " g  g      g  g ",
+      "    gg    gg    "
     ],
     walk2: [
-      "      dddddd      ",
-      "    dddddddddd    ",
-      "   dddddddddddd   ",
-      "  dddwkddkddwddd  ",
-      " ddddwkddkddwdddd ",
-      " dddddddddddddddd ",
-      " dddddkddddkddddd ",
-      " ddddddkkkkdddddd ",
-      "  dddddddddddddd  ",
-      "    nnnnnnnnnn    ",
-      "   nnnnnnnnnnnn   ",
-      "  nnnnnnnnnnnnnn  ",
-      "   ddddd    dddd  ",
-      "   dddddd  dddddd ",
-      "   ddddd    ddddd ",
-      "    ddd      ddd  "
+      "    g      g    ",
+      "   g g    g g   ",
+      "   gggggggggg   ",
+      "  gggdkgggdkggg ",
+      " gggggggggggggg ",
+      "  gggggggggggg  ",
+      "   gg    gg     ",
+      "  g        g    "
     ],
     squashed: [
-      "                  ",
-      "                  ",
-      "                  ",
-      "                  ",
-      "                  ",
-      "                  ",
-      "                  ",
-      "    dddddddddd    ",
-      "  dddddddddddddd  ",
-      " ddddkddddddkdddd ",
-      " ddddddkkkkdddddd ",
-      "  dddddddddddddd  ",
-      "   nnnnnnnnnnnn   ",
-      "  dddddddddddddd  ",
-      " dddddddddddddddd ",
-      "dddddddddddddddddd"
+      "  g   g   g   g ",
+      "   g  g   g  g  ",
+      "    g g g g     ",
+      "  g g     g g   ",
+      "    g g g g     ",
+      "   g  g   g  g  ",
+      "  g   g   g   g "
     ]
   },
   brick: [
@@ -1067,7 +1042,6 @@ export function MarioPortfolio() {
     let gameActive = true;
     let cameraX = 0;
     const levelWidth = 2400;
-    const gravity = 0.45;
 
     // Generate twinkling night stars if not already done
     if (starsRef.current.length === 0) {
@@ -1086,8 +1060,8 @@ export function MarioPortfolio() {
       y: 300,
       vx: 0,
       vy: 0,
-      width: 26,
-      height: 32,
+      width: 45,
+      height: 56,
       grounded: false,
       facing: "right" as "left" | "right",
       animFrame: 0,
@@ -1199,12 +1173,30 @@ export function MarioPortfolio() {
     }
 
     const enemies: Enemy[] = [
-      { x: 320, y: groundY - 32, vx: -1.2, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
-      { x: 620, y: groundY - 32, vx: -1.0, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
-      { x: 950, y: groundY - 32, vx: -1.5, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
-      { x: 1250, y: groundY - 32, vx: -0.8, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
-      { x: 1680, y: groundY - 32, vx: -1.3, width: 32, height: 32, isSquashed: false, squashTimer: 0 }
+      { x: 300, y: 110, vx: 1.0, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
+      { x: 500, y: 110, vx: -1.0, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
+      { x: 700, y: 110, vx: 1.2, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
+      { x: 1000, y: 140, vx: -0.8, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
+      { x: 1200, y: 140, vx: 1.0, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
+      { x: 1400, y: 110, vx: -1.2, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
+      { x: 1700, y: 130, vx: 1.1, width: 32, height: 32, isSquashed: false, squashTimer: 0 },
+      { x: 1900, y: 130, vx: -1.0, width: 32, height: 32, isSquashed: false, squashTimer: 0 }
     ];
+
+    let lasers: { x: number; y: number; active: boolean }[] = [];
+    let enemyBullets: { x: number; y: number; active: boolean }[] = [];
+    interface Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      color: string;
+      alpha: number;
+      size: number;
+    }
+    const particles: Particle[] = [];
+    let shakeAmt = 0;
+    let fireCooldown = 0;
 
     // Flying texts spawned when block is hit
     interface FloatingText {
@@ -1219,7 +1211,7 @@ export function MarioPortfolio() {
     // Flagpole y position
     const flagPoleX = 2150;
     const flagYStart = groundY - 240;
-    let flagY = flagYStart;
+    const flagY = flagYStart;
     let flagHit = false;
 
     // Game loop
@@ -1251,49 +1243,29 @@ export function MarioPortfolio() {
         return;
       }
 
-      // Input Check
       const goLeft = keyMap.ArrowLeft || keyMap.KeyA || keys.left;
       const goRight = keyMap.ArrowRight || keyMap.KeyD || keys.right;
-      const jump = keyMap.ArrowUp || keyMap.Space || keyMap.KeyW || keys.up;
       const enterPipe = keyMap.ArrowDown || keyMap.KeyS || keys.down;
 
       if (goLeft) {
-        player.vx = -4;
+        player.vx = -4.5;
         player.facing = "left";
       } else if (goRight) {
-        player.vx = 4;
+        player.vx = 4.5;
         player.facing = "right";
       } else {
         player.vx = 0;
       }
 
-      // Jump
-      if (jump && player.grounded) {
-        player.vy = -11.5;
-        player.grounded = false;
-        synth.playJump();
-      }
-
-      // Gravity and Movement
-      player.vy += gravity;
+      // Movement bounds clamping
       player.x += player.vx;
-      player.y += player.vy;
-
-      // Platformer constraints
       if (player.x < 0) player.x = 0;
       if (player.x > levelWidth - player.width) player.x = levelWidth - player.width;
 
-      // Ground collision
-      if (player.y >= groundY - player.height) {
-        player.y = groundY - player.height;
-        player.vy = 0;
-        player.grounded = true;
-      }
+      player.grounded = true; // Stay grounded for animations
 
       // Animation calculations
-      if (!player.grounded) {
-        player.animFrame = 3; // jump sprite
-      } else if (player.vx !== 0) {
+      if (player.vx !== 0) {
         player.animTimer++;
         if (player.animTimer > 6) {
           player.animFrame = player.animFrame === 1 ? 2 : 1;
@@ -1303,13 +1275,167 @@ export function MarioPortfolio() {
         player.animFrame = 0; // standing
       }
 
-      // Blink timer for Goomba hit protection
+      // Blinking timer for hit invincibility
       if (player.isBlinking) {
         player.blinkTimer -= 16;
         if (player.blinkTimer <= 0) {
           player.isBlinking = false;
         }
       }
+
+      // Fire Lasers: triggered by Space, UP D-pad, UP Arrow, Key W
+      if (fireCooldown > 0) fireCooldown -= 16;
+      const wantsToFire = keyMap.Space || keys.up || keyMap.ArrowUp || keyMap.KeyW;
+      if (wantsToFire && fireCooldown <= 0) {
+        // Fire dual lasers from both left and right sides of the player
+        lasers.push({
+          x: player.x + 8,
+          y: player.y + 4,
+          active: true
+        });
+        lasers.push({
+          x: player.x + player.width - 12,
+          y: player.y + 4,
+          active: true
+        });
+        fireCooldown = 260; // Faster cooldown for fire rate satisfaction
+        shakeAmt = 2.0; // Small kickback shake on fire!
+        synth.playCoin(); // laser fire sound
+      }
+
+      // Update Player Lasers
+      lasers.forEach(laser => {
+        laser.y -= 7.5; // speed upward
+        if (laser.y < 0) {
+          laser.active = false;
+          return;
+        }
+
+        // Hit invaders
+        enemies.forEach(enemy => {
+          if (enemy.isSquashed) return;
+
+          if (
+            laser.x > enemy.x &&
+            laser.x < enemy.x + enemy.width &&
+            laser.y > enemy.y &&
+            laser.y < enemy.y + enemy.height
+          ) {
+            laser.active = false;
+            enemy.isSquashed = true;
+            enemy.squashTimer = 0;
+            synth.playStomp(); // stomp hit sound
+            setScore(s => s + 200);
+            shakeAmt = 6.0; // screen shake on hit!
+
+            // Spawn green explosion particles
+            for (let i = 0; i < 12; i++) {
+              particles.push({
+                x: enemy.x + enemy.width / 2,
+                y: enemy.y + enemy.height / 2,
+                vx: (Math.random() - 0.5) * 6,
+                vy: (Math.random() - 0.5) * 6,
+                color: "#24C124",
+                alpha: 1.0,
+                size: Math.random() * 3 + 2
+              });
+            }
+
+            floatingTexts.push({
+              x: enemy.x,
+              y: enemy.y - 10,
+              text: "+200",
+              vy: -1.5,
+              alpha: 1.0
+            });
+          }
+        });
+
+        // Hit blocks from below
+        blocks.forEach(b => {
+          const size = tileSize;
+          if (
+            laser.x > b.x &&
+            laser.x < b.x + size &&
+            laser.y > b.y &&
+            laser.y < b.y + size
+          ) {
+            laser.active = false;
+            if (!b.hit) {
+              b.bounceY = 8;
+              b.hit = true;
+              if (b.type === "question") {
+                b.type = "empty";
+                synth.playCoin();
+                setCoinsCollected(c => c + 1);
+                setScore(s => s + 100);
+                if (b.content) {
+                  floatingTexts.push({
+                    x: b.x - 10,
+                    y: b.y - 15,
+                    text: b.content,
+                    vy: -2,
+                    alpha: 1.0
+                  });
+                }
+              } else {
+                synth.playStomp();
+              }
+            }
+          }
+        });
+      });
+      lasers = lasers.filter(l => l.active);
+
+      // Invaders pacing and shooting back
+      enemies.forEach(enemy => {
+        if (enemy.isSquashed) {
+          enemy.squashTimer += 16;
+          return;
+        }
+
+        // Pace back and forth
+        enemy.x += enemy.vx;
+        if (enemy.x < 50 || enemy.x > levelWidth - 50) {
+          enemy.vx *= -1;
+        }
+
+        // Alien shooting back
+        if (Math.random() < 0.005) {
+          enemyBullets.push({
+            x: enemy.x + enemy.width / 2,
+            y: enemy.y + enemy.height,
+            active: true
+          });
+        }
+      });
+
+      // Update Enemy Plasma Bullets
+      enemyBullets.forEach(bullet => {
+        bullet.y += 4.0; // speed downward
+        if (bullet.y > canvas.height) {
+          bullet.active = false;
+          return;
+        }
+
+        // Collision with player
+        if (
+          bullet.x > player.x &&
+          bullet.x < player.x + player.width &&
+          bullet.y > player.y &&
+          bullet.y < player.y + player.height
+        ) {
+          bullet.active = false;
+          if (!player.isBlinking) {
+            synth.playShrink();
+            player.isBlinking = true;
+            player.blinkTimer = 1200; // 1.2s invincibility
+            setScore(s => Math.max(0, s - 50)); // penalty
+            shakeAmt = 12.0; // BIG screen shake on hit!
+          }
+        }
+      });
+      enemyBullets = enemyBullets.filter(b => b.active);
 
       // Block Bounce animations
       blocks.forEach(b => {
@@ -1318,82 +1444,17 @@ export function MarioPortfolio() {
         }
       });
 
-      // COLLISION WITH BLOCKS (FROM BELOW)
-      blocks.forEach(b => {
-        // Simple AABB box collision
-        const blockX = b.x;
-        const blockY = b.y - b.bounceY;
-        const size = tileSize;
-
-        if (
-          player.x < blockX + size &&
-          player.x + player.width > blockX &&
-          player.y < blockY + size &&
-          player.y + player.height > blockY
-        ) {
-          // Resolve vertical collision
-          const overlapX = Math.min(player.x + player.width - blockX, blockX + size - player.x);
-          const overlapY = Math.min(player.y + player.height - blockY, blockY + size - player.y);
-
-          if (overlapY < overlapX) {
-            if (player.vy < 0) {
-              // Hitting block from below
-              player.y = blockY + size;
-              player.vy = 0;
-
-              if (!b.hit) {
-                b.bounceY = 8;
-                b.hit = true;
-                if (b.type === "question") {
-                  b.type = "empty";
-                  synth.playCoin();
-                  setCoinsCollected(c => c + 1);
-                  setScore(s => s + 100);
-
-                  // Spawn flying text content
-                  if (b.content) {
-                    floatingTexts.push({
-                      x: b.x - 10,
-                      y: b.y - 15,
-                      text: b.content,
-                      vy: -2,
-                      alpha: 1.0
-                    });
-                  }
-                } else {
-                  synth.playStomp(); // break noise
-                }
-              }
-            } else {
-              // Landing on top of block
-              player.y = blockY - player.height;
-              player.vy = 0;
-              player.grounded = true;
-            }
-          } else {
-            // Horizontal side collision
-            if (player.vx > 0) {
-              player.x = blockX - player.width;
-            } else if (player.vx < 0) {
-              player.x = blockX + size;
-            }
-          }
-        }
-      });
-
-      // PIPE PORTAL TRIGGER
+      // PIPE PORTAL TRIGGER (WARP TO SECTIONS)
       pipes.forEach(pipe => {
         if (
           player.x + player.width / 2 > pipe.x &&
-          player.x + player.width / 2 < pipe.x + pipe.width &&
-          player.y + player.height >= pipe.y &&
-          player.y + player.height <= pipe.y + 10
+          player.x + player.width / 2 < pipe.x + pipe.width
         ) {
+          // Standing under portal and pressing down
           if (enterPipe) {
             synth.playShrink();
             player.vx = 0;
             player.vy = 0;
-            // Enter transition
             setTimeout(() => {
               openSection(pipe.targetSection);
             }, 300);
@@ -1401,46 +1462,7 @@ export function MarioPortfolio() {
         }
       });
 
-      // ENEMY COLLISION & RUNNING LOGIC
-      enemies.forEach(enemy => {
-        if (enemy.isSquashed) {
-          enemy.squashTimer += 16;
-          return;
-        }
-
-        // Pacing back and forth
-        enemy.x += enemy.vx;
-        // Collision with map boundaries for enemy
-        if (enemy.x < 150 || enemy.x > levelWidth - 300) {
-          enemy.vx *= -1;
-        }
-
-        // Simple box check with player
-        if (
-          player.x < enemy.x + enemy.width &&
-          player.x + player.width > enemy.x &&
-          player.y < enemy.y + enemy.height &&
-          player.y + player.height > enemy.y
-        ) {
-          // Check if Mario is landing on top of the Goomba
-          const isLanding = (player.y + player.height - player.vy <= enemy.y + 12) && player.vy > 0;
-          if (isLanding) {
-            enemy.isSquashed = true;
-            player.vy = -6; // bounce
-            synth.playStomp();
-            setScore(s => s + 200);
-          } else if (!player.isBlinking) {
-            // Player gets hit - no death, just bounce back and temporary blink protection
-            synth.playShrink();
-            player.isBlinking = true;
-            player.blinkTimer = 1000; // 1s protection
-            player.vx = player.facing === "right" ? -5 : 5;
-            player.vy = -3;
-          }
-        }
-      });
-
-      // FLAGPOLE END-OF-STAGE COLLISION
+      // FLAGPOLE END-OF-STAGE COLLISION (Optional, walk to end stage)
       if (!flagHit && player.x >= flagPoleX) {
         flagHit = true;
         player.vx = 0;
@@ -1450,7 +1472,7 @@ export function MarioPortfolio() {
         synth.playStageClear();
       }
 
-      // Update flying text positions
+      // Update flying texts
       floatingTexts.forEach((ft, idx) => {
         ft.y += ft.vy;
         ft.alpha -= 0.02;
@@ -1459,18 +1481,30 @@ export function MarioPortfolio() {
         }
       });
 
-      // Flag slide down animation
-      if (flagHit && flagY < groundY - 40) {
-        flagY += 4;
-      }
+      // Update particles
+      particles.forEach((p, idx) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.02; // fade out
+        if (p.alpha <= 0) {
+          particles.splice(idx, 1);
+        }
+      });
 
-      // Camera Scrolling
-      // Center camera on player, clamp bounds
+      // Camera follow
       cameraX = Math.max(0, Math.min(levelWidth - canvas.width, player.x - canvas.width / 2 + player.width / 2));
     };
 
     const draw = () => {
       if (!ctx) return;
+
+      ctx.save();
+      // Apply screen shake
+      if (shakeAmt > 0) {
+        const dx = (Math.random() - 0.5) * shakeAmt;
+        const dy = (Math.random() - 0.5) * shakeAmt;
+        ctx.translate(dx, dy);
+      }
 
       // 1. Draw Night Sky Gradient
       const skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
@@ -1480,8 +1514,14 @@ export function MarioPortfolio() {
       ctx.fillStyle = skyGrad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw Twinkling Stars (Parallax)
+      // Draw Twinkling & Scrolling Stars (Simulating space travel)
       starsRef.current.forEach(star => {
+        star.y += star.speed * 6; // Move stars downward
+        if (star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * levelWidth;
+        }
+
         star.alpha += star.speed;
         const starOpacity = 0.2 + Math.abs(Math.sin(star.alpha)) * 0.8;
         ctx.fillStyle = `rgba(255, 255, 255, ${starOpacity})`;
@@ -1492,7 +1532,6 @@ export function MarioPortfolio() {
       drawPixelSprite(ctx, 600 - cameraX * 0.2, 35, SPRITES.moon, 3.5);
 
       // 2. Draw Clouds (Static / Parallax)
-      // Clouds
       const cloudPositions = [
         { x: 100, y: 50 }, { x: 500, y: 70 }, { x: 900, y: 40 },
         { x: 1300, y: 60 }, { x: 1700, y: 50 }, { x: 2100, y: 80 }
@@ -1510,53 +1549,96 @@ export function MarioPortfolio() {
         drawPixelSprite(ctx, hill.x - cameraX * 0.5, hill.y, SPRITES.hill, 4.0);
       });
 
-      // 4. Draw Ground Blocks
-      // Simple ground drawing
-      ctx.fillStyle = "#7A431D"; // Dark brown dirt
+      // 4. Draw Ground Blocks (Futuristic Neon Grid Highway!)
+      ctx.fillStyle = "#0c0e17"; // Ultra dark space runway
       ctx.fillRect(0 - cameraX, groundY, levelWidth, canvas.height - groundY);
       
-      // Ground top green trim
-      ctx.fillStyle = "#24C124";
-      ctx.fillRect(0 - cameraX, groundY, levelWidth, 8);
+      // Draw glowing blue horizontal horizon line
+      ctx.fillStyle = "#00ffcc"; // Neon cyan horizon top
+      ctx.fillRect(0 - cameraX, groundY, levelWidth, 3);
+      
+      // Perspective grid lines
+      ctx.strokeStyle = "rgba(0, 255, 204, 0.18)";
+      ctx.lineWidth = 1.5;
+      
+      // Horizontal grid lines
+      const linesCount = 8;
+      for (let i = 0; i < linesCount; i++) {
+        const ly = groundY + (i / linesCount) * (canvas.height - groundY);
+        ctx.beginPath();
+        ctx.moveTo(0 - cameraX, ly);
+        ctx.lineTo(levelWidth - cameraX, ly);
+        ctx.stroke();
+      }
 
-      // 5. Draw Blocks
+      // Vertical perspective lines
+      for (let gx = -100; gx < levelWidth + 200; gx += 50) {
+        ctx.beginPath();
+        ctx.moveTo(gx - cameraX, groundY);
+        ctx.lineTo(gx - cameraX - 100, canvas.height); // perspective slant
+        ctx.stroke();
+      }
+
+      // 5. Draw Blocks (Space Stations/Asteroids)
       blocks.forEach(b => {
         const sprite = SPRITES[b.type as "brick" | "question" | "empty"] || SPRITES.brick;
         drawPixelSprite(ctx, b.x - cameraX, b.y - b.bounceY, sprite, 2.0);
       });
 
-      // 6. Draw Pipes (Portals)
+      // Draw Player Lasers
+      ctx.fillStyle = "#ff007f";
+      lasers.forEach(laser => {
+        ctx.fillRect(laser.x - cameraX, laser.y, 4, 12);
+      });
+
+      // Draw Enemy Plasma Bullets
+      ctx.fillStyle = "#00ffcc";
+      enemyBullets.forEach(bullet => {
+        ctx.beginPath();
+        ctx.arc(bullet.x - cameraX, bullet.y, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Draw Explosion Particles
+      particles.forEach(p => {
+        ctx.fillStyle = `rgba(36, 193, 36, ${p.alpha})`; // green matching color
+        ctx.fillRect(p.x - cameraX, p.y, p.size, p.size);
+      });
+
+      // 6. Draw Space Portals
       pipes.forEach(pipe => {
         // Draw label text
         ctx.fillStyle = "#FFFFFF";
         ctx.font = '8px "Press Start 2P", Courier, monospace';
         ctx.textAlign = "center";
         ctx.fillText(pipe.label, pipe.x + pipe.width / 2 - cameraX, pipe.y - 15);
-        ctx.fillStyle = "#000000";
-        ctx.fillText("▼ ENTER", pipe.x + pipe.width / 2 - cameraX, pipe.y - 5);
+        ctx.fillStyle = "#00ffcc";
+        ctx.fillText("[ WARP ]", pipe.x + pipe.width / 2 - cameraX, pipe.y + pipe.height / 2 + 5);
 
-        // Draw Pipe Base
-        ctx.fillStyle = COLOR_MAP.g;
-        ctx.fillRect(pipe.x - cameraX, pipe.y + 16, pipe.width, pipe.height - 16);
-        ctx.fillStyle = COLOR_MAP.t; // Shadow
-        ctx.fillRect(pipe.x + pipe.width - 12 - cameraX, pipe.y + 16, 12, pipe.height - 16);
-        
-        // Draw Pipe Top Rim
-        ctx.fillStyle = COLOR_MAP.g;
-        ctx.fillRect(pipe.x - 4 - cameraX, pipe.y, pipe.width + 8, 16);
-        ctx.fillStyle = COLOR_MAP.t;
-        ctx.fillRect(pipe.x + pipe.width - 8 - cameraX, pipe.y, 12, 16);
+        // Glow outer ring
+        ctx.strokeStyle = "rgba(0, 255, 204, 0.3)";
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.arc(pipe.x + pipe.width / 2 - cameraX, pipe.y + pipe.height / 2, 32, 0, Math.PI * 2);
+        ctx.stroke();
 
-        // Draw Pipe Borders
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(pipe.x - cameraX, pipe.y + 16, pipe.width, pipe.height - 16);
-        ctx.strokeRect(pipe.x - 4 - cameraX, pipe.y, pipe.width + 8, 16);
+        // Solid inner ring
+        ctx.strokeStyle = "#00ffcc";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(pipe.x + pipe.width / 2 - cameraX, pipe.y + pipe.height / 2, 28, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Portal center light
+        ctx.fillStyle = "rgba(0, 255, 204, 0.15)";
+        ctx.beginPath();
+        ctx.arc(pipe.x + pipe.width / 2 - cameraX, pipe.y + pipe.height / 2, 26, 0, Math.PI * 2);
+        ctx.fill();
       });
 
-      // 7. Draw Goombas
+      // 7. Draw Space Invaders
       enemies.forEach(enemy => {
-        if (enemy.isSquashed && enemy.squashTimer > 400) return; // Hide squashed goomba after 400ms
+        if (enemy.isSquashed && enemy.squashTimer > 400) return; // Hide squashed invader after 400ms
 
         const sprite = enemy.isSquashed 
           ? SPRITES.goomba.squashed 
@@ -1621,7 +1703,7 @@ export function MarioPortfolio() {
           player.x - cameraX, 
           player.y, 
           marioSprite, 
-          2.0, 
+          3.5, 
           player.facing === "left"
         );
       }
@@ -1637,6 +1719,8 @@ export function MarioPortfolio() {
       // 11. Screen Borders (Vignette Retro styling)
       ctx.fillStyle = "rgba(0,0,0,0.04)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.restore();
     };
 
     // Main animation runner
@@ -2587,8 +2671,8 @@ export function MarioPortfolio() {
           {/* Quick Level Instructions overlay */}
           <div className="absolute top-2 left-2 bg-black/60 p-2 text-[8px] rounded border border-white/20 text-slate-200 space-y-1 pointer-events-none">
             <div>KEYS: A/D/Arrows = Move</div>
-            <div>SPACE/W/Up = Jump</div>
-            <div>S/Down = Enter Pipe Portal</div>
+            <div>SPACE / RED JUMP = Fire Laser</div>
+            <div>S / YELLOW DOWN = Warp Portal</div>
           </div>
         </div>
 
