@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Volume2, VolumeX, ArrowLeft, ArrowRight,
@@ -220,76 +220,76 @@ const COLOR_MAP: Record<string, string> = {
 const SPRITES = {
   mario: {
     idle: [
-      "    rrrrr    ",
-      "   rrrrrrrrr ",
-      "   dddppkp   ",
-      "  dppkppppp  ",
-      "  dppdppkppp ",
-      "  ddppdpppp  ",
+      "    kkkkk    ",
+      "   kkkkkkkkk ",
+      "   kkkppkp   ",
+      "  kppkppppp  ",
+      "  kppkppkppp ",
+      "  kkppkpppp  ",
       "    pppppp   ",
-      "   rrbrrr    ",
-      "  rrrbrrbrrr ",
-      " rrrrbbbbbrrr",
-      " pp rbybyr pp",
+      "   vvbvvv    ",
+      "  vvvbvvbvvv ",
+      " vvvvbbbbvvv",
+      " pp vbbybv pp",
       " pppbbbbbbppp",
       "  p bbbbbbbb ",
       "   bbb  bbb  ",
-      "  ddd    ddd ",
-      " dddd    dddd"
+      "  www    www ",
+      " wwww    wwww"
     ],
     walk1: [
-      "    rrrrr    ",
-      "   rrrrrrrrr ",
-      "   dddppkp   ",
-      "  dppkppppp  ",
-      "  dppdppkppp ",
-      "  ddppdpppp  ",
+      "    kkkkk    ",
+      "   kkkkkkkkk ",
+      "   kkkppkp   ",
+      "  kppkppppp  ",
+      "  kppkppkppp ",
+      "  kkppkpppp  ",
       "    pppppp   ",
-      "   rrbrrr    ",
-      "  rrrbbbrr   ",
-      "  rrrbbbbbrr ",
-      "   rbybyr pp ",
+      "   vvbvvv    ",
+      "  vvvbbbrv   ",
+      "  vvvbbbbbrv ",
+      "   vbybyv pp ",
       "   bbbbbb ppp",
       "  bbbbbbbb p ",
-      " dddd  bbb   ",
-      "  ddd  ddd   ",
-      "       dddd  "
+      " wwww  bbb   ",
+      "  www  www   ",
+      "       wwww  "
     ],
     walk2: [
-      "    rrrrr    ",
-      "   rrrrrrrrr ",
-      "   dddppkp   ",
-      "  dppkppppp  ",
-      "  dppdppkppp ",
-      "  ddppdpppp  ",
+      "    kkkkk    ",
+      "   kkkkkkkkk ",
+      "   kkkppkp   ",
+      "  kppkppppp  ",
+      "  kppkppkppp ",
+      "  kkppkpppp  ",
       "    pppppp   ",
-      "   rrbrrr    ",
-      "   rrbbbrrr  ",
-      "   rrbbbbbrr ",
-      "  pp rbybyr  ",
+      "   vvbvvv    ",
+      "   vvbbbrvv  ",
+      "   vvbbbbbrv ",
+      "  pp vbybyv  ",
       " ppp bbbbbb  ",
       "  p bbbbbbbb ",
-      "    bbb  dddd",
-      "    ddd   ddd",
-      "   dddd      "
+      "    bbb  wwww",
+      "    www   www",
+      "   wwww      "
     ],
     jump: [
-      "    rrrrr    ",
-      "   rrrrrrrrr ",
-      "   dddppkp   ",
-      "  dppkppppp  ",
-      "  dppdppkppp ",
-      "  ddppdpppp  ",
+      "    kkkkk    ",
+      "   kkkkkkkkk ",
+      "   kkkppkp   ",
+      "  kppkppppp  ",
+      "  kppkppkppp ",
+      "  kkppkpppp  ",
       "    pppppp   ",
-      "  rrrbrrr    ",
-      " rrrrbbbrr   ",
-      " rrrrbbbbbrr ",
-      "  pp rbybyr  ",
+      "  vvvbvvv    ",
+      " vvvvbbbrv   ",
+      " vvvvbbbbbrv ",
+      "  pp vbybyv  ",
       "   pppbbbb   ",
       "    bbbbbbbb ",
       "   bbbb  bbb ",
-      "  ddd    ddd ",
-      " dddd    dddd"
+      "  www    www ",
+      " wwww    wwww"
     ],
     squashed: [
       "             ",
@@ -297,35 +297,35 @@ const SPRITES = {
       "             ",
       "             ",
       "             ",
-      "    rrrrr    ",
-      "   rrrrrrrr  ",
-      "  ddddppkppp ",
-      "  ddppdppppp ",
-      "   pppppppp  ",
-      "  rrrbbbrrrr ",
-      " pprbybyrppp ",
-      "  pbbbbbbp   ",
-      "  bbbbbbbb   ",
-      "  dddddddd   ",
-      " dddddddddd  "
+      "    kkkkk    ",
+      "   kkkkkkkkk ",
+      "   kkkppkp   ",
+      "  kppkppppp  ",
+      "  kppkppkppp ",
+      "  kkppkpppp  ",
+      "    pppppp   ",
+      "  vvvbvvv    ",
+      " vvvvbbbrv   ",
+      " vvvvbbbbbrv ",
+      "  pp vbybyv  "
     ],
     victory: [
-      "    rrrrr    ",
-      "   rrrrrrrrr ",
-      "   dddppkp   ",
-      "  dppkppppp  ",
-      "  dppdppkppp ",
-      "  ddppdpppp  ",
+      "    kkkkk    ",
+      "   kkkkkkkkk ",
+      "   kkkppkp   ",
+      "  kppkppppp  ",
+      "  kppkppkppp ",
+      "  kkppkpppp  ",
       "    pppppp   ",
-      "   rrbrrr    ",
-      "  rrrbrrbrrr ",
-      " rrrrbbbbbrrr",
-      " pp rbybyr pp",
+      "   vvbvvv    ",
+      "  vvvbvvbvvv ",
+      " vvvvbbbbvvv",
+      " pp vbbybv pp",
       " pppbbbbbbppp",
       "  p bbbbbbbb ",
       "   bbb  bbb  ",
-      "  ddd    ddd ",
-      " dddd    dddd"
+      "  www    www ",
+      " wwww    wwww"
     ]
   },
   goomba: {
@@ -449,22 +449,32 @@ const SPRITES = {
     "  yyyy  "
   ],
   cloud: [
-    "      wwwwww      ",
-    "    wwwwwwwwww    ",
-    "  wwwwwwwwwwwwww  ",
-    "wwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwww",
-    "  wwwwwwwwwwwwww  "
+    "      ssssss      ",
+    "    ssssssssss    ",
+    "  ssssssssssssss  ",
+    "ssssssssssssssssss",
+    "ssssssssssssssssss",
+    "ssssssssssssssssss",
+    "  ssssssssssssss  "
   ],
   hill: [
-    "      gggg      ",
-    "    gggggggg    ",
-    "   gggggggggg   ",
-    "  gggggggggggg  ",
-    " gggggggggggggg ",
-    "gggggggggggggggg",
-    "gggggggggggggggg"
+    "      tttt      ",
+    "    tttttttt    ",
+    "   tttttttttt   ",
+    "  tttttttttttt  ",
+    " tttttttttttttt ",
+    "tttttttttttttttt",
+    "tttttttttttttttt"
+  ],
+  moon: [
+    "   yyyyy  ",
+    "  yyyyyy  ",
+    " yyyyy    ",
+    "yyyy      ",
+    "yyyy      ",
+    " yyyyy    ",
+    "  yyyyyy  ",
+    "   yyyyy  "
   ]
 };
 
@@ -839,6 +849,77 @@ function MenuCard({
 export function MarioPortfolio() {
   const [phase, setPhase] = useState<"start" | "loading" | "dashboard" | "minigame">("start");
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [transitionState, setTransitionState] = useState<{
+    isActive: boolean;
+    targetSection: string | null;
+    phase: "idle" | "closing" | "opening";
+  }>({
+    isActive: false,
+    targetSection: null,
+    phase: "idle",
+  });
+
+  const navigateToSection = useCallback((section: string | null) => {
+    if (transitionState.isActive) return;
+    if (section === null) {
+      synth.playShrink();
+    } else {
+      synth.playClick();
+    }
+    setTransitionState({
+      isActive: true,
+      targetSection: section,
+      phase: "closing"
+    });
+    
+    setTimeout(() => {
+      setActiveSection(section);
+      setTransitionState(prev => ({
+        ...prev,
+        phase: "opening"
+      }));
+      if (section === null) {
+        synth.playPowerUp();
+      } else {
+        synth.playCoin();
+      }
+      
+      setTimeout(() => {
+        setTransitionState({
+          isActive: false,
+          targetSection: null,
+          phase: "idle"
+        });
+      }, 450);
+    }, 450);
+  }, [transitionState.isActive]);
+
+  const navigateToPhase = useCallback((newPhase: "start" | "loading" | "dashboard" | "minigame") => {
+    if (transitionState.isActive) return;
+    synth.playClick();
+    setTransitionState({
+      isActive: true,
+      targetSection: null,
+      phase: "closing"
+    });
+    
+    setTimeout(() => {
+      setPhase(newPhase);
+      setTransitionState(prev => ({
+        ...prev,
+        phase: "opening"
+      }));
+      synth.playPowerUp();
+      
+      setTimeout(() => {
+        setTransitionState({
+          isActive: false,
+          targetSection: null,
+          phase: "idle"
+        });
+      }, 450);
+    }, 450);
+  }, [transitionState.isActive]);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingText, setLoadingText] = useState("WORLD 1-1");
   const [bgmMuted, setBgmMuted] = useState(true);
@@ -864,6 +945,7 @@ export function MarioPortfolio() {
   // References
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameId = useRef<number | null>(null);
+  const starsRef = useRef<{x: number, y: number, size: number, speed: number, alpha: number}[]>([]);
 
   // Core stats for UI
   const [coinsCollected, setCoinsCollected] = useState(0);
@@ -929,8 +1011,7 @@ export function MarioPortfolio() {
 
   const handleStartGame = () => {
     synth.resume();
-    synth.playCoin();
-    setPhase("loading");
+    navigateToPhase("loading");
     // Attempt BGM start after short interaction delay
     setTimeout(() => {
       setBgmMuted(false);
@@ -938,15 +1019,13 @@ export function MarioPortfolio() {
     }, 1000);
   };
 
-  const openSection = (section: string) => {
-    synth.playClick();
-    setActiveSection(section);
-  };
+  const openSection = useCallback((section: string) => {
+    navigateToSection(section);
+  }, [navigateToSection]);
 
-  const closeSection = () => {
-    synth.playShrink();
-    setActiveSection(null);
-  };
+  const closeSection = useCallback(() => {
+    navigateToSection(null);
+  }, [navigateToSection]);
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -970,8 +1049,7 @@ export function MarioPortfolio() {
   // 5. 2D PLATFORMER CANVAS ENGINE
   // ==========================================
   const startPlatformer = () => {
-    synth.playCoin();
-    setPhase("minigame");
+    navigateToPhase("minigame");
   };
 
   useEffect(() => {
@@ -990,6 +1068,17 @@ export function MarioPortfolio() {
     let cameraX = 0;
     const levelWidth = 2400;
     const gravity = 0.45;
+
+    // Generate twinkling night stars if not already done
+    if (starsRef.current.length === 0) {
+      starsRef.current = Array.from({ length: 80 }, () => ({
+        x: Math.random() * levelWidth,
+        y: Math.random() * 220,
+        size: Math.random() * 1.8 + 0.8,
+        speed: 0.01 + Math.random() * 0.03,
+        alpha: Math.random()
+      }));
+    }
 
     // Player state
     const player = {
@@ -1383,9 +1472,24 @@ export function MarioPortfolio() {
     const draw = () => {
       if (!ctx) return;
 
-      // 1. Draw Sky Background
-      ctx.fillStyle = "#38BDF8";
+      // 1. Draw Night Sky Gradient
+      const skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      skyGrad.addColorStop(0, "#02040a"); // Midnight black
+      skyGrad.addColorStop(0.7, "#091021"); // Deep blue-violet
+      skyGrad.addColorStop(1, "#111b33"); // Moonlit blue
+      ctx.fillStyle = skyGrad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw Twinkling Stars (Parallax)
+      starsRef.current.forEach(star => {
+        star.alpha += star.speed;
+        const starOpacity = 0.2 + Math.abs(Math.sin(star.alpha)) * 0.8;
+        ctx.fillStyle = `rgba(255, 255, 255, ${starOpacity})`;
+        ctx.fillRect(Math.floor(star.x - cameraX * 0.9), Math.floor(star.y), Math.floor(star.size), Math.floor(star.size));
+      });
+
+      // Draw Crescent Moon (Parallax)
+      drawPixelSprite(ctx, 600 - cameraX * 0.2, 35, SPRITES.moon, 3.5);
 
       // 2. Draw Clouds (Static / Parallax)
       // Clouds
@@ -1549,7 +1653,7 @@ export function MarioPortfolio() {
       window.removeEventListener("keyup", handleKeyUp);
       if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
     };
-  }, [phase, keys]);
+  }, [phase, keys, openSection]);
 
   // ==========================================
   // VIEW RENDER PARTS
@@ -1557,7 +1661,11 @@ export function MarioPortfolio() {
 
   // Start Screen view
   const renderStartScreen = () => (
-    <div className="w-full min-h-screen bg-transparent flex flex-col items-center justify-center p-6 relative select-none font-retro">
+    <div className="w-full min-h-screen bg-[#070b12] flex flex-col items-center justify-center p-6 relative select-none font-retro crt-screen overflow-hidden">
+      {/* CRT Scanline and Flicker layers */}
+      <div className="scanlines" />
+      <div className="crt-flicker" />
+
       <div className="bg-black/35 backdrop-blur-[20px] border border-white/10 p-8 max-w-lg w-full text-center relative z-10 rounded-[2rem] hover:border-white/20 transition-all">
         <div className="flex justify-center gap-2 mb-6">
           <span className="text-yellow-400 text-3xl animate-bounce">★</span>
@@ -1625,6 +1733,7 @@ export function MarioPortfolio() {
       case "projects": return "WORLD 1-4: PROJECTS CASTLE";
       case "skills": return "POWER-UPS: SKILLS";
       case "contact": return "PEACH LETTER: CONTACT";
+      case "playground": return "WORLD 2-1: PLAYGROUND";
       default: return "";
     }
   };
@@ -1847,7 +1956,7 @@ export function MarioPortfolio() {
                 initial={{ opacity: 0, scale: 0.9, y: 30 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ delay: idx * 0.12, type: "spring" }}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ y: -6, scale: 1.02, transition: { type: "spring", stiffness: 450, damping: 8 } }}
                 className="bg-slate-950 border-4 border-black p-5 text-xs sm:text-sm rounded-none space-y-3.5 relative overflow-hidden shadow-[6px_6px_0px_#000] hover:shadow-[8px_8px_0px_#000] transition-all font-retro"
               >
                 <div className="absolute top-3 right-3 px-3 py-1 bg-yellow-500 text-black text-[8px] font-black border-2 border-black rounded-none uppercase tracking-wider font-retro">
@@ -2036,6 +2145,49 @@ export function MarioPortfolio() {
             )}
           </div>
         );
+      case "playground":
+        return (
+          <div className="space-y-6 max-w-4xl mx-auto w-full text-center">
+            <div className="text-[10px] text-slate-400 uppercase tracking-widest font-black mb-1 font-retro">STAGE 2-1: PLAYGROUND & FYP GAME</div>
+            
+            <div className="bg-slate-950 border-4 border-black p-5 rounded-none space-y-4 shadow-[6px_6px_0px_#000] font-retro text-left">
+              <h3 className="text-sm font-black text-yellow-400 uppercase tracking-wider font-retro flex items-center gap-2">
+                🎮 MATHIVITY TD
+              </h3>
+              <p className="text-[10px] sm:text-xs text-slate-300 uppercase tracking-wide leading-relaxed font-retro">
+                An educational 2D mathematical tower defense game built in Godot 4. Students tackle percentage, fraction, and ratio questions in active gameplay to reduce mathematical anxiety.
+              </p>
+              
+              {/* Playable WebGL Game Frame Container */}
+              <div className="relative border-4 border-black bg-slate-900 w-full overflow-hidden aspect-[16/9] crt-screen">
+                <div className="scanlines" />
+                <div className="crt-flicker" />
+                
+                <iframe
+                  src="https://html-classic.itch.zone/html/16436534/index.html?v=1782694771"
+                  className="w-full h-full border-none"
+                  allow="autoplay; fullscreen; gamepad"
+                  scrolling="no"
+                  title="Mathivity TD Game View"
+                />
+              </div>
+              
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">
+                <div className="text-[8px] text-slate-400 uppercase font-retro">
+                  FYP GAME • DEVELOPED IN GODOT 4.5 • AMIRUL FARIZ
+                </div>
+                <a 
+                  href="https://amirulgodot.itch.io/mathivity" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 bg-red-600 border-2 border-black hover:bg-red-500 active:scale-95 text-white text-[9px] uppercase font-bold tracking-wider font-retro shadow-[4px_4px_0px_#000] active:translate-y-0.5 active:shadow-none"
+                >
+                  Open Game on Itch.io
+                </a>
+              </div>
+            </div>
+          </div>
+        );
       default:
         return null;
     }
@@ -2050,6 +2202,7 @@ export function MarioPortfolio() {
       activeSection === "projects" ? "#facc15" :
       activeSection === "experience" ? "#34d399" :
       activeSection === "skills" ? "#c084fc" :
+      activeSection === "playground" ? "#ff007f" :
       activeSection === "contact" ? "#f472b6" : "#00ffcc";
 
     return (
@@ -2117,6 +2270,7 @@ export function MarioPortfolio() {
                 { id: "skills", label: "SKILLS", icon: Code, section: "skills" },
                 { id: "projects", label: "PROJECTS", icon: Folder, section: "projects" },
                 { id: "journey", label: "JOURNEY", icon: LineChart, section: "experience" },
+                { id: "playground", label: "PLAYGROUND", icon: Gamepad2, section: "playground" },
                 { id: "contact", label: "CONTACT", icon: Mail, section: "contact" }
               ].map(item => {
                 const isItemActive = activeSection === item.section;
@@ -2287,7 +2441,7 @@ export function MarioPortfolio() {
                               ease: "easeInOut"
                             }
                           }}
-                          className="absolute right-[-110px] sm:right-[-325px] bottom-[-50px] sm:bottom-[-95px] w-[21rem] h-[14rem] sm:w-[33rem] sm:h-[22rem] pointer-events-none select-none z-0 overflow-visible"
+                          className="absolute right-[-80px] sm:right-[-250px] bottom-[-40px] sm:bottom-[-70px] w-[17rem] h-[11.3rem] sm:w-[26rem] sm:h-[17.3rem] pointer-events-none select-none z-0 overflow-visible"
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
@@ -2400,11 +2554,10 @@ export function MarioPortfolio() {
   const renderMinigame = () => (
     <div className="w-full min-h-screen bg-transparent flex flex-col select-none font-retro text-white p-4">
       {/* Back button */}
-      <div className="max-w-4xl mx-auto w-full mb-3 flex justify-between items-center">
+      <div className="max-w-5xl mx-auto w-full mb-3 flex justify-between items-center">
         <button
           onClick={() => {
-            synth.playShrink();
-            setPhase("dashboard");
+            navigateToPhase("dashboard");
           }}
           className="px-3 py-1.5 bg-slate-800 border-2 border-white hover:bg-slate-700 text-[9px] uppercase tracking-wider flex items-center gap-1.5"
         >
@@ -2419,9 +2572,13 @@ export function MarioPortfolio() {
       </div>
 
       {/* Main Arcade Cabinet Box */}
-      <div className="max-w-4xl mx-auto w-full bg-slate-950 border-4 border-red-600 p-2 md:p-4 shadow-[12px_12px_0px_#000] rounded-lg">
+      <div className="max-w-5xl mx-auto w-full bg-slate-950 border-4 border-red-600 p-2 md:p-4 shadow-[12px_12px_0px_#000] rounded-lg">
         {/* Canvas viewport container */}
-        <div className="relative border-4 border-black bg-sky-400 w-full overflow-hidden aspect-[16/9]">
+        <div className="relative border-4 border-black bg-sky-400 w-full overflow-hidden aspect-[16/9] crt-screen">
+          {/* CRT scanline and flicker overlays */}
+          <div className="scanlines" />
+          <div className="crt-flicker" />
+
           <canvas
             ref={canvasRef}
             className="w-full h-full block image-render-pixel"
@@ -2545,9 +2702,8 @@ export function MarioPortfolio() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => {
-            synth.playCoin();
-            closeSection();
-            setPhase("dashboard");
+            setActiveSection(null);
+            navigateToPhase("dashboard");
           }}
           className="px-6 py-3.5 bg-white/5 border border-white/20 hover:bg-white/15 active:scale-95 text-white text-[10px] tracking-wider uppercase font-bold font-retro rounded-2xl backdrop-blur-md transition-all cursor-pointer"
         >
@@ -2576,6 +2732,59 @@ export function MarioPortfolio() {
     );
   };
 
+  const renderPixelTransition = () => {
+    const cols = 16;
+    const rows = 12;
+    const totalBlocks = cols * rows;
+    const blocks = Array.from({ length: totalBlocks });
+
+    const centerX = (cols - 1) / 2;
+    const centerY = (rows - 1) / 2;
+    const maxDist = Math.sqrt(Math.pow(centerX, 2) + Math.pow(centerY, 2));
+
+    return (
+      <div 
+        className="fixed inset-0 z-[9999] pointer-events-auto w-screen h-screen overflow-hidden grid"
+        style={{
+          gridTemplateColumns: `repeat(${cols}, 1fr)`,
+          gridTemplateRows: `repeat(${rows}, 1fr)`
+        }}
+      >
+        {blocks.map((_, idx) => {
+          const col = idx % cols;
+          const row = Math.floor(idx / cols);
+          
+          // Radial distance from center of the screen
+          const dist = Math.sqrt(Math.pow(col - centerX, 2) + Math.pow(row - centerY, 2));
+          // Normalize delay so the wave sweeps from the center outwards
+          const delay = (dist / maxDist) * 0.22;
+
+          const isClosing = transitionState.phase === "closing";
+
+          return (
+            <motion.div
+              key={idx}
+              initial={{ 
+                scale: isClosing ? 0 : 1.05,
+                rotate: isClosing ? -180 : 0
+              }}
+              animate={{ 
+                scale: isClosing ? 1.05 : 0,
+                rotate: isClosing ? 0 : 180
+              }}
+              transition={{
+                duration: 0.24,
+                delay: delay,
+                ease: [0.34, 1.56, 0.64, 1] // Snappy elastic overshoot easeOut
+              }}
+              className="w-full h-full bg-[#08090d] border border-black/40 origin-center"
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
   // Switch between stages
   return (
     <div className="w-full min-h-screen relative overflow-hidden select-none bg-slate-950 text-white">
@@ -2596,7 +2805,7 @@ export function MarioPortfolio() {
       )}
 
       {/* Main content wrapper */}
-      <div className="relative z-10 w-full min-h-screen flex flex-col">
+      <div className="relative z-10 w-full min-h-screen flex flex-col overflow-x-hidden">
         {phase === "start" && renderStartScreen()}
         {phase === "loading" && renderLoadingScreen()}
         {phase === "dashboard" && (
@@ -2612,6 +2821,9 @@ export function MarioPortfolio() {
           </>
         )}
       </div>
+
+      {/* Pixel Art Screen Transition Overlay */}
+      {transitionState.isActive && renderPixelTransition()}
     </div>
   );
 }
