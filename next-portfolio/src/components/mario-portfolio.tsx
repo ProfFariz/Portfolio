@@ -2388,7 +2388,7 @@ export function MarioPortfolio() {
           </div>
 
           {/* Right Main Content Panel */}
-          <div className="flex-1 overflow-y-auto p-4 md:p-8 flex justify-center items-center">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-8 flex justify-center items-center">
             <div className="max-w-7xl w-full flex flex-col lg:flex-row gap-8 items-center justify-center">
               
               {/* Left Column: 3x2 Grid (Hidden on mobile if a section is active) */}
@@ -2477,7 +2477,7 @@ export function MarioPortfolio() {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -30 }}
                       transition={{ duration: 0.2 }}
-                      className="flex flex-col justify-between items-center lg:items-start min-h-[420px] py-4 w-full"
+                      className="flex flex-col justify-between items-center lg:items-start min-h-[420px] py-4 w-full relative"
                     >
                       {/* Welcome Headers */}
                       <div className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left w-full">
@@ -2506,36 +2506,8 @@ export function MarioPortfolio() {
                         </motion.button>
                       </div>
 
-                      {/* Current Location Box with Pointing Avatar behind it */}
-                      <div className="relative w-full max-w-sm mt-10">
-                        {/* Pointing Avatar Character with floating animation, hidden behind box */}
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.8, y: 30 }}
-                          animate={{ 
-                            opacity: 1, 
-                            scale: 1, 
-                            y: [0, -4, 0]
-                          }}
-                          transition={{ 
-                            opacity: { duration: 0.3 },
-                            scale: { type: "spring" },
-                            y: {
-                              repeat: Infinity,
-                              duration: 2.2,
-                              ease: "easeInOut"
-                            }
-                          }}
-                          className="absolute right-[-80px] sm:right-[-250px] bottom-[-40px] sm:bottom-[-70px] w-[17rem] h-[11.3rem] sm:w-[26rem] sm:h-[17.3rem] pointer-events-none select-none z-0 overflow-visible"
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src="/amirulfarizavatar.png"
-                            alt="Amirul Fariz Avatar pointing"
-                            className="w-full h-full object-contain object-bottom"
-                            style={{ imageRendering: "pixelated" }}
-                          />
-                        </motion.div>
-
+                      {/* Current Location Box */}
+                      <div className="relative w-full max-w-sm mt-10 z-10">
                         <div 
                           className="w-full p-4 bg-[#0c0d10] border-2 border-black rounded-none text-left relative z-10" 
                           style={{ outline: "1px solid #00ffcc", boxShadow: "0 0 12px rgba(0,255,204,0.15)" }}
@@ -2553,6 +2525,34 @@ export function MarioPortfolio() {
                           </div>
                         </div>
                       </div>
+
+                      {/* Pointing Avatar Character positioned relative to parent welcome panel */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                        animate={{ 
+                          opacity: 1, 
+                          scale: 1, 
+                          y: [0, -4, 0]
+                        }}
+                        transition={{ 
+                          opacity: { duration: 0.3 },
+                          scale: { type: "spring" },
+                          y: {
+                            repeat: Infinity,
+                            duration: 2.2,
+                            ease: "easeInOut"
+                          }
+                        }}
+                        className="absolute right-[-40px] sm:right-[-90px] bottom-[-20px] sm:bottom-[-40px] w-[17rem] h-[11.3rem] sm:w-[26rem] sm:h-[17.3rem] pointer-events-none select-none z-0 overflow-visible"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src="/amirulfarizavatar.png"
+                          alt="Amirul Fariz Avatar pointing"
+                          className="w-full h-full object-contain object-bottom"
+                          style={{ imageRendering: "pixelated" }}
+                        />
+                      </motion.div>
                     </motion.div>
                   ) : (
                     <motion.div 
